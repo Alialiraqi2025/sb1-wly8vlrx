@@ -73,7 +73,8 @@ function App() {
 
   const loadChats = async () => {
     try {
-      const userChats = await ChatService.getChats();
+      const chatServiceInstance = ChatService.getInstance();
+      const userChats = await chatServiceInstance.getChats();
       setChats(userChats);
     } catch (error) {
       console.error('Failed to load chats:', error);
@@ -117,7 +118,8 @@ function App() {
       const encryptedMessage = await EncryptionService.encryptMessage(message, selectedChat.participants);
       
       // Send message through chat service
-      await ChatService.sendMessage(encryptedMessage);
+      const chatServiceInstance = ChatService.getInstance();
+      await chatServiceInstance.sendMessage(encryptedMessage);
       
       // Update local chat state
       const updatedChat = {

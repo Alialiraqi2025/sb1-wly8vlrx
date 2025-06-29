@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, Plus, Archive, Pin, MoreHorizontal, MessageSquare, Users, Phone, Video } from 'lucide-react';
 import { Chat, User, ScreenSize } from '../types';
-import { ChatService } from '../services/ChatService';
 
 interface ChatListProps {
   chats: Chat[];
@@ -20,12 +19,6 @@ const ChatList: React.FC<ChatListProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showNewChatModal, setShowNewChatModal] = useState(false);
-
-  useEffect(() => {
-    // Initialize demo data
-    const chatService = ChatService.getInstance();
-    chatService.initializeDemoData();
-  }, []);
 
   const filteredChats = chats.filter(chat => {
     const searchTerm = searchQuery.toLowerCase();
