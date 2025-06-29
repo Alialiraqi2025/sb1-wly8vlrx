@@ -8,7 +8,6 @@ const FeaturedProducts = () => {
       name: 'Basmati Rice 5kg',
       brand: 'Premium Quality',
       price: '17,000 IQD',
-      originalPrice: '21,000 IQD',
       rating: 4.8,
       inStock: true,
       image: 'https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -20,7 +19,6 @@ const FeaturedProducts = () => {
       name: 'Extra Virgin Olive Oil 1L',
       brand: 'Mediterranean Gold',
       price: '11,800 IQD',
-      originalPrice: '14,400 IQD',
       rating: 4.9,
       inStock: true,
       image: 'https://images.pexels.com/photos/33783/olive-oil-salad-dressing-cooking-olive.jpg?auto=compress&cs=tinysrgb&w=400',
@@ -32,7 +30,6 @@ const FeaturedProducts = () => {
       name: 'Chocolate Chip Cookies',
       brand: 'Sweet Delight 400g',
       price: '4,600 IQD',
-      originalPrice: '6,500 IQD',
       rating: 4.7,
       inStock: true,
       image: 'https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -44,7 +41,6 @@ const FeaturedProducts = () => {
       name: 'All-Purpose Cleaner 750ml',
       brand: 'CleanMax Pro',
       price: '5,200 IQD',
-      originalPrice: '7,000 IQD',
       rating: 4.6,
       inStock: true,
       image: 'https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -56,7 +52,6 @@ const FeaturedProducts = () => {
       name: 'Fresh Bananas 1kg',
       brand: 'Farm Fresh',
       price: '2,800 IQD',
-      originalPrice: '3,200 IQD',
       rating: 4.5,
       inStock: true,
       image: 'https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -68,7 +63,6 @@ const FeaturedProducts = () => {
       name: 'Fresh Milk 1L',
       brand: 'Daily Farm',
       price: '3,400 IQD',
-      originalPrice: '4,000 IQD',
       rating: 4.8,
       inStock: true,
       image: 'https://images.pexels.com/photos/236010/pexels-photo-236010.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -124,7 +118,6 @@ const FeaturedProducts = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-orange-600">{product.price}</span>
-                    <span className="text-xs text-gray-500 line-through">{product.originalPrice}</span>
                   </div>
                   <button className="bg-orange-500 text-white p-2 rounded-lg hover:bg-orange-600 transition-colors">
                     <ShoppingCart className="h-4 w-4" />

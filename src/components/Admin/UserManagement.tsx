@@ -17,7 +17,10 @@ import {
   Ban,
   CheckCircle,
   AlertCircle,
-  X
+  X,
+  Plus,
+  Save,
+  UserPlus
 } from 'lucide-react';
 
 const UserManagement = () => {
@@ -88,7 +91,18 @@ const UserManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedRole, setSelectedRole] = useState('all');
   const [showUserModal, setShowUserModal] = useState(false);
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    role: 'customer',
+    status: 'active'
+  });
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -132,6 +146,62 @@ const UserManagement = () => {
     setUsers(users.map(user => 
       user.id === userId ? { ...user, status: newStatus } : user
     ));
+  };
+
+  const handleAddUser = () => {
+    const user = {
+      id: users.length + 1,
+      ...newUser,
+      joinDate: new Date().toISOString().split('T')[0],
+      lastLogin: new Date().toISOString().split('T')[0],
+      totalOrders: 0,
+      totalSpent: 0,
+      avatar: null,
+      verified: false
+    };
+
+    setUsers([...users, user]);
+    setNewUser({
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      role: 'customer',
+      status: 'active'
+    });
+    setShowAddUserModal(false);
+  };
+
+  const handleEditUser = (user: any) => {
+    setEditingUser(user);
+    setNewUser({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      role: user.role,
+      status: user.status
+    });
+    setShowEditUserModal(true);
+  };
+
+  const handleUpdateUser = () => {
+    const updatedUser = {
+      ...editingUser,
+      ...newUser
+    };
+
+    setUsers(users.map(u => u.id === editingUser.id ? updatedUser : u));
+    setShowEditUserModal(false);
+    setEditingUser(null);
+    setNewUser({
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      role: 'customer',
+      status: 'active'
+    });
   };
 
   const handleDeleteUser = (userId: number) => {
@@ -269,8 +339,11 @@ const UserManagement = () => {
                 <option value="inactive">Inactive</option>
               </select>
               
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Send Message
+              <button 
+                onClick={() => handleEditUser(selectedUser)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Edit User
               </button>
               
               <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
@@ -290,6 +363,137 @@ const UserManagement = () => {
     </div>
   );
 
+  const UserFormModal = ({ isEdit = false }) => (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-900">
+              {isEdit ? 'Edit User' : 'Add New User'}
+            </h2>
+            <button
+              onClick={() => {
+                setShowAddUserModal(false);
+                setShowEditUserModal(false);
+                setEditingUser(null);
+              }}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={newUser.name}
+                onChange={(e) => setNewUser({...newUser, name: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter full name"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={newUser.email}
+                onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter email address"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                value={newUser.phone}
+                onChange={(e) => setNewUser({...newUser, phone: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="+964 XXX XXX XXXX"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Role
+              </label>
+              <select
+                value={newUser.role}
+                onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+                <option value="moderator">Moderator</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Address
+              </label>
+              <textarea
+                value={newUser.address}
+                onChange={(e) => setNewUser({...newUser, address: e.target.value})}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter full address"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Status
+              </label>
+              <select
+                value={newUser.status}
+                onChange={(e) => setNewUser({...newUser, status: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="active">Active</option>
+                <option value="pending">Pending</option>
+                <option value="suspended">Suspended</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+          <button
+            onClick={() => {
+              setShowAddUserModal(false);
+              setShowEditUserModal(false);
+              setEditingUser(null);
+            }}
+            className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={isEdit ? handleUpdateUser : handleAddUser}
+            className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors flex items-center space-x-2"
+          >
+            <Save className="h-4 w-4" />
+            <span>{isEdit ? 'Update User' : 'Add User'}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -298,9 +502,13 @@ const UserManagement = () => {
           <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
           <p className="text-gray-600">Manage customer accounts and user data</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-600">Total Users: {users.length}</span>
-        </div>
+        <button
+          onClick={() => setShowAddUserModal(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Add User</span>
+        </button>
       </div>
 
       {/* Stats Cards */}
@@ -482,6 +690,13 @@ const UserManagement = () => {
                         <Eye className="h-4 w-4" />
                       </button>
                       <button
+                        onClick={() => handleEditUser(user)}
+                        className="text-green-600 hover:text-green-900"
+                        title="Edit"
+                      >
+                        <Edit3 className="h-4 w-4" />
+                      </button>
+                      <button
                         onClick={() => handleDeleteUser(user.id)}
                         className="text-red-600 hover:text-red-900"
                         title="Delete"
@@ -505,8 +720,10 @@ const UserManagement = () => {
         )}
       </div>
 
-      {/* User Modal */}
+      {/* Modals */}
       {showUserModal && <UserModal />}
+      {showAddUserModal && <UserFormModal />}
+      {showEditUserModal && <UserFormModal isEdit={true} />}
     </div>
   );
 };

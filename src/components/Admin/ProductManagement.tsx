@@ -24,7 +24,6 @@ const ProductManagement = () => {
       brand: 'Golden Harvest',
       category: 'Grains & Rice',
       price: 17000,
-      originalPrice: 21000,
       stock: 45,
       status: 'active',
       rating: 4.8,
@@ -41,7 +40,6 @@ const ProductManagement = () => {
       brand: 'Mediterranean Gold',
       category: 'Oils & Vinegar',
       price: 11800,
-      originalPrice: 14400,
       stock: 12,
       status: 'active',
       rating: 4.9,
@@ -58,7 +56,6 @@ const ProductManagement = () => {
       brand: 'Sweet Delight',
       category: 'Snacks',
       price: 4600,
-      originalPrice: 6500,
       stock: 8,
       status: 'low_stock',
       rating: 4.7,
@@ -82,22 +79,30 @@ const ProductManagement = () => {
     brand: '',
     category: '',
     price: '',
-    originalPrice: '',
     stock: '',
     description: '',
     tags: '',
     image: ''
   });
 
+  // Exact categories from the main app
   const categories = [
+    'Frozen Food',
+    'Bakery',
+    'Snacks',
+    'Cold Drinks',
+    'Cleaning',
+    'Personal Service',
+    'Mobile Accessories',
+    'Electric & Tools',
+    'Toys',
+    'Ice Cream',
+    'Hot Drinks',
     'Grains & Rice',
     'Oils & Vinegar',
-    'Snacks',
-    'Cleaning',
     'Fresh Produce',
     'Dairy',
-    'Beverages',
-    'Frozen Foods'
+    'Beverages'
   ];
 
   const filteredProducts = products.filter(product => {
@@ -143,7 +148,6 @@ const ProductManagement = () => {
       id: products.length + 1,
       ...newProduct,
       price: parseInt(newProduct.price),
-      originalPrice: parseInt(newProduct.originalPrice),
       stock: parseInt(newProduct.stock),
       status: parseInt(newProduct.stock) > 20 ? 'active' : parseInt(newProduct.stock) > 0 ? 'low_stock' : 'out_of_stock',
       rating: 0,
@@ -159,7 +163,6 @@ const ProductManagement = () => {
       brand: '',
       category: '',
       price: '',
-      originalPrice: '',
       stock: '',
       description: '',
       tags: '',
@@ -175,7 +178,6 @@ const ProductManagement = () => {
       brand: product.brand,
       category: product.category,
       price: product.price.toString(),
-      originalPrice: product.originalPrice.toString(),
       stock: product.stock.toString(),
       description: product.description,
       tags: product.tags.join(', '),
@@ -189,7 +191,6 @@ const ProductManagement = () => {
       ...editingProduct,
       ...newProduct,
       price: parseInt(newProduct.price),
-      originalPrice: parseInt(newProduct.originalPrice),
       stock: parseInt(newProduct.stock),
       status: parseInt(newProduct.stock) > 20 ? 'active' : parseInt(newProduct.stock) > 0 ? 'low_stock' : 'out_of_stock',
       tags: newProduct.tags.split(',').map(tag => tag.trim())
@@ -203,7 +204,6 @@ const ProductManagement = () => {
       brand: '',
       category: '',
       price: '',
-      originalPrice: '',
       stock: '',
       description: '',
       tags: '',
@@ -299,29 +299,16 @@ const ProductManagement = () => {
               />
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Price (IQD)
+                Selling Price (IQD)
               </label>
               <input
                 type="number"
                 value={newProduct.price}
                 onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter price"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Original Price (IQD)
-              </label>
-              <input
-                type="number"
-                value={newProduct.originalPrice}
-                onChange={(e) => setNewProduct({...newProduct, originalPrice: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter original price"
+                placeholder="Enter selling price"
               />
             </div>
           </div>
@@ -498,7 +485,6 @@ const ProductManagement = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{formatPrice(product.price)}</div>
-                    <div className="text-xs text-gray-500 line-through">{formatPrice(product.originalPrice)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm font-medium text-gray-900">{product.stock}</span>

@@ -24,7 +24,6 @@ const Cart = () => {
       name: 'Basmati Rice 5kg',
       brand: 'Premium Quality',
       price: 17000,
-      originalPrice: 21000,
       quantity: 2,
       image: 'https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=200',
       category: 'Grains & Rice',
@@ -36,7 +35,6 @@ const Cart = () => {
       name: 'Extra Virgin Olive Oil 1L',
       brand: 'Mediterranean Gold',
       price: 11800,
-      originalPrice: 14400,
       quantity: 1,
       image: 'https://images.pexels.com/photos/33783/olive-oil-salad-dressing-cooking-olive.jpg?auto=compress&cs=tinysrgb&w=200',
       category: 'Oils & Vinegar',
@@ -48,7 +46,6 @@ const Cart = () => {
       name: 'Chocolate Chip Cookies 400g',
       brand: 'Sweet Delight',
       price: 4600,
-      originalPrice: 6500,
       quantity: 3,
       image: 'https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=200',
       category: 'Snacks',
@@ -60,7 +57,6 @@ const Cart = () => {
       name: 'Fresh Milk 1L',
       brand: 'Daily Farm',
       price: 3400,
-      originalPrice: 4000,
       quantity: 2,
       image: 'https://images.pexels.com/photos/236010/pexels-photo-236010.jpeg?auto=compress&cs=tinysrgb&w=200',
       category: 'Dairy',
@@ -147,12 +143,6 @@ const Cart = () => {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const calculateSavings = () => {
-    return cartItems.reduce((total, item) => 
-      total + ((item.originalPrice - item.price) * item.quantity), 0
-    );
   };
 
   const getDeliveryPrice = () => {
@@ -407,9 +397,6 @@ const Cart = () => {
                         <span className="font-bold text-orange-600 text-sm">
                           {formatPrice(item.price)}
                         </span>
-                        <span className="text-xs text-gray-500 line-through">
-                          {formatPrice(item.originalPrice)}
-                        </span>
                         <span className="bg-red-100 text-red-800 text-xs px-1.5 py-0.5 rounded">
                           -{item.discount}%
                         </span>
@@ -590,10 +577,6 @@ const Cart = () => {
             <div className="flex justify-between">
               <span>Subtotal ({inStockItems.length} items)</span>
               <span>{formatPrice(calculateSubtotal())}</span>
-            </div>
-            <div className="flex justify-between text-orange-600">
-              <span>You saved</span>
-              <span>-{formatPrice(calculateSavings())}</span>
             </div>
             <div className="flex justify-between">
               <span>Delivery</span>
