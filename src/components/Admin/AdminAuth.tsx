@@ -8,11 +8,16 @@ import {
   ShieldCheck,
   UserCheck,
   Key,
-  X
+  X,
+  Crown,
+  Monitor,
+  Users
 } from 'lucide-react';
+import { User, UserRole } from '../../types/UserTypes';
+import { getDefaultPermissions, getRoleColor, getRoleName } from '../../utils/roleUtils';
 
 interface AdminAuthProps {
-  onLogin: (adminData: any) => void;
+  onLogin: (adminData: User) => void;
   onClose?: () => void;
   screenSize?: {
     width: number;
@@ -37,11 +42,25 @@ const AdminAuth: React.FC<AdminAuthProps> = ({
     password: ''
   });
 
-  // Demo admin credentials
-  const ADMIN_CREDENTIALS = {
-    email: 'admin@durramarket.com',
-    password: 'admin123456'
-  };
+  // Demo admin credentials for different roles
+  const DEMO_CREDENTIALS = [
+    {
+      email: 'admin@durramarket.com',
+      password: 'admin123456',
+      role: 'admin' as UserRole,
+      name: 'Admin User',
+      department: 'Management',
+      accessLevel: 5
+    },
+    {
+      email: 'monitor@durramarket.com',
+      password: 'monitor123456',
+      role: 'monitor' as UserRole,
+      name: 'Monitor User',
+      department: 'Operations',
+      accessLevel: 2
+    }
+  ];
 
   const handleInputChange = (field: string, value: string) => {
     setLoginData(prev => ({ ...prev, [field]: value }));
@@ -75,8 +94,12 @@ const AdminAuth: React.FC<AdminAuthProps> = ({
       const enteredEmail = loginData.email.trim();
       const enteredPassword = loginData.password.trim();
       
-      if (enteredEmail !== ADMIN_CREDENTIALS.email || enteredPassword !== ADMIN_CREDENTIALS.password) {
-        newErrors.credentials = 'Invalid admin credentials. Please use the demo credentials provided below.';
+      const validCredential = DEMO_CREDENTIALS.find(
+        cred => cred.email === enteredEmail && cred.password === enteredPassword
+      );
+      
+      if (!validCredential) {
+        newErrors.credentials = 'Invalid admin credentials. Please use one of the demo credentials provided below.';
       }
     }
 
@@ -86,28 +109,53 @@ const AdminAuth: React.FC<AdminAuthProps> = ({
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      const adminData = {
-        id: 'admin-001',
-        name: 'Admin User',
-        email: loginData.email,
-        role: 'super_admin',
-        permissions: ['all'],
-        lastLogin: new Date().toISOString()
-      };
-      
-      onLogin(adminData);
-      setIsLoading(false);
-    }, 1500);
+    // Find the matching credential
+    const credential = DEMO_CREDENTIALS.find(
+      cred => cred.email === loginData.email.trim() && cred.password === loginData.password.trim()
+    );
+
+    if (credential) {
+      // Simulate API call
+      setTimeout(() => {
+        const adminData: User = {
+          id: `${credential.role}-001`,
+          name: credential.name,
+          email: credential.email,
+          role: credential.role,
+          status: 'active',
+          permissions: getDefaultPermissions(credential.role),
+          joinDate: '2024-01-01',
+          lastLogin: new Date().toISOString(),
+          verified: true,
+          hasPassword: true,
+          department: credential.department,
+          accessLevel: credential.accessLevel
+        };
+        
+        onLogin(adminData);
+        setIsLoading(false);
+      }, 1500);
+    }
   };
 
-  const fillDemoCredentials = () => {
+  const fillDemoCredentials = (credentialIndex: number) => {
+    const credential = DEMO_CREDENTIALS[credentialIndex];
     setLoginData({
-      email: ADMIN_CREDENTIALS.email,
-      password: ADMIN_CREDENTIALS.password
+      email: credential.email,
+      password: credential.password
     });
     setErrors({});
+  };
+
+  const getRoleIcon = (role: UserRole) => {
+    switch (role) {
+      case 'admin':
+        return <Crown className="h-4 w-4" />;
+      case 'monitor':
+        return <Monitor className="h-4 w-4" />;
+      default:
+        return <Users className="h-4 w-4" />;
+    }
   };
 
   return (
@@ -135,32 +183,42 @@ const AdminAuth: React.FC<AdminAuthProps> = ({
         {/* Content */}
         <div className="p-8">
           {/* Demo Credentials Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
-            <div className="flex justify-between items-start mb-2">
-              <h4 className="font-semibold text-blue-800 flex items-center space-x-2">
-                <Key className="h-4 w-4" />
-                <span>Demo Admin Access</span>
-              </h4>
-              <button
-                type="button"
-                onClick={fillDemoCredentials}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium underline"
-              >
-                Auto-fill
-              </button>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-blue-700">
-                <strong>Email:</strong> {ADMIN_CREDENTIALS.email}
-              </p>
-              <p className="text-sm text-blue-700">
-                <strong>Password:</strong> {ADMIN_CREDENTIALS.password}
-              </p>
-            </div>
-            <p className="text-xs text-blue-600 mt-2 flex items-center space-x-1">
-              <ShieldCheck className="h-3 w-3" />
-              <span>Use these credentials to access the admin dashboard</span>
-            </p>
+          <div className="space-y-4 mb-6">
+            <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
+              <Key className="h-4 w-4" />
+              <span>Demo Access Credentials</span>
+            </h4>
+            
+            {DEMO_CREDENTIALS.map((credential, index) => (
+              <div key={index} className={`bg-gradient-to-r ${getRoleColor(credential.role)} bg-opacity-10 border border-gray-200 rounded-2xl p-4`}>
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div className={`bg-gradient-to-r ${getRoleColor(credential.role)} p-1 rounded-lg`}>
+                      {getRoleIcon(credential.role)}
+                    </div>
+                    <h5 className="font-semibold text-gray-800">{getRoleName(credential.role)} Access</h5>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => fillDemoCredentials(index)}
+                    className="text-blue-600 hover:text-blue-700 text-sm font-medium underline"
+                  >
+                    Auto-fill
+                  </button>
+                </div>
+                <div className="space-y-1 text-sm">
+                  <p className="text-gray-700">
+                    <strong>Email:</strong> {credential.email}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Password:</strong> {credential.password}
+                  </p>
+                  <p className="text-gray-600 text-xs">
+                    {credential.department} • Level {credential.accessLevel}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Credentials Error */}
@@ -242,11 +300,38 @@ const AdminAuth: React.FC<AdminAuthProps> = ({
               ) : (
                 <>
                   <UserCheck className="h-5 w-5" />
-                  <span>Access Admin Dashboard</span>
+                  <span>Access Dashboard</span>
                 </>
               )}
             </button>
           </form>
+
+          {/* Role Information */}
+          <div className="mt-6 space-y-3">
+            <h4 className="font-medium text-gray-900 text-sm">Role Capabilities:</h4>
+            
+            <div className="space-y-2 text-xs">
+              <div className="flex items-start space-x-2">
+                <div className="bg-gradient-to-r from-red-500 to-red-600 p-1 rounded">
+                  <Crown className="h-3 w-3 text-white" />
+                </div>
+                <div>
+                  <span className="font-medium text-gray-900">Admin:</span>
+                  <span className="text-gray-600 ml-1">Full system access, user management, financial reports</span>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-2">
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-1 rounded">
+                  <Monitor className="h-3 w-3 text-white" />
+                </div>
+                <div>
+                  <span className="font-medium text-gray-900">Monitor:</span>
+                  <span className="text-gray-600 ml-1">View-only access, order status updates, basic reports</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Security Notice */}
           <div className="mt-6 p-4 bg-gray-50 rounded-2xl">

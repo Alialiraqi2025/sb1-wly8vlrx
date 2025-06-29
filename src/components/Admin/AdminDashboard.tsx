@@ -22,16 +22,21 @@ import {
   CheckCircle,
   XCircle,
   RefreshCw,
-  Grid3X3
+  Grid3X3,
+  Shield,
+  Monitor,
+  Crown
 } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import UserManagement from './UserManagement';
 import OrderManagement from './OrderManagement';
 import Analytics from './Analytics';
 import CategoryManagement from './CategoryManagement';
+import { User } from '../../types/UserTypes';
+import { hasPermission, getAccessibleMenuItems, getRoleColor, getRoleName } from '../../utils/roleUtils';
 
 interface AdminDashboardProps {
-  admin: any;
+  admin: User;
   onLogout: () => void;
   screenSize?: {
     width: number;
@@ -62,7 +67,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       change: '+12.5%',
       changeType: 'positive',
       icon: DollarSign,
-      color: 'from-green-500 to-emerald-600'
+      color: 'from-green-500 to-emerald-600',
+      visible: hasPermission(admin, 'view_analytics') || hasPermission(admin, 'financial_reports')
     },
     {
       title: 'Total Orders',
@@ -70,7 +76,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       change: '+8.2%',
       changeType: 'positive',
       icon: ShoppingCart,
-      color: 'from-blue-500 to-cyan-600'
+      color: 'from-blue-500 to-cyan-600',
+      visible: hasPermission(admin, 'view_orders') || hasPermission(admin, 'manage_orders')
     },
     {
       title: 'Total Users',
@@ -78,7 +85,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       change: '+15.3%',
       changeType: 'positive',
       icon: Users,
-      color: 'from-purple-500 to-indigo-600'
+      color: 'from-purple-500 to-indigo-600',
+      visible: hasPermission(admin, 'view_customers') || hasPermission(admin, 'manage_users')
     },
     {
       title: 'Total Products',
@@ -86,7 +94,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       change: '+3.1%',
       changeType: 'positive',
       icon: Package,
-      color: 'from-orange-500 to-red-600'
+      color: 'from-orange-500 to-red-600',
+      visible: hasPermission(admin, 'view_products') || hasPermission(admin, 'manage_products')
     }
   ];
 
@@ -123,14 +132,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     { name: 'Chocolate Cookies', stock: 8, threshold: 15, status: 'low' }
   ];
 
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'categories', label: 'Categories', icon: Grid3X3 },
-    { id: 'products', label: 'Products', icon: Package },
-    { id: 'orders', label: 'Orders', icon: ShoppingCart },
-    { id: 'users', label: 'Users', icon: Users },
-    { id: 'analytics', label: 'Analytics', icon: TrendingUp }
-  ];
+  // Get accessible menu items based on user permissions
+  const menuItems = getAccessibleMenuItems(admin);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -158,11 +161,40 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'admin':
+        return <Crown className="h-5 w-5 text-white" />;
+      case 'monitor':
+        return <Monitor className="h-5 w-5 text-white" />;
+      default:
+        return <Shield className="h-5 w-5 text-white" />;
+    }
+  };
+
   const renderDashboardContent = () => (
     <div className="space-y-6">
+      {/* Welcome Message */}
+      <div className={`bg-gradient-to-r ${getRoleColor(admin.role)} rounded-2xl p-6 text-white`}>
+        <div className="flex items-center space-x-4">
+          <div className="bg-white/20 p-3 rounded-xl">
+            {getRoleIcon(admin.role)}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Welcome back, {admin.name}!</h2>
+            <p className="text-white/90">
+              {getRoleName(admin.role)} Dashboard - {admin.department && `${admin.department} Department`}
+            </p>
+            {admin.accessLevel && (
+              <p className="text-white/80 text-sm">Access Level: {admin.accessLevel}</p>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
+        {stats.filter(stat => stat.visible).map((stat, index) => (
           <div key={index} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all">
             <div className="flex items-center justify-between mb-4">
               <div className={`bg-gradient-to-r ${stat.color} p-3 rounded-xl`}>
@@ -182,124 +214,177 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Recent Orders & Low Stock */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Orders */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Recent Orders</h3>
-            <button 
-              onClick={() => setActiveTab('orders')}
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-            >
-              View All
-            </button>
-          </div>
-          <div className="space-y-4">
-            {recentOrders.map((order) => (
-              <div key={order.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <h4 className="font-semibold text-gray-900">{order.id}</h4>
-                  <p className="text-sm text-gray-600">{order.customer}</p>
-                  <p className="text-xs text-gray-500">{order.items} items • {order.time}</p>
+        {/* Recent Orders - Show if user can view orders */}
+        {(hasPermission(admin, 'view_orders') || hasPermission(admin, 'manage_orders')) && (
+          <div className="bg-white rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-900">Recent Orders</h3>
+              <button 
+                onClick={() => setActiveTab('orders')}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                View All
+              </button>
+            </div>
+            <div className="space-y-4">
+              {recentOrders.map((order) => (
+                <div key={order.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{order.id}</h4>
+                    <p className="text-sm text-gray-600">{order.customer}</p>
+                    <p className="text-xs text-gray-500">{order.items} items • {order.time}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-gray-900">{order.total}</p>
+                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-gray-900">{order.total}</p>
-                  <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(order.status)}`}>
-                    {order.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Low Stock Alert */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Low Stock Alert</h3>
-            <button 
-              onClick={() => setActiveTab('products')}
-              className="text-orange-600 hover:text-orange-700 text-sm font-medium"
-            >
-              Manage Stock
-            </button>
-          </div>
-          <div className="space-y-4">
-            {lowStockProducts.map((product, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <h4 className="font-semibold text-gray-900">{product.name}</h4>
-                  <p className="text-sm text-gray-600">Threshold: {product.threshold} units</p>
+        {/* Low Stock Alert - Show if user can view products */}
+        {(hasPermission(admin, 'view_products') || hasPermission(admin, 'manage_products')) && (
+          <div className="bg-white rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-900">Low Stock Alert</h3>
+              <button 
+                onClick={() => setActiveTab('products')}
+                className="text-orange-600 hover:text-orange-700 text-sm font-medium"
+              >
+                Manage Stock
+              </button>
+            </div>
+            <div className="space-y-4">
+              {lowStockProducts.map((product, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{product.name}</h4>
+                    <p className="text-sm text-gray-600">Threshold: {product.threshold} units</p>
+                  </div>
+                  <div className="text-right">
+                    <p className={`font-bold text-lg ${getStockStatusColor(product.status)}`}>
+                      {product.stock}
+                    </p>
+                    <span className={`text-xs px-2 py-1 rounded-full ${getStockStatusColor(product.status)}`}>
+                      {product.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className={`font-bold text-lg ${getStockStatusColor(product.status)}`}>
-                    {product.stock}
-                  </p>
-                  <span className={`text-xs px-2 py-1 rounded-full ${getStockStatusColor(product.status)}`}>
-                    {product.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Quick Actions */}
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <button 
-            onClick={() => setActiveTab('categories')}
-            className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
-          >
-            <Grid3X3 className="h-8 w-8 text-purple-600 mb-2" />
-            <span className="text-sm font-medium text-purple-900">Manage Categories</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('products')}
-            className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
-          >
-            <Plus className="h-8 w-8 text-blue-600 mb-2" />
-            <span className="text-sm font-medium text-blue-900">Add Product</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('orders')}
-            className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
-          >
-            <Eye className="h-8 w-8 text-green-600 mb-2" />
-            <span className="text-sm font-medium text-green-900">View Orders</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('users')}
-            className="flex flex-col items-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
-          >
-            <Users className="h-8 w-8 text-indigo-600 mb-2" />
-            <span className="text-sm font-medium text-indigo-900">Manage Users</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('analytics')}
-            className="flex flex-col items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
-          >
-            <BarChart3 className="h-8 w-8 text-orange-600 mb-2" />
-            <span className="text-sm font-medium text-orange-900">View Analytics</span>
-          </button>
+          {hasPermission(admin, 'manage_categories') && (
+            <button 
+              onClick={() => setActiveTab('categories')}
+              className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
+            >
+              <Grid3X3 className="h-8 w-8 text-purple-600 mb-2" />
+              <span className="text-sm font-medium text-purple-900">Manage Categories</span>
+            </button>
+          )}
+          
+          {hasPermission(admin, 'manage_products') && (
+            <button 
+              onClick={() => setActiveTab('products')}
+              className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+            >
+              <Plus className="h-8 w-8 text-blue-600 mb-2" />
+              <span className="text-sm font-medium text-blue-900">Add Product</span>
+            </button>
+          )}
+          
+          {(hasPermission(admin, 'view_orders') || hasPermission(admin, 'manage_orders')) && (
+            <button 
+              onClick={() => setActiveTab('orders')}
+              className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+            >
+              <Eye className="h-8 w-8 text-green-600 mb-2" />
+              <span className="text-sm font-medium text-green-900">View Orders</span>
+            </button>
+          )}
+          
+          {(hasPermission(admin, 'view_customers') || hasPermission(admin, 'manage_users')) && (
+            <button 
+              onClick={() => setActiveTab('users')}
+              className="flex flex-col items-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
+            >
+              <Users className="h-8 w-8 text-indigo-600 mb-2" />
+              <span className="text-sm font-medium text-indigo-900">Manage Users</span>
+            </button>
+          )}
+          
+          {(hasPermission(admin, 'view_analytics') || hasPermission(admin, 'view_reports')) && (
+            <button 
+              onClick={() => setActiveTab('analytics')}
+              className="flex flex-col items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
+            >
+              <BarChart3 className="h-8 w-8 text-orange-600 mb-2" />
+              <span className="text-sm font-medium text-orange-900">View Analytics</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Role-specific Information */}
+      {admin.role === 'monitor' && (
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-6">
+          <div className="flex items-start space-x-3">
+            <Monitor className="h-6 w-6 text-purple-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-purple-900 mb-2">Monitor Role Information</h4>
+              <p className="text-purple-800 text-sm mb-3">
+                As a Monitor, you have view-only access to most sections with limited order management capabilities.
+              </p>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h5 className="font-medium text-purple-900 mb-1">You can:</h5>
+                  <ul className="text-purple-700 space-y-1">
+                    <li>• View all orders and customers</li>
+                    <li>• Update order status</li>
+                    <li>• View product inventory</li>
+                    <li>• Access reports and analytics</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-medium text-purple-900 mb-1">You cannot:</h5>
+                  <ul className="text-purple-700 space-y-1">
+                    <li>• Add or delete products</li>
+                    <li>• Manage user accounts</li>
+                    <li>• Access system settings</li>
+                    <li>• View financial reports</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
   const renderContent = () => {
     switch (activeTab) {
       case 'categories':
-        return <CategoryManagement />;
+        return hasPermission(admin, 'manage_categories') ? <CategoryManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
       case 'products':
-        return <ProductManagement />;
+        return (hasPermission(admin, 'manage_products') || hasPermission(admin, 'view_products')) ? <ProductManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
       case 'orders':
-        return <OrderManagement />;
+        return (hasPermission(admin, 'manage_orders') || hasPermission(admin, 'view_orders')) ? <OrderManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
       case 'users':
-        return <UserManagement />;
+        return (hasPermission(admin, 'manage_users') || hasPermission(admin, 'view_customers')) ? <UserManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
       case 'analytics':
-        return <Analytics />;
+        return (hasPermission(admin, 'view_analytics') || hasPermission(admin, 'view_reports')) ? <Analytics /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
       default:
         return renderDashboardContent();
     }
@@ -312,11 +397,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-2 rounded-xl">
-                <BarChart3 className="h-6 w-6 text-white" />
+              <div className={`bg-gradient-to-r ${getRoleColor(admin.role)} p-2 rounded-xl`}>
+                {getRoleIcon(admin.role)}
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
+                <h1 className="text-xl font-bold text-gray-900">{getRoleName(admin.role)} Dashboard</h1>
                 <p className="text-sm text-gray-600">Durra Market 2</p>
               </div>
             </div>
@@ -346,10 +431,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div className="flex items-center space-x-3">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-gray-900">{admin.name}</p>
-                  <p className="text-xs text-gray-600">{admin.role}</p>
+                  <p className="text-xs text-gray-600">{getRoleName(admin.role)}</p>
                 </div>
-                <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-2 rounded-full">
-                  <Users className="h-5 w-5 text-white" />
+                <div className={`bg-gradient-to-r ${getRoleColor(admin.role)} p-2 rounded-full`}>
+                  {getRoleIcon(admin.role)}
                 </div>
               </div>
 
@@ -378,11 +463,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     onClick={() => setActiveTab(item.id)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
                       activeTab === item.id
-                        ? 'bg-gray-900 text-white'
+                        ? `bg-gradient-to-r ${getRoleColor(admin.role)} text-white`
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
-                    <item.icon className="h-5 w-5" />
                     <span className="font-medium">{item.label}</span>
                   </button>
                 ))}
