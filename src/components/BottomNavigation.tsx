@@ -1,9 +1,10 @@
 import React from 'react';
-import { Home, Search, Grid3X3, ShoppingBag, User } from 'lucide-react';
+import { Home, Search, Grid3X3, ShoppingBag, User, Lock } from 'lucide-react';
 
 interface BottomNavigationProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  onShowAdminAuth?: () => void;
   screenSize?: {
     width: number;
     height: number;
@@ -16,6 +17,7 @@ interface BottomNavigationProps {
 const BottomNavigation: React.FC<BottomNavigationProps> = ({ 
   currentView, 
   setCurrentView,
+  onShowAdminAuth,
   screenSize = { width: 0, height: 0, isMobile: true, isTablet: false, isDesktop: false }
 }) => {
   const navItems = [
@@ -74,26 +76,41 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   };
 
   return (
-    <div className={getBottomNavClass()}>
-      <div className={getContainerClass()}>
-        <div className="flex items-center justify-around py-2">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrentView(item.id)}
-              className={getButtonClass(currentView === item.id)}
-              aria-label={`Navigate to ${item.label}`}
-            >
-              <item.icon className={getIconClass(currentView === item.id)} />
-              <span className={getTextClass()}>{item.label}</span>
-              {item.id === 'cart' && (
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
-              )}
-            </button>
-          ))}
+    <>
+      {/* Admin Login Button - Positioned above bottom navigation */}
+      <div className="fixed bottom-20 right-4 z-50">
+        <button
+          onClick={onShowAdminAuth}
+          className="bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-900 transition-all duration-300 hover:scale-110 touch-target ios-button android-button hover-lift touch-active focus-ring"
+          aria-label="Admin login"
+          title="Admin Access"
+        >
+          <Lock className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className={getBottomNavClass()}>
+        <div className={getContainerClass()}>
+          <div className="flex items-center justify-around py-2">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setCurrentView(item.id)}
+                className={getButtonClass(currentView === item.id)}
+                aria-label={`Navigate to ${item.label}`}
+              >
+                <item.icon className={getIconClass(currentView === item.id)} />
+                <span className={getTextClass()}>{item.label}</span>
+                {item.id === 'cart' && (
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

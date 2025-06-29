@@ -21,12 +21,14 @@ import {
   AlertTriangle,
   CheckCircle,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  Grid3X3
 } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import UserManagement from './UserManagement';
 import OrderManagement from './OrderManagement';
 import Analytics from './Analytics';
+import CategoryManagement from './CategoryManagement';
 
 interface AdminDashboardProps {
   admin: any;
@@ -123,6 +125,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+    { id: 'categories', label: 'Categories', icon: Grid3X3 },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'users', label: 'Users', icon: Users },
@@ -244,7 +247,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Quick Actions */}
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <button 
+            onClick={() => setActiveTab('categories')}
+            className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
+          >
+            <Grid3X3 className="h-8 w-8 text-purple-600 mb-2" />
+            <span className="text-sm font-medium text-purple-900">Manage Categories</span>
+          </button>
           <button 
             onClick={() => setActiveTab('products')}
             className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
@@ -261,10 +271,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </button>
           <button 
             onClick={() => setActiveTab('users')}
-            className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
+            className="flex flex-col items-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
           >
-            <Users className="h-8 w-8 text-purple-600 mb-2" />
-            <span className="text-sm font-medium text-purple-900">Manage Users</span>
+            <Users className="h-8 w-8 text-indigo-600 mb-2" />
+            <span className="text-sm font-medium text-indigo-900">Manage Users</span>
           </button>
           <button 
             onClick={() => setActiveTab('analytics')}
@@ -280,6 +290,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'categories':
+        return <CategoryManagement />;
       case 'products':
         return <ProductManagement />;
       case 'orders':

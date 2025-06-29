@@ -114,6 +114,7 @@ function App() {
     return (
       <AdminAuth 
         onLogin={handleAdminLogin}
+        onClose={() => setShowAdminAuth(false)}
         screenSize={screenSize}
       />
     );
@@ -174,7 +175,7 @@ function App() {
     if (screenSize.isDesktop) {
       return 'fixed bottom-8 right-8 bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-40 touch-target';
     } else {
-      return 'fixed bottom-24 right-4 bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-40 touch-target';
+      return 'fixed bottom-32 left-4 bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-40 touch-target';
     }
   };
 
@@ -198,6 +199,7 @@ function App() {
         <BottomNavigation 
           currentView={currentView} 
           setCurrentView={setCurrentView}
+          onShowAdminAuth={() => setShowAdminAuth(true)}
           screenSize={screenSize}
         />
       )}
@@ -225,6 +227,16 @@ function App() {
                 {item.label}
               </button>
             ))}
+          </div>
+          
+          {/* Desktop Admin Access */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <button
+              onClick={() => setShowAdminAuth(true)}
+              className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-gray-900 transition-colors flex items-center justify-center space-x-2"
+            >
+              <span>Admin</span>
+            </button>
           </div>
         </nav>
       )}
@@ -256,18 +268,6 @@ function App() {
         >
           <MessageCircle className="h-6 w-6" />
         </button>
-      )}
-
-      {/* Admin Access Link - Hidden but accessible via URL parameter */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed bottom-4 left-4 z-50">
-          <button
-            onClick={() => setShowAdminAuth(true)}
-            className="bg-gray-800 text-white px-3 py-1 rounded text-xs opacity-20 hover:opacity-100 transition-opacity"
-          >
-            Admin
-          </button>
-        </div>
       )}
     </div>
   );

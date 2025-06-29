@@ -7,11 +7,13 @@ import {
   AlertCircle, 
   ShieldCheck,
   UserCheck,
-  Key
+  Key,
+  X
 } from 'lucide-react';
 
 interface AdminAuthProps {
   onLogin: (adminData: any) => void;
+  onClose?: () => void;
   screenSize?: {
     width: number;
     height: number;
@@ -23,6 +25,7 @@ interface AdminAuthProps {
 
 const AdminAuth: React.FC<AdminAuthProps> = ({ 
   onLogin,
+  onClose,
   screenSize = { width: 0, height: 0, isMobile: true, isTablet: false, isDesktop: false }
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -111,12 +114,22 @@ const AdminAuth: React.FC<AdminAuthProps> = ({
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 text-white text-center">
-          <div className="bg-white/20 p-4 rounded-2xl inline-block mb-4">
-            <Shield className="h-12 w-12" />
+        <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 text-white relative">
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
+          <div className="text-center">
+            <div className="bg-white/20 p-4 rounded-2xl inline-block mb-4">
+              <Shield className="h-12 w-12" />
+            </div>
+            <h1 className="text-2xl font-bold mb-2">Admin Portal</h1>
+            <p className="text-gray-300">Durra Market 2 Management</p>
           </div>
-          <h1 className="text-2xl font-bold mb-2">Admin Portal</h1>
-          <p className="text-gray-300">Durra Market 2 Management</p>
         </div>
 
         {/* Content */}
