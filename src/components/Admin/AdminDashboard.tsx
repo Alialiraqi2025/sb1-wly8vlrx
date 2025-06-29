@@ -25,15 +25,18 @@ import {
   Grid3X3,
   Shield,
   Monitor,
-  Crown
+  Crown,
+  MessageCircle,
+  Headphones
 } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import UserManagement from './UserManagement';
 import OrderManagement from './OrderManagement';
 import Analytics from './Analytics';
 import CategoryManagement from './CategoryManagement';
+import CustomerSupport from './CustomerSupport';
 import { User } from '../../types/UserTypes';
-import { hasPermission, getAccessibleMenuItems, getRoleColor, getRoleName } from '../../utils/roleUtils';
+import { hasPermission, getAccessibleMenuItems, getRoleColor, getRoleName, getRoleRestrictions, canPerformAction } from '../../utils/roleUtils';
 
 interface AdminDashboardProps {
   admin: User;
@@ -56,7 +59,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [notifications] = useState([
     { id: 1, type: 'order', message: 'New order #ORD-2024-156', time: '2 min ago', unread: true },
     { id: 2, type: 'user', message: 'New user registration', time: '5 min ago', unread: true },
-    { id: 3, type: 'product', message: 'Low stock alert: Basmati Rice', time: '10 min ago', unread: false }
+    { id: 3, type: 'product', message: 'Low stock alert: Basmati Rice', time: '10 min ago', unread: false },
+    { id: 4, type: 'support', message: 'New customer support message', time: '15 min ago', unread: true }
   ]);
 
   // Dashboard stats
@@ -130,6 +134,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     { name: 'Basmati Rice 5kg', stock: 5, threshold: 20, status: 'critical' },
     { name: 'Olive Oil 1L', stock: 12, threshold: 25, status: 'low' },
     { name: 'Chocolate Cookies', stock: 8, threshold: 15, status: 'low' }
+  ];
+
+  const customerSupportStats = [
+    { label: 'Active Chats', value: 12, color: 'text-blue-600' },
+    { label: 'Pending Messages', value: 8, color: 'text-orange-600' },
+    { label: 'Resolved Today', value: 24, color: 'text-green-600' },
+    { label: 'Avg Response Time', value: '2.5 min', color: 'text-purple-600' }
   ];
 
   // Get accessible menu items based on user permissions
@@ -212,6 +223,29 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         ))}
       </div>
 
+      {/* Monitor-specific Customer Support Stats */}
+      {admin.role === 'monitor' && (
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-gray-900">Customer Support Overview</h3>
+            <button 
+              onClick={() => setActiveTab('support')}
+              className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+            >
+              Manage Support
+            </button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {customerSupportStats.map((stat, index) => (
+              <div key={index} className="text-center p-4 bg-gray-50 rounded-xl">
+                <div className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.value}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Recent Orders & Low Stock */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Orders - Show if user can view orders */}
@@ -255,7 +289,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 onClick={() => setActiveTab('products')}
                 className="text-orange-600 hover:text-orange-700 text-sm font-medium"
               >
-                Manage Stock
+                View Products
               </button>
             </div>
             <div className="space-y-4">
@@ -310,11 +344,21 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
             >
               <Eye className="h-8 w-8 text-green-600 mb-2" />
-              <span className="text-sm font-medium text-green-900">View Orders</span>
+              <span className="text-sm font-medium text-green-900">Manage Orders</span>
             </button>
           )}
           
-          {(hasPermission(admin, 'view_customers') || hasPermission(admin, 'manage_users')) && (
+          {hasPermission(admin, 'chat_with_customers') && (
+            <button 
+              onClick={() => setActiveTab('support')}
+              className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
+            >
+              <MessageCircle className="h-8 w-8 text-purple-600 mb-2" />
+              <span className="text-sm font-medium text-purple-900">Customer Support</span>
+            </button>
+          )}
+          
+          {hasPermission(admin, 'manage_users') && (
             <button 
               onClick={() => setActiveTab('users')}
               className="flex flex-col items-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
@@ -342,27 +386,28 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="flex items-start space-x-3">
             <Monitor className="h-6 w-6 text-purple-600 mt-1" />
             <div>
-              <h4 className="font-semibold text-purple-900 mb-2">Monitor Role Information</h4>
+              <h4 className="font-semibold text-purple-900 mb-2">Monitor Role Capabilities</h4>
               <p className="text-purple-800 text-sm mb-3">
-                As a Monitor, you have view-only access to most sections with limited order management capabilities.
+                As a Monitor, you specialize in order management and customer support with focused access to operational tools.
               </p>
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <h5 className="font-medium text-purple-900 mb-1">You can:</h5>
+                  <h5 className="font-medium text-purple-900 mb-1">✅ You can:</h5>
                   <ul className="text-purple-700 space-y-1">
-                    <li>• View all orders and customers</li>
-                    <li>• Update order status</li>
-                    <li>• View product inventory</li>
-                    <li>• Access reports and analytics</li>
+                    <li>• View and manage all orders</li>
+                    <li>• Update order status and tracking</li>
+                    <li>• Chat with customers and provide support</li>
+                    <li>• View customer information and history</li>
+                    <li>• View product inventory (read-only)</li>
+                    <li>• Access operational reports and analytics</li>
                   </ul>
                 </div>
                 <div>
-                  <h5 className="font-medium text-purple-900 mb-1">You cannot:</h5>
+                  <h5 className="font-medium text-purple-900 mb-1">❌ Restrictions:</h5>
                   <ul className="text-purple-700 space-y-1">
-                    <li>• Add or delete products</li>
-                    <li>• Manage user accounts</li>
-                    <li>• Access system settings</li>
-                    <li>• View financial reports</li>
+                    {getRoleRestrictions(admin.role).map((restriction, index) => (
+                      <li key={index}>• {restriction}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -376,15 +421,59 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const renderContent = () => {
     switch (activeTab) {
       case 'categories':
-        return hasPermission(admin, 'manage_categories') ? <CategoryManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
+        return canPerformAction(admin, 'add_category') ? 
+          <CategoryManagement /> : 
+          <div className="text-center py-12 text-gray-500">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+            <h3 className="text-lg font-semibold mb-2">Access Restricted</h3>
+            <p>You don't have permission to manage categories.</p>
+          </div>;
+      
       case 'products':
-        return (hasPermission(admin, 'manage_products') || hasPermission(admin, 'view_products')) ? <ProductManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
+        return (canPerformAction(admin, 'add_product') || canPerformAction(admin, 'view_product')) ? 
+          <ProductManagement userRole={admin.role} /> : 
+          <div className="text-center py-12 text-gray-500">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+            <h3 className="text-lg font-semibold mb-2">Access Restricted</h3>
+            <p>You don't have permission to access products.</p>
+          </div>;
+      
       case 'orders':
-        return (hasPermission(admin, 'manage_orders') || hasPermission(admin, 'view_orders')) ? <OrderManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
+        return (hasPermission(admin, 'manage_orders') || hasPermission(admin, 'view_orders')) ? 
+          <OrderManagement userRole={admin.role} /> : 
+          <div className="text-center py-12 text-gray-500">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+            <h3 className="text-lg font-semibold mb-2">Access Restricted</h3>
+            <p>You don't have permission to access orders.</p>
+          </div>;
+      
       case 'users':
-        return (hasPermission(admin, 'manage_users') || hasPermission(admin, 'view_customers')) ? <UserManagement /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
+        return hasPermission(admin, 'manage_users') ? 
+          <UserManagement /> : 
+          <div className="text-center py-12 text-gray-500">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+            <h3 className="text-lg font-semibold mb-2">Access Restricted</h3>
+            <p>You don't have permission to manage users.</p>
+          </div>;
+      
       case 'analytics':
-        return (hasPermission(admin, 'view_analytics') || hasPermission(admin, 'view_reports')) ? <Analytics /> : <div className="text-center py-12 text-gray-500">Access Denied</div>;
+        return (hasPermission(admin, 'view_analytics') || hasPermission(admin, 'view_reports')) ? 
+          <Analytics userRole={admin.role} /> : 
+          <div className="text-center py-12 text-gray-500">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+            <h3 className="text-lg font-semibold mb-2">Access Restricted</h3>
+            <p>You don't have permission to view analytics.</p>
+          </div>;
+      
+      case 'support':
+        return hasPermission(admin, 'chat_with_customers') ? 
+          <CustomerSupport userRole={admin.role} /> : 
+          <div className="text-center py-12 text-gray-500">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+            <h3 className="text-lg font-semibold mb-2">Access Restricted</h3>
+            <p>You don't have permission to access customer support.</p>
+          </div>;
+      
       default:
         return renderDashboardContent();
     }

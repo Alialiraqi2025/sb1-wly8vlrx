@@ -14,12 +14,22 @@ import {
   Eye,
   Star,
   Clock,
-  MapPin
+  MapPin,
+  Lock,
+  AlertTriangle
 } from 'lucide-react';
 
-const Analytics = () => {
+interface AnalyticsProps {
+  userRole?: string;
+}
+
+const Analytics: React.FC<AnalyticsProps> = ({ userRole = 'admin' }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('7days');
   const [selectedMetric, setSelectedMetric] = useState('revenue');
+
+  // Check permissions based on user role
+  const canViewFinancialData = userRole === 'admin';
+  const canViewOperationalData = userRole === 'admin' || userRole === 'monitor';
 
   // Sample analytics data
   const analyticsData = {
@@ -74,28 +84,28 @@ const Analytics = () => {
     {
       name: 'Premium Basmati Rice 5kg',
       sales: 245,
-      revenue: 4165000,
+      revenue: canViewFinancialData ? 4165000 : null,
       growth: 18.5,
       image: 'https://images.pexels.com/photos/723198/pexels-photo-723198.jpeg?auto=compress&cs=tinysrgb&w=100'
     },
     {
       name: 'Extra Virgin Olive Oil 1L',
       sales: 189,
-      revenue: 2230200,
+      revenue: canViewFinancialData ? 2230200 : null,
       growth: 12.3,
       image: 'https://images.pexels.com/photos/33783/olive-oil-salad-dressing-cooking-olive.jpg?auto=compress&cs=tinysrgb&w=100'
     },
     {
       name: 'Chocolate Chip Cookies 400g',
       sales: 167,
-      revenue: 768200,
+      revenue: canViewFinancialData ? 768200 : null,
       growth: 25.7,
       image: 'https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=100'
     },
     {
       name: 'All-Purpose Cleaner 750ml',
       sales: 134,
-      revenue: 696800,
+      revenue: canViewFinancialData ? 696800 : null,
       growth: 8.9,
       image: 'https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg?auto=compress&cs=tinysrgb&w=100'
     }
@@ -105,40 +115,40 @@ const Analytics = () => {
     {
       name: 'Ahmed Al-Rashid',
       orders: 24,
-      spent: 156000,
+      spent: canViewFinancialData ? 156000 : null,
       lastOrder: '2024-01-20',
       status: 'VIP'
     },
     {
       name: 'Sarah Ahmed',
       orders: 31,
-      spent: 198700,
+      spent: canViewFinancialData ? 198700 : null,
       lastOrder: '2024-01-20',
       status: 'VIP'
     },
     {
       name: 'Fatima Hassan',
       orders: 18,
-      spent: 89500,
+      spent: canViewFinancialData ? 89500 : null,
       lastOrder: '2024-01-19',
       status: 'Regular'
     },
     {
       name: 'Omar Khalil',
       orders: 15,
-      spent: 67200,
+      spent: canViewFinancialData ? 67200 : null,
       lastOrder: '2024-01-19',
       status: 'Regular'
     }
   ];
 
   const categoryPerformance = [
-    { name: 'Grains & Rice', sales: 45, revenue: 765000, growth: 15.2 },
-    { name: 'Oils & Vinegar', sales: 32, revenue: 378400, growth: 8.7 },
-    { name: 'Snacks', sales: 28, revenue: 128800, growth: 22.1 },
-    { name: 'Cleaning', sales: 25, revenue: 130000, growth: 12.5 },
-    { name: 'Fresh Produce', sales: 38, revenue: 106400, growth: 18.9 },
-    { name: 'Dairy', sales: 22, revenue: 74800, growth: 6.3 }
+    { name: 'Grains & Rice', sales: 45, revenue: canViewFinancialData ? 765000 : null, growth: 15.2 },
+    { name: 'Oils & Vinegar', sales: 32, revenue: canViewFinancialData ? 378400 : null, growth: 8.7 },
+    { name: 'Snacks', sales: 28, revenue: canViewFinancialData ? 128800 : null, growth: 22.1 },
+    { name: 'Cleaning', sales: 25, revenue: canViewFinancialData ? 130000 : null, growth: 12.5 },
+    { name: 'Fresh Produce', sales: 38, revenue: canViewFinancialData ? 106400 : null, growth: 18.9 },
+    { name: 'Dairy', sales: 22, revenue: canViewFinancialData ? 74800 : null, growth: 6.3 }
   ];
 
   const recentActivity = [
@@ -172,7 +182,8 @@ const Analytics = () => {
     }
   ];
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null) => {
+    if (price === null) return 'Restricted';
     return `${price.toLocaleString()} IQD`;
   };
 
@@ -195,7 +206,9 @@ const Analytics = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
-          <p className="text-gray-600">Track your store performance and insights</p>
+          <p className="text-gray-600">
+            {userRole === 'monitor' ? 'Track operational performance and customer insights' : 'Track your store performance and insights'}
+          </p>
         </div>
         <div className="flex items-center space-x-3">
           <select
@@ -215,30 +228,50 @@ const Analytics = () => {
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="bg-green-100 p-3 rounded-xl">
-              <DollarSign className="h-6 w-6 text-green-600" />
-            </div>
-            <div className={`flex items-center space-x-1 text-sm ${
-              analyticsData.revenue.trend === 'up' ? 'text-green-600' : 'text-red-600'
-            }`}>
-              {analyticsData.revenue.trend === 'up' ? (
-                <TrendingUp className="h-4 w-4" />
-              ) : (
-                <TrendingDown className="h-4 w-4" />
-              )}
-              <span>{analyticsData.revenue.change}%</span>
+      {/* Role Restriction Notice for Monitor */}
+      {userRole === 'monitor' && (
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
+          <div className="flex items-start space-x-3">
+            <Lock className="h-5 w-5 text-purple-600 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-purple-900 mb-1">Operational Analytics Access</h4>
+              <p className="text-purple-800 text-sm">
+                As a Monitor, you can view operational metrics like orders, customers, and product performance. 
+                Financial data and revenue information are restricted to administrators only.
+              </p>
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-1">
-            {formatPrice(analyticsData.revenue.current)}
-          </h3>
-          <p className="text-gray-600 text-sm">Total Revenue</p>
         </div>
+      )}
 
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Revenue - Only for Admin */}
+        {canViewFinancialData && (
+          <div className="bg-white rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-green-100 p-3 rounded-xl">
+                <DollarSign className="h-6 w-6 text-green-600" />
+              </div>
+              <div className={`flex items-center space-x-1 text-sm ${
+                analyticsData.revenue.trend === 'up' ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {analyticsData.revenue.trend === 'up' ? (
+                  <TrendingUp className="h-4 w-4" />
+                ) : (
+                  <TrendingDown className="h-4 w-4" />
+                )}
+                <span>{analyticsData.revenue.change}%</span>
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-1">
+              {formatPrice(analyticsData.revenue.current)}
+            </h3>
+            <p className="text-gray-600 text-sm">Total Revenue</p>
+          </div>
+        )}
+
+        {/* Orders */}
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="bg-blue-100 p-3 rounded-xl">
@@ -261,6 +294,7 @@ const Analytics = () => {
           <p className="text-gray-600 text-sm">Total Orders</p>
         </div>
 
+        {/* Customers */}
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="bg-purple-100 p-3 rounded-xl">
@@ -283,6 +317,7 @@ const Analytics = () => {
           <p className="text-gray-600 text-sm">Total Customers</p>
         </div>
 
+        {/* Products */}
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="bg-orange-100 p-3 rounded-xl">
@@ -300,16 +335,16 @@ const Analytics = () => {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Revenue Chart */}
+        {/* Trend Chart */}
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Revenue Trend</h3>
+            <h3 className="text-lg font-bold text-gray-900">Performance Trend</h3>
             <select
               value={selectedMetric}
               onChange={(e) => setSelectedMetric(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="revenue">Revenue</option>
+              {canViewFinancialData && <option value="revenue">Revenue</option>}
               <option value="orders">Orders</option>
               <option value="customers">Customers</option>
             </select>
@@ -329,7 +364,7 @@ const Analytics = () => {
                   ></div>
                 </div>
                 <div className="w-20 text-xs text-gray-900 text-right">
-                  {selectedMetric === 'revenue' ? formatPrice(item.value) : item.value.toLocaleString()}
+                  {selectedMetric === 'revenue' && canViewFinancialData ? formatPrice(item.value) : item.value.toLocaleString()}
                 </div>
               </div>
             ))}
@@ -352,7 +387,14 @@ const Analytics = () => {
                   <p className="text-sm text-gray-600">{category.sales}% of sales</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-gray-900">{formatPrice(category.revenue)}</p>
+                  {canViewFinancialData ? (
+                    <p className="font-bold text-gray-900">{formatPrice(category.revenue)}</p>
+                  ) : (
+                    <div className="flex items-center space-x-1 text-gray-400">
+                      <Lock className="h-3 w-3" />
+                      <span className="text-xs">Restricted</span>
+                    </div>
+                  )}
                   <div className="flex items-center space-x-1 text-sm text-green-600">
                     <TrendingUp className="h-3 w-3" />
                     <span>{category.growth}%</span>
@@ -387,7 +429,14 @@ const Analytics = () => {
                   <p className="text-xs text-gray-600">{product.sales} sales</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-gray-900 text-sm">{formatPrice(product.revenue)}</p>
+                  {canViewFinancialData ? (
+                    <p className="font-bold text-gray-900 text-sm">{formatPrice(product.revenue)}</p>
+                  ) : (
+                    <div className="flex items-center space-x-1 text-gray-400">
+                      <Lock className="h-3 w-3" />
+                      <span className="text-xs">Restricted</span>
+                    </div>
+                  )}
                   <div className="flex items-center space-x-1 text-xs text-green-600">
                     <TrendingUp className="h-3 w-3" />
                     <span>{product.growth}%</span>
@@ -426,14 +475,20 @@ const Analytics = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-gray-900 text-sm">{formatPrice(customer.spent)}</p>
+                  {canViewFinancialData ? (
+                    <p className="font-bold text-gray-900 text-sm">{formatPrice(customer.spent)}</p>
+                  ) : (
+                    <div className="flex items-center space-x-1 text-gray-400">
+                      <Lock className="h-3 w-3" />
+                      <span className="text-xs">Restricted</span>
+                    </div>
+                  )}
                   <p className="text-xs text-gray-600">{formatDate(customer.lastOrder)}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      
       </div>
 
       {/* Recent Activity */}

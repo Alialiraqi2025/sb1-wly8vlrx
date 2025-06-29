@@ -13,10 +13,15 @@ import {
   X,
   Upload,
   Save,
-  RotateCcw
+  RotateCcw,
+  Lock
 } from 'lucide-react';
 
-const ProductManagement = () => {
+interface ProductManagementProps {
+  userRole?: string;
+}
+
+const ProductManagement: React.FC<ProductManagementProps> = ({ userRole = 'admin' }) => {
   const [products, setProducts] = useState([
     {
       id: 1,
@@ -85,6 +90,12 @@ const ProductManagement = () => {
     image: ''
   });
 
+  // Check if user can perform actions
+  const canAddProduct = userRole === 'admin';
+  const canEditProduct = userRole === 'admin';
+  const canDeleteProduct = userRole === 'admin';
+  const canViewProduct = true; // Both admin and monitor can view
+
   // Exact categories from the main app
   const categories = [
     'Frozen Food',
@@ -144,6 +155,11 @@ const ProductManagement = () => {
   };
 
   const handleAddProduct = () => {
+    if (!canAddProduct) {
+      alert('You do not have permission to add products.');
+      return;
+    }
+
     const product = {
       id: products.length + 1,
       ...newProduct,
@@ -172,6 +188,11 @@ const ProductManagement = () => {
   };
 
   const handleEditProduct = (product: any) => {
+    if (!canEditProduct) {
+      alert('You do not have permission to edit products.');
+      return;
+    }
+
     setEditingProduct(product);
     setNewProduct({
       name: product.name,
@@ -187,6 +208,11 @@ const ProductManagement = () => {
   };
 
   const handleUpdateProduct = () => {
+    if (!canEditProduct) {
+      alert('You do not have permission to update products.');
+      return;
+    }
+
     const updatedProduct = {
       ...editingProduct,
       ...newProduct,
@@ -212,6 +238,11 @@ const ProductManagement = () => {
   };
 
   const handleDeleteProduct = (id: number) => {
+    if (!canDeleteProduct) {
+      alert('You do not have permission to delete products.');
+      return;
+    }
+
     if (confirm('Are you sure you want to delete this product?')) {
       setProducts(products.filter(p => p.id !== id));
     }
@@ -382,16 +413,36 @@ const ProductManagement = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Product Management</h2>
-          <p className="text-gray-600">Manage your store inventory and products</p>
+          <p className="text-gray-600">
+            {userRole === 'monitor' ? 'View store inventory and product information' : 'Manage your store inventory and products'}
+          </p>
         </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Add Product</span>
-        </button>
+        {canAddProduct && (
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Product</span>
+          </button>
+        )}
       </div>
+
+      {/* Role Restriction Notice for Monitor */}
+      {userRole === 'monitor' && (
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
+          <div className="flex items-start space-x-3">
+            <Lock className="h-5 w-5 text-purple-600 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-purple-900 mb-1">View-Only Access</h4>
+              <p className="text-purple-800 text-sm">
+                As a Monitor, you can view product information and inventory levels but cannot add, edit, or delete products. 
+                Contact an administrator for product management changes.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white rounded-2xl p-6 shadow-sm">
@@ -505,19 +556,35 @@ const ProductManagement = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => handleEditProduct(product)}
                         className="text-blue-600 hover:text-blue-900"
-                        title="Edit"
+                        title="View Details"
                       >
-                        <Edit3 className="h-4 w-4" />
+                        <Eye className="h-4 w-4" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product.id)}
-                        className="text-red-600 hover:text-red-900"
-                        title="Delete"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      {canEditProduct && (
+                        <button
+                          onClick={() => handleEditProduct(product)}
+                          className="text-blue-600 hover:text-blue-900"
+                          title="Edit"
+                        >
+                          <Edit3 className="h-4 w-4" />
+                        </button>
+                      )}
+                      {canDeleteProduct && (
+                        <button
+                          onClick={() => handleDeleteProduct(product.id)}
+                          className="text-red-600 hover:text-red-900"
+                          title="Delete"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                      {!canEditProduct && !canDeleteProduct && (
+                        <div className="flex items-center space-x-1 text-gray-400">
+                          <Lock className="h-3 w-3" />
+                          <span className="text-xs">View Only</span>
+                        </div>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -536,8 +603,8 @@ const ProductManagement = () => {
       </div>
 
       {/* Modals */}
-      {showAddModal && <ProductModal />}
-      {showEditModal && <ProductModal isEdit={true} />}
+      {showAddModal && canAddProduct && <ProductModal />}
+      {showEditModal && canEditProduct && <ProductModal isEdit={true} />}
     </div>
   );
 };

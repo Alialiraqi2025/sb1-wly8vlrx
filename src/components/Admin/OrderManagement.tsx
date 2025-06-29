@@ -18,10 +18,16 @@ import {
   Printer,
   Download,
   RefreshCw,
-  X
+  X,
+  MessageCircle,
+  AlertTriangle
 } from 'lucide-react';
 
-const OrderManagement = () => {
+interface OrderManagementProps {
+  userRole?: string;
+}
+
+const OrderManagement: React.FC<OrderManagementProps> = ({ userRole = 'admin' }) => {
   const [orders, setOrders] = useState([
     {
       id: 'ORD-2024-156',
@@ -41,7 +47,15 @@ const OrderManagement = () => {
       deliveryType: 'standard',
       orderDate: '2024-01-20T10:30:00',
       estimatedDelivery: '2024-01-20T15:30:00',
-      notes: 'Please call before delivery'
+      notes: 'Please call before delivery',
+      customerMessages: [
+        {
+          id: 1,
+          message: 'When will my order be delivered?',
+          timestamp: '2024-01-20T14:30:00',
+          read: false
+        }
+      ]
     },
     {
       id: 'ORD-2024-155',
@@ -63,7 +77,8 @@ const OrderManagement = () => {
       orderDate: '2024-01-19T14:15:00',
       estimatedDelivery: '2024-01-19T16:15:00',
       deliveredAt: '2024-01-19T16:05:00',
-      notes: ''
+      notes: '',
+      customerMessages: []
     },
     {
       id: 'ORD-2024-154',
@@ -85,7 +100,8 @@ const OrderManagement = () => {
       orderDate: '2024-01-19T09:45:00',
       estimatedDelivery: '2024-01-19T14:45:00',
       shippedAt: '2024-01-19T11:30:00',
-      notes: 'Fragile items - handle with care'
+      notes: 'Fragile items - handle with care',
+      customerMessages: []
     },
     {
       id: 'ORD-2024-153',
@@ -106,7 +122,15 @@ const OrderManagement = () => {
       orderDate: '2024-01-18T16:20:00',
       cancelledAt: '2024-01-18T17:00:00',
       cancelReason: 'Customer requested cancellation',
-      notes: ''
+      notes: '',
+      customerMessages: [
+        {
+          id: 1,
+          message: 'I need to cancel this order due to emergency',
+          timestamp: '2024-01-18T16:45:00',
+          read: true
+        }
+      ]
     }
   ]);
 
@@ -115,6 +139,11 @@ const OrderManagement = () => {
   const [selectedPayment, setSelectedPayment] = useState('all');
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  // Check permissions based on user role
+  const canUpdateOrderStatus = userRole === 'admin' || userRole === 'monitor';
+  const canViewOrderDetails = true; // Both admin and monitor can view
+  const canChatWithCustomer = userRole === 'admin' || userRole === 'monitor';
 
   const statusOptions = [
     { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
@@ -157,6 +186,11 @@ const OrderManagement = () => {
   };
 
   const handleStatusChange = (orderId: string, newStatus: string) => {
+    if (!canUpdateOrderStatus) {
+      alert('You do not have permission to update order status.');
+      return;
+    }
+
     setOrders(orders.map(order => 
       order.id === orderId ? { 
         ...order, 
@@ -225,30 +259,62 @@ const OrderManagement = () => {
                   {getStatusIcon(selectedOrder.status)}
                   <span className="capitalize">{selectedOrder.status}</span>
                 </span>
-                <select
-                  value={selectedOrder.status}
-                  onChange={(e) => {
-                    handleStatusChange(selectedOrder.id, e.target.value);
-                    setSelectedOrder({...selectedOrder, status: e.target.value});
-                  }}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {statusOptions.map(status => (
-                    <option key={status.value} value={status.value}>{status.label}</option>
-                  ))}
-                </select>
+                {canUpdateOrderStatus && (
+                  <select
+                    value={selectedOrder.status}
+                    onChange={(e) => {
+                      handleStatusChange(selectedOrder.id, e.target.value);
+                      setSelectedOrder({...selectedOrder, status: e.target.value});
+                    }}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    {statusOptions.map(status => (
+                      <option key={status.value} value={status.value}>{status.label}</option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div className="flex space-x-2">
                 <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
                   <Printer className="h-4 w-4" />
                   <span>Print</span>
                 </button>
-                <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
-                  <Download className="h-4 w-4" />
-                  <span>Export</span>
-                </button>
+                {canChatWithCustomer && selectedOrder.customerMessages.length > 0 && (
+                  <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2">
+                    <MessageCircle className="h-4 w-4" />
+                    <span>Reply to Customer</span>
+                  </button>
+                )}
               </div>
             </div>
+
+            {/* Customer Messages Alert */}
+            {selectedOrder.customerMessages.length > 0 && (
+              <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
+                <div className="flex items-start space-x-3">
+                  <MessageCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-purple-900 mb-2">Customer Messages</h4>
+                    {selectedOrder.customerMessages.map((msg) => (
+                      <div key={msg.id} className="bg-white rounded-lg p-3 mb-2">
+                        <p className="text-purple-800 text-sm">{msg.message}</p>
+                        <p className="text-purple-600 text-xs mt-1">{formatDateTime(msg.timestamp)}</p>
+                        {!msg.read && (
+                          <span className="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mt-1">
+                            Unread
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                    {canChatWithCustomer && (
+                      <button className="text-purple-600 hover:text-purple-700 text-sm font-medium">
+                        → Open Customer Support Chat
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Customer & Order Info */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -407,13 +473,31 @@ const OrderManagement = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Order Management</h2>
-          <p className="text-gray-600">Monitor and manage customer orders</p>
+          <p className="text-gray-600">
+            {userRole === 'monitor' ? 'Monitor and manage customer orders with customer support' : 'Monitor and manage customer orders'}
+          </p>
         </div>
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
           <RefreshCw className="h-4 w-4" />
           <span>Refresh</span>
         </button>
       </div>
+
+      {/* Role Information for Monitor */}
+      {userRole === 'monitor' && (
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
+          <div className="flex items-start space-x-3">
+            <ShoppingCart className="h-5 w-5 text-purple-600 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-purple-900 mb-1">Monitor Order Management</h4>
+              <p className="text-purple-800 text-sm">
+                You can view all orders, update order status, and chat with customers who send messages. 
+                This helps you provide excellent customer service and keep orders moving smoothly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -468,11 +552,13 @@ const OrderManagement = () => {
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Revenue</p>
-              <p className="text-lg font-bold text-green-600">{formatPrice(stats.totalRevenue)}</p>
+              <p className="text-sm text-gray-600">Customer Messages</p>
+              <p className="text-2xl font-bold text-purple-600">
+                {orders.reduce((count, order) => count + order.customerMessages.filter(msg => !msg.read).length, 0)}
+              </p>
             </div>
-            <div className="bg-green-100 p-3 rounded-xl">
-              <DollarSign className="h-6 w-6 text-green-600" />
+            <div className="bg-purple-100 p-3 rounded-xl">
+              <MessageCircle className="h-6 w-6 text-purple-600" />
             </div>
           </div>
         </div>
@@ -551,8 +637,17 @@ const OrderManagement = () => {
               {filteredOrders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.id}</div>
-                    <div className="text-sm text-gray-500 capitalize">{order.deliveryType} delivery</div>
+                    <div className="flex items-center space-x-2">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{order.id}</div>
+                        <div className="text-sm text-gray-500 capitalize">{order.deliveryType} delivery</div>
+                      </div>
+                      {order.customerMessages.some(msg => !msg.read) && (
+                        <div className="bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                          <MessageCircle className="h-3 w-3" />
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{order.customer.name}</div>
@@ -585,15 +680,25 @@ const OrderManagement = () => {
                       >
                         <Eye className="h-4 w-4" />
                       </button>
-                      <select
-                        value={order.status}
-                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                        className="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        {statusOptions.map(status => (
-                          <option key={status.value} value={status.value}>{status.label}</option>
-                        ))}
-                      </select>
+                      {canUpdateOrderStatus && (
+                        <select
+                          value={order.status}
+                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                          className="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                          {statusOptions.map(status => (
+                            <option key={status.value} value={status.value}>{status.label}</option>
+                          ))}
+                        </select>
+                      )}
+                      {canChatWithCustomer && order.customerMessages.length > 0 && (
+                        <button
+                          className="text-purple-600 hover:text-purple-900"
+                          title="Customer Messages"
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

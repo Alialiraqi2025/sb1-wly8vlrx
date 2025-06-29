@@ -40,6 +40,8 @@ export type Permission =
   | 'view_products'
   | 'view_reports'
   | 'update_order_status'
+  | 'chat_with_customers'
+  | 'manage_customer_support'
   // Customer permissions
   | 'place_orders'
   | 'view_own_orders'
@@ -52,6 +54,7 @@ export interface RoleConfig {
   color: string;
   permissions: Permission[];
   defaultStatus: UserStatus;
+  restrictions?: string[];
 }
 
 export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
@@ -72,7 +75,9 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
       'view_customers',
       'view_products',
       'view_reports',
-      'update_order_status'
+      'update_order_status',
+      'chat_with_customers',
+      'manage_customer_support'
     ],
     defaultStatus: 'active'
   },
@@ -90,15 +95,25 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
   },
   monitor: {
     name: 'Monitor',
-    description: 'View-only access with limited order management',
+    description: 'Order management and customer support specialist',
     color: 'from-purple-500 to-purple-600',
     permissions: [
       'view_orders',
       'view_customers',
       'view_products',
       'view_reports',
-      'update_order_status'
+      'update_order_status',
+      'manage_orders',
+      'chat_with_customers',
+      'manage_customer_support'
     ],
-    defaultStatus: 'active'
+    defaultStatus: 'active',
+    restrictions: [
+      'Cannot add, edit, or delete products',
+      'Cannot add, edit, or delete categories', 
+      'Cannot add, edit, or delete user accounts',
+      'Cannot access financial reports',
+      'Cannot modify system settings'
+    ]
   }
 };
