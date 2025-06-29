@@ -6,34 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Durra Market 2" />
+    <meta name="apple-mobile-web-app-title" content="SecureChat" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="theme-color" content="#f97316" />
-    <meta name="msapplication-TileColor" content="#f97316" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="msapplication-TileColor" content="#6366f1" />
     <meta name="format-detection" content="telephone=no" />
-    <title>Durra Market 2 - Your Local Food Store</title>
-    <meta name="description" content="Shop fresh groceries, pantry essentials, and household items at Durra Market 2. Quality products at affordable prices with fast delivery." />
+    <title>SecureChat - End-to-End Encrypted Messenger</title>
+    <meta name="description" content="Secure messaging app with end-to-end encryption, voice calls, video calls, and group chats." />
     
     <!-- iOS specific meta tags -->
     <meta name="apple-touch-fullscreen" content="yes" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png" />
-    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
     
     <!-- Android specific meta tags -->
     <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
     <link rel="manifest" href="/manifest.json" />
     
     <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://images.pexels.com" />
-    <link rel="dns-prefetch" href="https://images.pexels.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     
     <!-- Prevent zoom on input focus for iOS -->
     <style>
@@ -113,20 +104,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Service Worker Registration -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-      }
-    </script>
   </body>
 </html>
