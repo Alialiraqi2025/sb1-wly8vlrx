@@ -13,12 +13,16 @@ import Cart from './components/Cart';
 import Search from './components/Search';
 import Auth from './components/Auth';
 import Chat from './components/Chat';
+import AdminAuth from './components/Admin/AdminAuth';
+import AdminDashboard from './components/Admin/AdminDashboard';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
   const [showAuth, setShowAuth] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [showAdminAuth, setShowAdminAuth] = useState(false);
   const [user, setUser] = useState(null);
+  const [admin, setAdmin] = useState(null);
   const [screenSize, setScreenSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -63,6 +67,14 @@ function App() {
     };
   }, []);
 
+  // Check for admin access in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+      setShowAdminAuth(true);
+    }
+  }, []);
+
   const handleLogin = (userData: any) => {
     setUser(userData);
     setShowAuth(false);
@@ -72,6 +84,40 @@ function App() {
     setUser(null);
     setCurrentView('home');
   };
+
+  const handleAdminLogin = (adminData: any) => {
+    setAdmin(adminData);
+    setShowAdminAuth(false);
+  };
+
+  const handleAdminLogout = () => {
+    setAdmin(null);
+    // Remove admin parameter from URL
+    const url = new URL(window.location);
+    url.searchParams.delete('admin');
+    window.history.replaceState({}, document.title, url.pathname);
+  };
+
+  // If admin is logged in, show admin dashboard
+  if (admin) {
+    return (
+      <AdminDashboard 
+        admin={admin} 
+        onLogout={handleAdminLogout}
+        screenSize={screenSize}
+      />
+    );
+  }
+
+  // If admin auth is requested, show admin login
+  if (showAdminAuth) {
+    return (
+      <AdminAuth 
+        onLogin={handleAdminLogin}
+        screenSize={screenSize}
+      />
+    );
+  }
 
   const renderCurrentView = () => {
     switch (currentView) {
@@ -210,6 +256,18 @@ function App() {
         >
           <MessageCircle className="h-6 w-6" />
         </button>
+      )}
+
+      {/* Admin Access Link - Hidden but accessible via URL parameter */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="fixed bottom-4 left-4 z-50">
+          <button
+            onClick={() => setShowAdminAuth(true)}
+            className="bg-gray-800 text-white px-3 py-1 rounded text-xs opacity-20 hover:opacity-100 transition-opacity"
+          >
+            Admin
+          </button>
+        </div>
       )}
     </div>
   );
