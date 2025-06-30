@@ -74,6 +74,10 @@ body {
   }
 }
 
+/* ========================================
+   COMPREHENSIVE SCROLLBAR SYSTEM
+   ======================================== */
+
 /* Premium Settings Scrollbar - TELE IRAQ Style */
 .settings-scrollbar::-webkit-scrollbar {
   width: 14px;
@@ -139,6 +143,12 @@ body {
   background: linear-gradient(135deg, #b91c1c, #991b1b);
 }
 
+/* Firefox scrollbar for chat list */
+.chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 var(--element-bg-secondary);
+}
+
 /* Messages Scrollbar */
 .messages-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -160,7 +170,127 @@ body {
   background: rgba(220, 38, 38, 0.8);
 }
 
-/* Element-style scrollbar for other areas */
+/* Firefox scrollbar for messages */
+.messages-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(220, 38, 38, 0.6) transparent;
+}
+
+/* Auth Screen Scrollbar */
+.auth-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+.auth-scrollbar::-webkit-scrollbar-track {
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 6px;
+  margin: 4px;
+}
+
+.auth-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.auth-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: scale(1.02);
+}
+
+/* Firefox scrollbar for auth */
+.auth-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 rgba(220, 38, 38, 0.1);
+}
+
+/* Main App Scrollbar */
+.app-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  background: transparent;
+}
+
+.app-scrollbar::-webkit-scrollbar-track {
+  background: var(--element-bg-tertiary);
+  border-radius: 6px;
+  margin: 4px;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 6px;
+  border: 1px solid var(--element-bg);
+  transition: all 0.2s ease;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+/* Firefox scrollbar for main app */
+.app-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #dc2626 var(--element-bg-tertiary);
+}
+
+/* Sidebar Scrollbar */
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: var(--element-sidebar);
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.7);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 38, 38, 0.9);
+}
+
+/* Firefox scrollbar for sidebar */
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(220, 38, 38, 0.7) var(--element-sidebar);
+}
+
+/* Modal/Popup Scrollbar */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.5);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 38, 38, 0.7);
+}
+
+/* Firefox scrollbar for modals */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(220, 38, 38, 0.5) transparent;
+}
+
+/* Element-style scrollbar for fallback */
 ::-webkit-scrollbar {
   width: 8px;
   background: transparent;
@@ -180,7 +310,7 @@ body {
   background: var(--element-text-muted);
 }
 
-/* Firefox scrollbar */
+/* Firefox scrollbar fallback */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--element-border) transparent;
@@ -736,6 +866,10 @@ body {
   .chat-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
+  
+  .app-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -755,6 +889,14 @@ body {
   
   .settings-scrollbar::-webkit-scrollbar-track {
     margin: 4px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .messages-scrollbar::-webkit-scrollbar {
+    width: 6px;
   }
 }
 
@@ -781,6 +923,14 @@ body {
   .settings-scrollbar::-webkit-scrollbar-thumb {
     background: #000000;
   }
+  
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: #000000;
+  }
+  
+  .messages-scrollbar::-webkit-scrollbar-thumb {
+    background: #000000;
+  }
 }
 
 /* Reduced motion support */
@@ -796,6 +946,10 @@ body {
   }
   
   .settings-scrollbar::-webkit-scrollbar-thumb:hover {
+    transform: none;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar-thumb:hover {
     transform: none;
   }
 }

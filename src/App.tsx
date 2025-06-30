@@ -189,7 +189,7 @@ function App() {
 
   // Main App View - Full Page Views
   return (
-    <div className="app-container">
+    <div className="app-container app-scrollbar">
       {/* Header - Element style */}
       <header className="app-header">
         <div className="px-4 lg:px-6">
@@ -281,7 +281,7 @@ function App() {
           )}
           
           {currentView === 'groups' && (
-            <div className="h-full bg-white p-6 flex items-center justify-center">
+            <div className="h-full bg-white p-6 flex items-center justify-center app-scrollbar overflow-y-auto">
               <div className="text-center">
                 <div className="element-card p-8">
                   <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
