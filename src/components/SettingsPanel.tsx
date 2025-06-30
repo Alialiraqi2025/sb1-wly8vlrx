@@ -273,7 +273,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderAccount = () => (
-    <div className="space-y-6 force-scroll">
+    <div className="space-y-6">
       {/* Profile Section */}
       <div className="element-card p-6">
         <h4 className="text-lg font-bold text-red-600 mb-6 flex items-center">
@@ -608,19 +608,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Extra content to ensure scrolling */}
-      <div className="space-y-4">
-        {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className="element-card p-4">
-            <h4 className="font-medium text-gray-900 mb-2">Account Demo Section {i + 1}</h4>
-            <p className="text-sm text-gray-600">
-              This is additional content to demonstrate the enhanced account page scrollbar functionality.
-              The account scrollbar features a premium red gradient design with enhanced hover effects.
-            </p>
-          </div>
-        ))}
       </div>
     </div>
   );
