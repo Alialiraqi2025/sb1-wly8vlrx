@@ -268,26 +268,24 @@ function App() {
 
           {/* Chat Window */}
           <div className="flex-main chat-window-container">
-            <div className="flex-content">
-              {selectedChat ? (
-                <ChatWindow
-                  chat={selectedChat}
-                  messages={messages}
-                  currentUserId={currentUser.id}
-                  onSendMessage={handleSendMessage}
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full p-6 empty-state">
-                  <div className="text-center animate-fade-in">
-                    <div className="element-card p-12 mb-6 inline-block">
-                      <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
-                      <p className="text-gray-600">Choose a chat from the sidebar to start messaging</p>
-                    </div>
+            {selectedChat ? (
+              <ChatWindow
+                chat={selectedChat}
+                messages={messages}
+                currentUserId={currentUser.id}
+                onSendMessage={handleSendMessage}
+              />
+            ) : (
+              <div className="empty-state">
+                <div className="text-center animate-fade-in">
+                  <div className="element-card p-12 mb-6 inline-block">
+                    <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
+                    <p className="text-gray-600">Choose a chat from the sidebar to start messaging</p>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </main>
