@@ -34,7 +34,17 @@ import {
   AlertTriangle,
   Trash2,
   Save,
-  X
+  X,
+  QrCode,
+  Plus,
+  MoreVertical,
+  MapPin,
+  Clock,
+  Wifi,
+  LogOut,
+  RefreshCw,
+  Copy,
+  CheckCircle
 } from 'lucide-react';
 import { User as UserType } from '../types';
 
@@ -44,12 +54,31 @@ interface SettingsPanelProps {
 
 type SettingsView = 'main' | 'account' | 'sessions' | 'appearance' | 'notifications' | 'preferences' | 'keyboard' | 'sidebar' | 'voice-video' | 'security-privacy' | 'encryption' | 'labs' | 'help' | 'about';
 
+interface Session {
+  id: string;
+  deviceName: string;
+  deviceType: 'desktop' | 'mobile' | 'tablet' | 'web';
+  location: string;
+  ipAddress: string;
+  lastActive: Date;
+  isCurrent: boolean;
+  isVerified: boolean;
+  browser?: string;
+  os?: string;
+}
+
 const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   const [currentView, setCurrentView] = useState<SettingsView>('main');
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [encryptionEnabled, setEncryptionEnabled] = useState(true);
+  
+  // Sessions states
+  const [showQRCode, setShowQRCode] = useState(false);
+  const [qrCodeData, setQrCodeData] = useState('');
+  const [isGeneratingQR, setIsGeneratingQR] = useState(false);
+  const [copiedQR, setCopiedQR] = useState(false);
   
   // Account form states
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -71,6 +100,138 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     new: false,
     confirm: false
   });
+
+  // Demo sessions data
+  const [sessions, setSessions] = useState<Session[]>([
+    {
+      id: 'current',
+      deviceName: 'Chrome on Windows',
+      deviceType: 'desktop',
+      location: 'Baghdad, Iraq',
+      ipAddress: '192.168.1.100',
+      lastActive: new Date(),
+      isCurrent: true,
+      isVerified: true,
+      browser: 'Chrome 120.0',
+      os: 'Windows 11'
+    },
+    {
+      id: 'mobile1',
+      deviceName: 'iPhone 15 Pro',
+      deviceType: 'mobile',
+      location: 'Baghdad, Iraq',
+      ipAddress: '192.168.1.101',
+      lastActive: new Date(Date.now() - 1800000), // 30 minutes ago
+      isCurrent: false,
+      isVerified: true,
+      browser: 'Safari Mobile',
+      os: 'iOS 17.2'
+    },
+    {
+      id: 'tablet1',
+      deviceName: 'iPad Air',
+      deviceType: 'tablet',
+      location: 'Erbil, Iraq',
+      ipAddress: '10.0.0.50',
+      lastActive: new Date(Date.now() - 7200000), // 2 hours ago
+      isCurrent: false,
+      isVerified: true,
+      browser: 'Safari',
+      os: 'iPadOS 17.2'
+    },
+    {
+      id: 'desktop2',
+      deviceName: 'Firefox on Ubuntu',
+      deviceType: 'desktop',
+      location: 'Basra, Iraq',
+      ipAddress: '203.0.113.45',
+      lastActive: new Date(Date.now() - 86400000), // 1 day ago
+      isCurrent: false,
+      isVerified: false,
+      browser: 'Firefox 121.0',
+      os: 'Ubuntu 22.04'
+    }
+  ]);
+
+  const generateQRCode = async () => {
+    setIsGeneratingQR(true);
+    
+    // Simulate QR code generation
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Generate a secure session token for QR code
+    const sessionToken = `TELE_IRAQ_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const qrData = JSON.stringify({
+      app: 'TELE_IRAQ',
+      action: 'link_device',
+      token: sessionToken,
+      userId: user.id,
+      timestamp: Date.now(),
+      expires: Date.now() + 300000 // 5 minutes
+    });
+    
+    setQrCodeData(qrData);
+    setShowQRCode(true);
+    setIsGeneratingQR(false);
+    
+    // Auto-hide QR code after 5 minutes
+    setTimeout(() => {
+      setShowQRCode(false);
+      setQrCodeData('');
+    }, 300000);
+  };
+
+  const copyQRData = async () => {
+    try {
+      await navigator.clipboard.writeText(qrCodeData);
+      setCopiedQR(true);
+      setTimeout(() => setCopiedQR(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy QR data:', err);
+    }
+  };
+
+  const terminateSession = (sessionId: string) => {
+    if (sessionId === 'current') {
+      alert('Cannot terminate current session. Please sign out instead.');
+      return;
+    }
+    
+    setSessions(prev => prev.filter(session => session.id !== sessionId));
+    alert('Session terminated successfully.');
+  };
+
+  const verifySession = (sessionId: string) => {
+    setSessions(prev => prev.map(session => 
+      session.id === sessionId 
+        ? { ...session, isVerified: true }
+        : session
+    ));
+    alert('Session verified successfully.');
+  };
+
+  const getDeviceIcon = (deviceType: string) => {
+    switch (deviceType) {
+      case 'mobile':
+        return <Smartphone className="w-5 h-5" />;
+      case 'tablet':
+        return <Monitor className="w-5 h-5" />;
+      case 'desktop':
+        return <Monitor className="w-5 h-5" />;
+      default:
+        return <Smartphone className="w-5 h-5" />;
+    }
+  };
+
+  const formatLastActive = (date: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    
+    if (diff < 60000) return 'Active now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)} minutes ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)} hours ago`;
+    return `${Math.floor(diff / 86400000)} days ago`;
+  };
 
   const handleProfileSave = () => {
     // Here you would typically save to your backend/database
@@ -254,6 +415,301 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
             status="Enabled"
             isActive={true}
           />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSessions = () => (
+    <div className="space-y-6">
+      {/* Link New Device Section */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
+          <Plus className="w-5 h-5 mr-2" />
+          Link New Device
+        </h4>
+        <p className="text-sm text-gray-600 mb-6">
+          Use a QR code to sign in to TELE IRAQ on another device and set up secure messaging.
+        </p>
+        
+        {!showQRCode ? (
+          <button
+            onClick={generateQRCode}
+            disabled={isGeneratingQR}
+            className="element-button flex items-center space-x-2 w-full justify-center"
+          >
+            {isGeneratingQR ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Generating QR Code...</span>
+              </>
+            ) : (
+              <>
+                <QrCode className="w-4 h-4" />
+                <span>Generate QR Code</span>
+              </>
+            )}
+          </button>
+        ) : (
+          <div className="space-y-4">
+            {/* QR Code Display */}
+            <div className="bg-white p-6 rounded-lg border-2 border-red-200 text-center">
+              <div className="w-48 h-48 mx-auto mb-4 bg-gradient-to-br from-red-100 to-red-200 rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <QrCode className="w-16 h-16 text-red-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-red-700">QR Code</p>
+                  <p className="text-xs text-red-600">Scan with your device</p>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-gray-900">Scan this QR code with your new device</p>
+                <p className="text-xs text-gray-500">Code expires in 5 minutes</p>
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h5 className="font-medium text-blue-900 mb-2">📱 How to link your device:</h5>
+              <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                <li>Open TELE IRAQ on your new device</li>
+                <li>Tap "Link with QR Code" on the login screen</li>
+                <li>Scan this QR code with your device camera</li>
+                <li>Confirm the link on both devices</li>
+                <li>Your messages will sync automatically</li>
+              </ol>
+            </div>
+
+            {/* QR Code Actions */}
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={copyQRData}
+                className="element-button-secondary flex items-center space-x-2 flex-1"
+              >
+                {copiedQR ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    <span>Copy Link</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  setShowQRCode(false);
+                  setQrCodeData('');
+                }}
+                className="element-button-secondary flex items-center space-x-2 flex-1"
+              >
+                <X className="w-4 h-4" />
+                <span>Cancel</span>
+              </button>
+            </div>
+
+            {/* Security Notice */}
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <Shield className="w-5 h-5 text-red-600 mt-0.5" />
+                <div>
+                  <h5 className="font-medium text-red-900">Security Notice</h5>
+                  <p className="text-sm text-red-700 mt-1">
+                    Only scan this QR code on devices you trust. The link will expire automatically in 5 minutes for your security.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Current Session */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
+          <Monitor className="w-5 h-5 mr-2" />
+          Current Session
+        </h4>
+        
+        {sessions.filter(session => session.isCurrent).map(session => (
+          <div key={session.id} className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start space-x-3">
+                <div className="text-green-600">
+                  {getDeviceIcon(session.deviceType)}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <h5 className="font-semibold text-green-900">{session.deviceName}</h5>
+                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">Current</span>
+                    {session.isVerified && (
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    )}
+                  </div>
+                  <div className="space-y-1 text-sm text-green-700">
+                    <div className="flex items-center space-x-2">
+                      <MapPin className="w-3 h-3" />
+                      <span>{session.location}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Wifi className="w-3 h-3" />
+                      <span>{session.ipAddress}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Clock className="w-3 h-3" />
+                      <span>{formatLastActive(session.lastActive)}</span>
+                    </div>
+                    {session.browser && (
+                      <div className="text-xs text-green-600">
+                        {session.browser} • {session.os}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Other Sessions */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
+          <Smartphone className="w-5 h-5 mr-2" />
+          Other Sessions ({sessions.filter(session => !session.isCurrent).length})
+        </h4>
+        
+        {sessions.filter(session => !session.isCurrent).length === 0 ? (
+          <div className="text-center py-8">
+            <Smartphone className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-500 mb-2">No other active sessions</p>
+            <p className="text-sm text-gray-400">Use the QR code above to link a new device</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {sessions.filter(session => !session.isCurrent).map(session => (
+              <div key={session.id} className={`border rounded-lg p-4 ${
+                session.isVerified ? 'border-gray-200 bg-white' : 'border-yellow-200 bg-yellow-50'
+              }`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-3">
+                    <div className={`${session.isVerified ? 'text-gray-600' : 'text-yellow-600'}`}>
+                      {getDeviceIcon(session.deviceType)}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <h5 className="font-semibold text-gray-900">{session.deviceName}</h5>
+                        {session.isVerified ? (
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                        )}
+                      </div>
+                      <div className="space-y-1 text-sm text-gray-600">
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="w-3 h-3" />
+                          <span>{session.location}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Wifi className="w-3 h-3" />
+                          <span>{session.ipAddress}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Clock className="w-3 h-3" />
+                          <span>{formatLastActive(session.lastActive)}</span>
+                        </div>
+                        {session.browser && (
+                          <div className="text-xs text-gray-500">
+                            {session.browser} • {session.os}
+                          </div>
+                        )}
+                      </div>
+                      {!session.isVerified && (
+                        <div className="mt-2 text-sm text-yellow-700">
+                          ⚠️ Unverified session - verify or terminate if not recognized
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    {!session.isVerified && (
+                      <button
+                        onClick={() => verifySession(session.id)}
+                        className="text-green-600 hover:text-green-700 p-1"
+                        title="Verify session"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => terminateSession(session.id)}
+                      className="text-red-600 hover:text-red-700 p-1"
+                      title="Terminate session"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-start space-x-3">
+                <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                <div>
+                  <h5 className="font-medium text-red-900">Session Security</h5>
+                  <p className="text-sm text-red-700 mt-1">
+                    If you see any sessions you don't recognize, terminate them immediately and change your password.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Session Settings */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
+          <Settings className="w-5 h-5 mr-2" />
+          Session Settings
+        </h4>
+        <div className="space-y-4">
+          <ToggleItem
+            title="Auto-verify trusted devices"
+            description="Automatically verify devices from known locations"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Session notifications"
+            description="Get notified when new devices sign in"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Auto-terminate inactive sessions"
+            description="Automatically sign out devices after 30 days of inactivity"
+            enabled={false}
+            onChange={() => {}}
+          />
+          <div className="pt-4 border-t border-gray-200">
+            <button
+              onClick={() => {
+                if (confirm('Are you sure you want to terminate all other sessions? This will sign out all your other devices.')) {
+                  setSessions(prev => prev.filter(session => session.isCurrent));
+                  alert('All other sessions terminated successfully.');
+                }
+              }}
+              className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Terminate All Other Sessions</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -845,14 +1301,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         return renderMainSettings();
       case 'account':
         return renderAccount();
+      case 'sessions':
+        return renderSessions();
       case 'security-privacy':
         return renderSecurityPrivacy();
       case 'appearance':
         return renderAppearance();
       case 'notifications':
         return renderNotifications();
-      case 'sessions':
-        return renderGenericSection('Sessions', <Smartphone className="w-5 h-5 mr-2" />);
       case 'preferences':
         return renderGenericSection('Preferences', <Settings className="w-5 h-5 mr-2" />);
       case 'keyboard':
