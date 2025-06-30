@@ -183,7 +183,7 @@ function App() {
     );
   }
 
-  // Main App View with Sidebar
+  // Main App View - Full Page Views
   return (
     <div className="app-container">
       {/* Header - Element style */}
@@ -259,20 +259,22 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content - Full Page Views */}
       <main className="app-main">
-        <div className="main-layout">
-          {/* Sidebar */}
-          <div className="sidebar-section">
-            {currentView === 'all-chats' && (
+        <div className="h-full w-full">
+          {currentView === 'all-chats' && (
+            <div className="h-full bg-white">
               <AllChatsList
                 chats={chats}
                 onChatSelect={handleChatSelect}
                 currentUserId={currentUser.id}
               />
-            )}
-            {currentView === 'groups' && (
-              <div className="p-6 text-center flex-1 flex items-center justify-center">
+            </div>
+          )}
+          
+          {currentView === 'groups' && (
+            <div className="h-full bg-white p-6 flex items-center justify-center">
+              <div className="text-center">
                 <div className="element-card p-8">
                   <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
@@ -283,16 +285,14 @@ function App() {
                   </button>
                 </div>
               </div>
-            )}
-            {currentView === 'settings' && (
+            </div>
+          )}
+          
+          {currentView === 'settings' && (
+            <div className="h-full bg-white">
               <SettingsPanel user={currentUser} />
-            )}
-          </div>
-
-          {/* Main Content Area - Empty when no chat selected */}
-          <div className="main-content-section">
-            {/* Empty area */}
-          </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
