@@ -169,9 +169,9 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex flex-col overflow-hidden">
+    <div className="app-container bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
       {/* Header */}
-      <header className="glass-strong border-b border-white/20 flex-shrink-0 z-50">
+      <header className="app-header glass-strong border-b border-white/20">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 sm:h-20">
             {/* Logo */}
@@ -246,59 +246,61 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-container flex-1">
-        {/* Sidebar */}
-        <div className="flex-sidebar glass-strong border-r border-white/20">
-          <div className="flex-content">
-            {currentView === 'chats' && (
-              <ChatList
-                chats={chats}
-                selectedChat={selectedChat}
-                onChatSelect={handleChatSelect}
-                currentUserId={currentUser.id}
-              />
-            )}
-            {currentView === 'groups' && (
-              <div className="p-6 sm:p-8 text-center flex-1 flex items-center justify-center">
-                <div className="card-glass">
-                  <Users className="w-12 h-12 sm:w-16 sm:h-16 text-white mx-auto mb-4 sm:mb-6" />
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Groups</h3>
-                  <p className="text-white/70 mb-4 sm:mb-6 text-base sm:text-lg">Create and manage group chats</p>
-                  <button className="btn-primary hover-lift">
-                    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
-                    New Group
-                  </button>
-                </div>
-              </div>
-            )}
-            {currentView === 'settings' && (
-              <SettingsPanel user={currentUser} />
-            )}
-          </div>
-        </div>
-
-        {/* Chat Window */}
-        <div className="flex-main">
-          <div className="flex-content">
-            {selectedChat ? (
-              <ChatWindow
-                chat={selectedChat}
-                messages={messages}
-                currentUserId={currentUser.id}
-                onSendMessage={handleSendMessage}
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full p-6">
-                <div className="text-center animate-fade-in">
-                  <div className="glass-strong rounded-3xl p-8 sm:p-12 mb-6 sm:mb-8 inline-block">
-                    <MessageCircle className="w-16 h-16 sm:w-20 sm:h-20 text-white mx-auto" />
+      {/* Main Content - Now allows scrolling */}
+      <main className="app-main">
+        <div className="flex-container">
+          {/* Sidebar */}
+          <div className="flex-sidebar glass-strong border-r border-white/20">
+            <div className="flex-content">
+              {currentView === 'chats' && (
+                <ChatList
+                  chats={chats}
+                  selectedChat={selectedChat}
+                  onChatSelect={handleChatSelect}
+                  currentUserId={currentUser.id}
+                />
+              )}
+              {currentView === 'groups' && (
+                <div className="p-6 sm:p-8 text-center flex-1 flex items-center justify-center">
+                  <div className="card-glass">
+                    <Users className="w-12 h-12 sm:w-16 sm:h-16 text-white mx-auto mb-4 sm:mb-6" />
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Groups</h3>
+                    <p className="text-white/70 mb-4 sm:mb-6 text-base sm:text-lg">Create and manage group chats</p>
+                    <button className="btn-primary hover-lift">
+                      <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
+                      New Group
+                    </button>
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Select a conversation</h3>
-                  <p className="text-lg sm:text-xl text-white/70">Choose a chat to start messaging securely</p>
                 </div>
-              </div>
-            )}
+              )}
+              {currentView === 'settings' && (
+                <SettingsPanel user={currentUser} />
+              )}
+            </div>
+          </div>
+
+          {/* Chat Window */}
+          <div className="flex-main">
+            <div className="flex-content">
+              {selectedChat ? (
+                <ChatWindow
+                  chat={selectedChat}
+                  messages={messages}
+                  currentUserId={currentUser.id}
+                  onSendMessage={handleSendMessage}
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full p-6">
+                  <div className="text-center animate-fade-in">
+                    <div className="glass-strong rounded-3xl p-8 sm:p-12 mb-6 sm:mb-8 inline-block">
+                      <MessageCircle className="w-16 h-16 sm:w-20 sm:h-20 text-white mx-auto" />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Select a conversation</h3>
+                    <p className="text-lg sm:text-xl text-white/70">Choose a chat to start messaging securely</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>

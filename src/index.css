@@ -12,7 +12,7 @@
 
 html, body {
   height: 100%;
-  overflow: hidden;
+  overflow: auto; /* Allow scrolling on main page */
 }
 
 body {
@@ -27,8 +27,8 @@ body {
 }
 
 #root {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh; /* Changed from height: 100vh to min-height */
+  overflow: visible; /* Allow overflow */
 }
 
 /* High contrast and better visibility */
@@ -361,8 +361,8 @@ body {
 /* CRITICAL: Flexible layout utilities with proper scrolling */
 .flex-container {
   display: flex;
-  height: 100%;
-  overflow: hidden;
+  min-height: calc(100vh - 80px); /* Account for header height */
+  overflow: visible; /* Allow overflow */
 }
 
 .flex-sidebar {
@@ -370,7 +370,7 @@ body {
   min-width: 320px;
   max-width: 400px;
   width: 30%;
-  height: 100%;
+  height: calc(100vh - 80px); /* Account for header */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -379,7 +379,7 @@ body {
 .flex-main {
   flex: 1;
   min-width: 0;
-  height: 100%;
+  height: calc(100vh - 80px); /* Account for header */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -397,6 +397,27 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0; /* Critical for flex scrolling */
+}
+
+/* App container - allow scrolling */
+.app-container {
+  min-height: 100vh;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.app-main {
+  flex: 1;
+  overflow: visible;
+  min-height: 0;
 }
 
 /* Ensure scrollable areas work properly */
@@ -423,6 +444,7 @@ body {
 @media (max-width: 768px) {
   .flex-container {
     flex-direction: column;
+    min-height: calc(100vh - 64px); /* Smaller header on mobile */
   }
   
   .flex-sidebar {
