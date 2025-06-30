@@ -149,7 +149,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Enter your display name"
-                      className="element-input pl-10"
+                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       required={!isLogin}
                     />
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -168,7 +168,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Enter your email"
-                    className="element-input pl-10"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     required
                   />
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -186,7 +186,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder="Enter your password"
-                    className="element-input pl-10 pr-10"
+                    className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     required
                   />
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
