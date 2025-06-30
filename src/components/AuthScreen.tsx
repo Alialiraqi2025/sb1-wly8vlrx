@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Eye, EyeOff, User, Mail, Lock, Shield, Zap, Globe, Star } from 'lucide-react';
+import { MessageSquare, Eye, EyeOff, User, Mail, Lock, Shield, Zap, Globe, Star, Users } from 'lucide-react';
 import { User as UserType } from '../types';
 
 interface AuthScreenProps {
