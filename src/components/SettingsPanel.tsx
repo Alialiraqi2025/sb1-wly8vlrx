@@ -33,7 +33,12 @@ import {
   Type,
   Minus,
   Plus,
-  RotateCcw
+  RotateCcw,
+  Clock,
+  Languages,
+  MapPin,
+  Calendar,
+  ChevronDown
 } from 'lucide-react';
 import { User as UserType } from '../types';
 
@@ -51,6 +56,39 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [encryptionEnabled, setEncryptionEnabled] = useState(true);
+  const [language, setLanguage] = useState<'en' | 'ar'>('en');
+  const [timezone, setTimezone] = useState<string>('Asia/Baghdad');
+  const [timeFormat, setTimeFormat] = useState<'12' | '24'>('12');
+  const [dateFormat, setDateFormat] = useState<'dd/mm/yyyy' | 'mm/dd/yyyy' | 'yyyy-mm-dd'>('dd/mm/yyyy');
+
+  const languages = [
+    { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
+    { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇮🇶' }
+  ];
+
+  const iraqTimezones = [
+    { value: 'Asia/Baghdad', label: 'Baghdad (GMT+3)', city: 'Baghdad' },
+    { value: 'Asia/Baghdad', label: 'Erbil (GMT+3)', city: 'Erbil' },
+    { value: 'Asia/Baghdad', label: 'Basra (GMT+3)', city: 'Basra' },
+    { value: 'Asia/Baghdad', label: 'Mosul (GMT+3)', city: 'Mosul' },
+    { value: 'Asia/Baghdad', label: 'Najaf (GMT+3)', city: 'Najaf' },
+    { value: 'Asia/Baghdad', label: 'Karbala (GMT+3)', city: 'Karbala' }
+  ];
+
+  const worldTimezones = [
+    { value: 'UTC', label: 'UTC (GMT+0)', region: 'Universal' },
+    { value: 'Europe/London', label: 'London (GMT+0/+1)', region: 'Europe' },
+    { value: 'Europe/Paris', label: 'Paris (GMT+1/+2)', region: 'Europe' },
+    { value: 'Europe/Istanbul', label: 'Istanbul (GMT+3)', region: 'Europe' },
+    { value: 'Asia/Dubai', label: 'Dubai (GMT+4)', region: 'Middle East' },
+    { value: 'Asia/Tehran', label: 'Tehran (GMT+3:30/+4:30)', region: 'Middle East' },
+    { value: 'Asia/Riyadh', label: 'Riyadh (GMT+3)', region: 'Middle East' },
+    { value: 'Asia/Kuwait', label: 'Kuwait (GMT+3)', region: 'Middle East' },
+    { value: 'America/New_York', label: 'New York (GMT-5/-4)', region: 'Americas' },
+    { value: 'America/Los_Angeles', label: 'Los Angeles (GMT-8/-7)', region: 'Americas' },
+    { value: 'Asia/Tokyo', label: 'Tokyo (GMT+9)', region: 'Asia' },
+    { value: 'Australia/Sydney', label: 'Sydney (GMT+10/+11)', region: 'Oceania' }
+  ];
 
   const renderMainSettings = () => (
     <div className="space-y-6">
@@ -96,7 +134,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           title="Appearance"
           description="Customize the app's appearance"
           onClick={() => setCurrentView('appearance')}
-          highlight={true}
         />
         
         <SettingItem
@@ -109,8 +146,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         <SettingItem
           icon={<Settings className="w-5 h-5" />}
           title="Preferences"
-          description="General app preferences"
+          description="Language, timezone, and regional settings"
           onClick={() => setCurrentView('preferences')}
+          highlight={true}
         />
         
         <SettingItem
@@ -184,6 +222,340 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
             title="Secure backup"
             status="Enabled"
             isActive={true}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPreferences = () => (
+    <div className="space-y-6">
+      {/* Language Settings */}
+      <div className="element-card p-6">
+        <h4 className="element-text font-semibold mb-4 flex items-center">
+          <Languages className="w-5 h-5 mr-2 text-red-600" />
+          Application Language
+        </h4>
+        <p className="element-text-small text-gray-600 mb-6">
+          Choose your preferred interface language. This will change all menus, buttons, and system messages.
+        </p>
+        
+        <div className="space-y-3">
+          {languages.map((lang) => (
+            <LanguageOption
+              key={lang.code}
+              flag={lang.flag}
+              name={lang.name}
+              nativeName={lang.nativeName}
+              selected={language === lang.code}
+              onClick={() => setLanguage(lang.code as 'en' | 'ar')}
+            />
+          ))}
+        </div>
+
+        {/* Language Preview */}
+        <div className="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h5 className="font-semibold text-gray-900 mb-3">Preview</h5>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm">
+                {language === 'ar' ? 'الرسائل' : 'Messages'}
+              </span>
+              <span className="text-xs text-gray-500">
+                {language === 'ar' ? '٣ رسائل جديدة' : '3 new messages'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">
+                {language === 'ar' ? 'الإعدادات' : 'Settings'}
+              </span>
+              <ChevronRight className={`w-4 h-4 text-gray-400 ${language === 'ar' ? 'rotate-180' : ''}`} />
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">
+                {language === 'ar' ? 'الأمان والخصوصية' : 'Security & Privacy'}
+              </span>
+              <ChevronRight className={`w-4 h-4 text-gray-400 ${language === 'ar' ? 'rotate-180' : ''}`} />
+            </div>
+          </div>
+        </div>
+
+        {/* Language Notice */}
+        <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start space-x-3">
+            <Globe className="w-5 h-5 text-blue-600 mt-0.5" />
+            <div>
+              <h5 className="font-semibold text-blue-900">Language Support</h5>
+              <p className="text-sm text-blue-800 mt-1">
+                {language === 'ar' 
+                  ? 'تم تصميم تطبيق تيلي عراق خصيصاً لدعم اللغة العربية مع تخطيط من اليمين إلى اليسار.'
+                  : 'TELE IRAQ is designed with full Arabic language support including right-to-left layout.'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Timezone Settings */}
+      <div className="element-card p-6">
+        <h4 className="element-text font-semibold mb-4 flex items-center">
+          <Clock className="w-5 h-5 mr-2 text-red-600" />
+          Time Zone
+        </h4>
+        <p className="element-text-small text-gray-600 mb-6">
+          Set your time zone to display accurate timestamps for messages and calls.
+        </p>
+
+        {/* Current Time Display */}
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h5 className="font-semibold text-red-900">Current Time</h5>
+              <p className="text-2xl font-bold text-red-800 mt-1">
+                {new Date().toLocaleTimeString('en-US', {
+                  timeZone: timezone,
+                  hour12: timeFormat === '12',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
+              </p>
+              <p className="text-sm text-red-700">
+                {new Date().toLocaleDateString('en-US', {
+                  timeZone: timezone,
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <Clock className="w-6 h-6 text-red-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Iraq Timezones */}
+        <div className="mb-6">
+          <h5 className="font-semibold text-gray-900 mb-3 flex items-center">
+            <MapPin className="w-4 h-4 mr-2 text-red-600" />
+            Iraq Cities
+          </h5>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {iraqTimezones.map((tz) => (
+              <TimezoneOption
+                key={tz.city}
+                label={tz.label}
+                city={tz.city}
+                selected={timezone === tz.value}
+                onClick={() => setTimezone(tz.value)}
+                flag="🇮🇶"
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* World Timezones */}
+        <div className="mb-6">
+          <h5 className="font-semibold text-gray-900 mb-3 flex items-center">
+            <Globe className="w-4 h-4 mr-2" />
+            Other Timezones
+          </h5>
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {worldTimezones.map((tz) => (
+              <TimezoneOption
+                key={tz.value}
+                label={tz.label}
+                city={tz.region}
+                selected={timezone === tz.value}
+                onClick={() => setTimezone(tz.value)}
+                flag="🌍"
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Auto-detect Timezone */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h5 className="font-semibold text-yellow-900">Auto-detect Timezone</h5>
+              <p className="text-sm text-yellow-800 mt-1">
+                Automatically set timezone based on your device location
+              </p>
+            </div>
+            <button className="element-button-secondary text-sm">
+              Detect
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Time & Date Format */}
+      <div className="element-card p-6">
+        <h4 className="element-text font-semibold mb-4 flex items-center">
+          <Calendar className="w-5 h-5 mr-2" />
+          Time & Date Format
+        </h4>
+        
+        <div className="space-y-6">
+          {/* Time Format */}
+          <div>
+            <h5 className="font-semibold text-gray-900 mb-3">Time Format</h5>
+            <div className="grid grid-cols-2 gap-3">
+              <TimeFormatOption
+                format="12"
+                label="12-hour"
+                example="2:30 PM"
+                selected={timeFormat === '12'}
+                onClick={() => setTimeFormat('12')}
+              />
+              <TimeFormatOption
+                format="24"
+                label="24-hour"
+                example="14:30"
+                selected={timeFormat === '24'}
+                onClick={() => setTimeFormat('24')}
+              />
+            </div>
+          </div>
+
+          {/* Date Format */}
+          <div>
+            <h5 className="font-semibold text-gray-900 mb-3">Date Format</h5>
+            <div className="space-y-2">
+              <DateFormatOption
+                format="dd/mm/yyyy"
+                label="Day/Month/Year"
+                example="25/12/2024"
+                selected={dateFormat === 'dd/mm/yyyy'}
+                onClick={() => setDateFormat('dd/mm/yyyy')}
+              />
+              <DateFormatOption
+                format="mm/dd/yyyy"
+                label="Month/Day/Year"
+                example="12/25/2024"
+                selected={dateFormat === 'mm/dd/yyyy'}
+                onClick={() => setDateFormat('mm/dd/yyyy')}
+              />
+              <DateFormatOption
+                format="yyyy-mm-dd"
+                label="Year-Month-Day"
+                example="2024-12-25"
+                selected={dateFormat === 'yyyy-mm-dd'}
+                onClick={() => setDateFormat('yyyy-mm-dd')}
+              />
+            </div>
+          </div>
+
+          {/* Format Preview */}
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h5 className="font-semibold text-gray-900 mb-3">Preview</h5>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Current time:</span>
+                <span className="text-sm font-medium">
+                  {new Date().toLocaleTimeString('en-US', {
+                    hour12: timeFormat === '12',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Today's date:</span>
+                <span className="text-sm font-medium">
+                  {dateFormat === 'dd/mm/yyyy' && new Date().toLocaleDateString('en-GB')}
+                  {dateFormat === 'mm/dd/yyyy' && new Date().toLocaleDateString('en-US')}
+                  {dateFormat === 'yyyy-mm-dd' && new Date().toISOString().split('T')[0]}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Message timestamp:</span>
+                <span className="text-sm font-medium">
+                  {new Date().toLocaleString('en-US', {
+                    hour12: timeFormat === '12',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    day: dateFormat === 'dd/mm/yyyy' ? '2-digit' : 'numeric',
+                    month: dateFormat === 'yyyy-mm-dd' ? '2-digit' : 'short',
+                    year: 'numeric'
+                  })}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Regional Settings */}
+      <div className="element-card p-6">
+        <h4 className="element-text font-semibold mb-4 flex items-center">
+          <Globe className="w-5 h-5 mr-2" />
+          Regional Settings
+        </h4>
+        <div className="space-y-4">
+          <ToggleItem
+            title="Use Arabic numerals"
+            description="Display numbers in Arabic-Indic numerals (٠١٢٣٤٥٦٧٨٩)"
+            enabled={language === 'ar'}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Right-to-left layout"
+            description="Automatically enable RTL layout for Arabic interface"
+            enabled={language === 'ar'}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Local calendar"
+            description="Show dates according to local calendar system"
+            enabled={false}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Week starts on Saturday"
+            description="Start the week on Saturday instead of Sunday"
+            enabled={true}
+            onChange={() => {}}
+          />
+        </div>
+      </div>
+
+      {/* App Behavior */}
+      <div className="element-card p-6">
+        <h4 className="element-text font-semibold mb-4 flex items-center">
+          <Settings className="w-5 h-5 mr-2" />
+          App Behavior
+        </h4>
+        <div className="space-y-4">
+          <ToggleItem
+            title="Auto-start on system boot"
+            description="Automatically start TELE IRAQ when your device starts"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Minimize to system tray"
+            description="Keep the app running in the background when closed"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Check for updates automatically"
+            description="Automatically check for and install app updates"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Send usage statistics"
+            description="Help improve TELE IRAQ by sending anonymous usage data"
+            enabled={false}
+            onChange={() => {}}
           />
         </div>
       </div>
@@ -925,10 +1297,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         return renderAppearance();
       case 'notifications':
         return renderNotifications();
+      case 'preferences':
+        return renderPreferences();
       case 'account':
         return renderGenericSection('Account', <UserCheck className="w-5 h-5 mr-2" />);
-      case 'preferences':
-        return renderGenericSection('Preferences', <Settings className="w-5 h-5 mr-2" />);
       case 'keyboard':
         return renderGenericSection('Keyboard', <Keyboard className="w-5 h-5 mr-2" />);
       case 'sidebar':
@@ -1124,6 +1496,122 @@ const MessageLayoutOption: React.FC<MessageLayoutOptionProps> = ({
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           {preview}
         </div>
+      </div>
+    </button>
+  );
+};
+
+interface LanguageOptionProps {
+  flag: string;
+  name: string;
+  nativeName: string;
+  selected: boolean;
+  onClick: () => void;
+}
+
+const LanguageOption: React.FC<LanguageOptionProps> = ({ flag, name, nativeName, selected, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
+        selected
+          ? 'border-red-500 bg-red-50'
+          : 'border-gray-200 hover:border-gray-300'
+      }`}
+    >
+      <div className="flex items-center space-x-4">
+        <div className="text-2xl">{flag}</div>
+        <div className="flex-1 text-left">
+          <h4 className="element-text font-medium">{name}</h4>
+          <p className="element-text-small text-gray-500">{nativeName}</p>
+        </div>
+        {selected && <Check className="w-5 h-5 text-red-600" />}
+      </div>
+    </button>
+  );
+};
+
+interface TimezoneOptionProps {
+  label: string;
+  city: string;
+  selected: boolean;
+  onClick: () => void;
+  flag: string;
+}
+
+const TimezoneOption: React.FC<TimezoneOptionProps> = ({ label, city, selected, onClick, flag }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full p-3 rounded-lg border transition-all duration-200 text-left ${
+        selected
+          ? 'border-red-500 bg-red-50'
+          : 'border-gray-200 hover:border-gray-300'
+      }`}
+    >
+      <div className="flex items-center space-x-3">
+        <div className="text-lg">{flag}</div>
+        <div className="flex-1">
+          <h5 className="text-sm font-medium text-gray-900">{city}</h5>
+          <p className="text-xs text-gray-500">{label}</p>
+        </div>
+        {selected && <Check className="w-4 h-4 text-red-600" />}
+      </div>
+    </button>
+  );
+};
+
+interface TimeFormatOptionProps {
+  format: '12' | '24';
+  label: string;
+  example: string;
+  selected: boolean;
+  onClick: () => void;
+}
+
+const TimeFormatOption: React.FC<TimeFormatOptionProps> = ({ format, label, example, selected, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
+        selected
+          ? 'border-red-500 bg-red-50'
+          : 'border-gray-200 hover:border-gray-300'
+      }`}
+    >
+      <div className="text-center">
+        <h4 className="element-text font-medium">{label}</h4>
+        <p className="element-text-small text-gray-500 mt-1">{example}</p>
+        {selected && <Check className="w-4 h-4 text-red-600 mx-auto mt-2" />}
+      </div>
+    </button>
+  );
+};
+
+interface DateFormatOptionProps {
+  format: 'dd/mm/yyyy' | 'mm/dd/yyyy' | 'yyyy-mm-dd';
+  label: string;
+  example: string;
+  selected: boolean;
+  onClick: () => void;
+}
+
+const DateFormatOption: React.FC<DateFormatOptionProps> = ({ format, label, example, selected, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full p-3 rounded-lg border transition-all duration-200 text-left ${
+        selected
+          ? 'border-red-500 bg-red-50'
+          : 'border-gray-200 hover:border-gray-300'
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <h4 className="element-text font-medium">{label}</h4>
+          <p className="element-text-small text-gray-500">{example}</p>
+        </div>
+        {selected && <Check className="w-5 h-5 text-red-600" />}
       </div>
     </button>
   );
