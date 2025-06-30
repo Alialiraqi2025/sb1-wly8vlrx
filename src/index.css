@@ -10,6 +10,11 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -18,8 +23,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff;
-  overflow: hidden;
   line-height: 1.6;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* High contrast and better visibility */
@@ -36,24 +45,36 @@ body {
   --shadow-xl: 0 35px 60px -12px rgba(0, 0, 0, 0.35);
 }
 
-/* Custom scrollbar with better visibility */
+/* Custom scrollbar - hidden by default, visible on hover */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Show scrollbar on hover */
+.scrollable:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+
+/* Firefox scrollbar */
+.scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
 /* Enhanced animations */
@@ -335,19 +356,82 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* Mobile optimizations */
+/* Flexible layout utilities */
+.flex-container {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.flex-sidebar {
+  flex: 0 0 auto;
+  min-width: 320px;
+  max-width: 400px;
+  width: 30%;
+  overflow: hidden;
+}
+
+.flex-main {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.flex-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.flex-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .flex-sidebar {
+    width: 35%;
+    min-width: 280px;
+  }
+}
+
 @media (max-width: 768px) {
-  .message-bubble {
-    max-width: 90%;
+  .flex-container {
+    flex-direction: column;
   }
   
-  body {
-    overflow: auto;
+  .flex-sidebar {
+    width: 100%;
+    max-width: none;
+    height: 40vh;
+    min-height: 300px;
+  }
+  
+  .flex-main {
+    height: 60vh;
+  }
+  
+  .message-bubble {
+    max-width: 90%;
   }
   
   .glass {
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
+  }
+}
+
+@media (max-width: 640px) {
+  .flex-sidebar {
+    height: 35vh;
+    min-height: 250px;
+  }
+  
+  .flex-main {
+    height: 65vh;
   }
 }
 
@@ -450,4 +534,102 @@ body {
 ::-moz-selection {
   background: rgba(102, 126, 234, 0.3);
   color: white;
+}
+
+/* Auto-resizing textarea */
+.auto-resize {
+  resize: none;
+  overflow: hidden;
+  min-height: 56px;
+  max-height: 140px;
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, textarea, select {
+  transition: all 0.2s ease;
+}
+
+/* Focus management for better accessibility */
+.focus-trap {
+  outline: none;
+}
+
+.focus-trap:focus-within {
+  outline: 2px solid rgba(102, 126, 234, 0.6);
+  outline-offset: 2px;
+}
+
+/* Prevent text selection on UI elements */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Better touch targets for mobile */
+@media (pointer: coarse) {
+  button, input, select, textarea, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Optimized scrolling for mobile */
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Prevent zoom on input focus for iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select, textarea, input[type="text"], input[type="password"], 
+  input[type="datetime"], input[type="datetime-local"], 
+  input[type="date"], input[type="month"], input[type="time"], 
+  input[type="week"], input[type="number"], input[type="email"], 
+  input[type="url"], input[type="search"], input[type="tel"], 
+  input[type="color"] {
+    font-size: 16px !important;
+  }
+}
+
+/* Enhanced glass effect for better visibility */
+.glass-enhanced {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexible grid system */
+.grid-responsive {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better performance for animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Container queries support */
+@container (max-width: 400px) {
+  .container-responsive {
+    padding: 1rem;
+  }
+}
+
+/* Enhanced visibility for important elements */
+.high-visibility {
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
