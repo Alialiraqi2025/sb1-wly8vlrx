@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, Users, Settings, Hash } from 'lucide-react';
+import { MessageSquare, Users, Settings, Hash, ArrowLeft } from 'lucide-react';
 import AuthScreen from './components/AuthScreen';
-import ChatList from './components/ChatList';
-import ChatWindow from './components/ChatWindow';
+import AllChatsList from './components/AllChatsList';
+import ChatInterface from './components/ChatInterface';
 import SettingsPanel from './components/SettingsPanel';
 import { User, Chat, Message } from './types';
 import { generateDemoData } from './utils/demoData';
 
+type ViewType = 'all-chats' | 'groups' | 'settings' | 'chat-interface';
+
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentView, setCurrentView] = useState<'chats' | 'groups' | 'settings'>('chats');
+  const [currentView, setCurrentView] = useState<ViewType>('all-chats');
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [chats, setChats] = useState<Chat[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -41,11 +43,13 @@ function App() {
     setSelectedChat(null);
     setChats([]);
     setMessages([]);
-    setCurrentView('chats');
+    setCurrentView('all-chats');
   };
 
   const handleChatSelect = (chat: Chat) => {
     setSelectedChat(chat);
+    setCurrentView('chat-interface');
+    
     // Load messages for selected chat
     const demoMessages: Message[] = [
       {
@@ -77,6 +81,12 @@ function App() {
       }
     ];
     setMessages(demoMessages);
+  };
+
+  const handleBackToAllChats = () => {
+    setCurrentView('all-chats');
+    setSelectedChat(null);
+    setMessages([]);
   };
 
   const handleSendMessage = (content: string, type: 'text' | 'image' | 'file' | 'voice' = 'text') => {
@@ -158,6 +168,22 @@ function App() {
     return <AuthScreen onLogin={handleLogin} />;
   }
 
+  // Chat Interface View - Full Screen
+  if (currentView === 'chat-interface' && selectedChat) {
+    return (
+      <div className="app-container">
+        <ChatInterface
+          chat={selectedChat}
+          messages={messages}
+          currentUserId={currentUser.id}
+          onSendMessage={handleSendMessage}
+          onBack={handleBackToAllChats}
+        />
+      </div>
+    );
+  }
+
+  // Main App View with Sidebar
   return (
     <div className="app-container">
       {/* Header - Element style */}
@@ -177,9 +203,9 @@ function App() {
             {/* Navigation */}
             <nav className="flex items-center space-x-1">
               <button
-                onClick={() => setCurrentView('chats')}
+                onClick={() => setCurrentView('all-chats')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
-                  currentView === 'chats'
+                  currentView === 'all-chats'
                     ? 'bg-green-100 text-green-700'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
@@ -239,10 +265,9 @@ function App() {
           {/* Sidebar */}
           <div className="flex-sidebar sidebar-container">
             <div className="flex-content">
-              {currentView === 'chats' && (
-                <ChatList
+              {currentView === 'all-chats' && (
+                <AllChatsList
                   chats={chats}
-                  selectedChat={selectedChat}
                   onChatSelect={handleChatSelect}
                   currentUserId={currentUser.id}
                 />
@@ -266,26 +291,17 @@ function App() {
             </div>
           </div>
 
-          {/* Chat Window */}
+          {/* Main Content Area */}
           <div className="flex-main chat-window-container">
-            {selectedChat ? (
-              <ChatWindow
-                chat={selectedChat}
-                messages={messages}
-                currentUserId={currentUser.id}
-                onSendMessage={handleSendMessage}
-              />
-            ) : (
-              <div className="empty-state">
-                <div className="text-center animate-fade-in">
-                  <div className="element-card p-12 mb-6 inline-block">
-                    <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
-                    <p className="text-gray-600">Choose a chat from the sidebar to start messaging</p>
-                  </div>
+            <div className="empty-state">
+              <div className="text-center animate-fade-in">
+                <div className="element-card p-12 mb-6 inline-block">
+                  <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
+                  <p className="text-gray-600">Choose a chat from the sidebar to start messaging</p>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </main>
