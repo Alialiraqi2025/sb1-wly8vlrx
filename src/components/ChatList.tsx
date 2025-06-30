@@ -89,7 +89,7 @@ const ChatList: React.FC<ChatListProps> = ({ chats, selectedChat, onChatSelect, 
                   {/* Chat Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="element-text font-semibold truncate">{chat.name}</h3>
+                      <h3 className="element-text font-semibold truncate chat-name">{chat.name}</h3>
                       <div className="flex items-center space-x-2 flex-shrink-0">
                         {chat.lastMessageTime && (
                           <span className="element-text-small">

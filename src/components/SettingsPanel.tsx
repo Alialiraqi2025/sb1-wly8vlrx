@@ -24,7 +24,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="element-text font-semibold text-lg">{user.name}</h3>
+                <h3 className="element-text font-semibold text-lg username">{user.name}</h3>
                 <p className="element-text-small text-gray-500">{user.email}</p>
                 <div className="flex items-center space-x-2 mt-1">
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>

@@ -97,7 +97,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
               )}
             </div>
             <div>
-              <h3 className="element-text font-semibold">{chat.name}</h3>
+              <h3 className="element-text font-semibold chat-name">{chat.name}</h3>
               <p className="element-text-small text-gray-500">
                 {chat.isOnline ? 'Active now' : 'Last seen recently'}
               </p>
