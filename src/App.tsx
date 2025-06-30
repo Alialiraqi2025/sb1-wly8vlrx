@@ -263,7 +263,7 @@ function App() {
       <main className="app-main">
         <div className="flex-container">
           {/* Sidebar */}
-          <div className="flex-sidebar sidebar-container">
+          <div className="flex-sidebar">
             <div className="flex-content">
               {currentView === 'all-chats' && (
                 <AllChatsList
@@ -292,7 +292,7 @@ function App() {
           </div>
 
           {/* Main Content Area - Empty when no chat selected */}
-          <div className="flex-main chat-window-container">
+          <div className="flex-main">
             {/* Empty area - no message displayed */}
           </div>
         </div>
