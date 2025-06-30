@@ -141,7 +141,7 @@ function App() {
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Element</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">TELE IRAQ</h1>
             <p className="text-gray-600">Secure messaging for everyone</p>
           </div>
           <div className="flex items-center justify-center space-x-2">
@@ -170,7 +170,7 @@ function App() {
                 <MessageSquare className="w-5 h-5 text-white" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl font-bold text-gray-900">Element</h1>
+                <h1 className="text-xl font-bold text-gray-900">TELE IRAQ</h1>
               </div>
             </div>
 

@@ -50,7 +50,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
               <MessageSquare className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-white">Element</h1>
+            <h1 className="text-3xl font-bold text-white">TELE IRAQ</h1>
           </div>
           
           <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
@@ -115,7 +115,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
               <MessageSquare className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Element</h1>
+            <h1 className="text-2xl font-bold text-gray-900">TELE IRAQ</h1>
           </div>
 
           <div className="element-card p-8">
@@ -124,7 +124,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 {isLogin ? 'Sign in' : 'Create account'}
               </h2>
               <p className="text-gray-600">
-                {isLogin ? 'Welcome back to Element' : 'Join the secure messaging network'}
+                {isLogin ? 'Welcome back to TELE IRAQ' : 'Join the secure messaging network'}
               </p>
             </div>
 

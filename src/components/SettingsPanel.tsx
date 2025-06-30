@@ -100,12 +100,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           <div className="element-card p-6">
             <h4 className="element-text font-semibold mb-4 flex items-center">
               <Award className="w-5 h-5 mr-2" />
-              About Element
+              About TELE IRAQ
             </h4>
             <div className="space-y-2 element-text-small text-gray-600">
               <p>Version 1.11.50</p>
               <p>Built on Matrix protocol</p>
-              <p>© 2024 Element. All rights reserved.</p>
+              <p>© 2024 TELE IRAQ. All rights reserved.</p>
             </div>
             
             <div className="flex items-center space-x-4 mt-4">
