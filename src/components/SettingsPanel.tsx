@@ -28,17 +28,19 @@ import {
   Info,
   UserCheck,
   Camera,
-  Edit3,
-  Mail,
-  Phone,
-  Calendar,
   MapPin,
-  Save,
-  X,
-  Upload,
+  Phone,
+  Mail,
+  Calendar,
+  Download,
+  UserX,
   Trash2,
-  AlertCircle,
-  CheckCircle
+  AlertTriangle,
+  Volume2,
+  Headphones,
+  MicOff,
+  VideoOff,
+  Languages
 } from 'lucide-react';
 import { User as UserType } from '../types';
 
@@ -60,16 +62,15 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [profileData, setProfileData] = useState({
     displayName: user.name,
-    email: user.email,
-    phone: '+964 770 123 4567',
-    bio: 'Secure communication enthusiast',
+    bio: 'Secure messaging enthusiast from Iraq 🇮🇶',
     location: 'Baghdad, Iraq',
-    joinDate: 'January 2024'
+    email: user.email,
+    phone: '+964 770 123 4567'
   });
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    current: '',
+    new: '',
+    confirm: ''
   });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
@@ -77,63 +78,57 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     confirm: false
   });
 
-  // Message layout and font size states
-  const [messageLayout, setMessageLayout] = useState<'modern' | 'bubbles' | 'irc'>('modern');
-  const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
-
-  // Language and timezone states
+  // Preferences states
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
   const [timezone, setTimezone] = useState('Asia/Baghdad');
 
   // Voice & Video states
-  const [microphoneVolume, setMicrophoneVolume] = useState(75);
-  const [speakerVolume, setSpeakerVolume] = useState(80);
-  const [cameraQuality, setCameraQuality] = useState<'720p' | '1080p' | '4k'>('1080p');
-  const [echoCancellation, setEchoCancellation] = useState(true);
-  const [noiseSuppression, setNoiseSuppression] = useState(true);
+  const [voiceSettings, setVoiceSettings] = useState({
+    inputVolume: 75,
+    outputVolume: 80,
+    noiseSuppression: true,
+    echoCancellation: true,
+    autoGainControl: true
+  });
+  const [videoSettings, setVideoSettings] = useState({
+    resolution: '720p',
+    frameRate: 30,
+    mirrorVideo: true,
+    backgroundBlur: false
+  });
+
+  const validatePassword = (password: string) => {
+    const requirements = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      number: /\d/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+    
+    const score = Object.values(requirements).filter(Boolean).length;
+    return { requirements, score, strength: score < 2 ? 'weak' : score < 4 ? 'medium' : 'strong' };
+  };
 
   const handleProfileSave = () => {
-    // Simulate API call
-    setTimeout(() => {
-      setIsEditingProfile(false);
-      // Show success message
-    }, 1000);
+    setIsEditingProfile(false);
+    // Here you would typically save to backend
   };
 
   const handlePasswordChange = () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
+    if (passwordData.new !== passwordData.confirm) {
       alert('New passwords do not match');
       return;
     }
-    if (passwordData.newPassword.length < 8) {
-      alert('Password must be at least 8 characters long');
+    
+    const validation = validatePassword(passwordData.new);
+    if (validation.score < 4) {
+      alert('Password does not meet all requirements');
       return;
     }
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsChangingPassword(false);
-      setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
-      // Show success message
-    }, 1000);
-  };
-
-  const handleProfilePictureUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        // Handle file upload
-        console.log('Uploading profile picture:', file.name);
-      }
-    };
-    input.click();
+    setIsChangingPassword(false);
+    setPasswordData({ current: '', new: '', confirm: '' });
+    // Here you would typically save to backend
   };
 
   const renderMainSettings = () => (
@@ -145,11 +140,11 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="element-text font-semibold text-lg username">{user.name}</h3>
-            <p className="element-text-small text-gray-500">{user.email}</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white username">{user.name}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">{user.email}</p>
             <div className="flex items-center space-x-2 mt-1">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="element-text-small text-green-600">Online</span>
+              <span className="text-sm text-green-600 dark:text-green-400">Online</span>
             </div>
           </div>
         </div>
@@ -164,7 +159,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         <SettingItem
           icon={<UserCheck className="w-5 h-5" />}
           title="Account"
-          description="Manage your account settings and profile"
+          description="Manage your account settings"
           onClick={() => setCurrentView('account')}
         />
         
@@ -196,25 +191,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           onClick={() => setCurrentView('preferences')}
         />
         
-        {/* Hide Keyboard and Sidebar on mobile */}
-        <div className="hidden lg:block">
-          <SettingItem
-            icon={<Keyboard className="w-5 h-5" />}
-            title="Keyboard"
-            description="Keyboard shortcuts and settings"
-            onClick={() => setCurrentView('keyboard')}
-          />
-        </div>
-        
-        <div className="hidden lg:block">
-          <SettingItem
-            icon={<Sidebar className="w-5 h-5" />}
-            title="Sidebar"
-            description="Customize sidebar behavior"
-            onClick={() => setCurrentView('sidebar')}
-          />
-        </div>
-        
         <SettingItem
           icon={<Video className="w-5 h-5" />}
           title="Voice & Video"
@@ -240,7 +216,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         <SettingItem
           icon={<TestTube className="w-5 h-5" />}
           title="Labs"
-          description="Experimental features and encryption info"
+          description="Learn about encryption technology"
           onClick={() => setCurrentView('labs')}
         />
         
@@ -254,7 +230,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
       {/* Security Status */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-base font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <Shield className="w-5 h-5 mr-2 text-green-600" />
           Security Status
         </h4>
@@ -280,211 +256,181 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderAccount = () => (
-    <div className="space-y-6 account-scrollbar">
-      {/* Profile Section */}
+    <div className="space-y-6">
+      {/* Profile Picture Section */}
       <div className="element-card p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h4 className="element-text font-semibold text-lg flex items-center">
-            <User className="w-5 h-5 mr-2" />
-            Profile
-          </h4>
-          <button
-            onClick={() => setIsEditingProfile(!isEditingProfile)}
-            className="element-button-secondary p-2"
-          >
-            {isEditingProfile ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
-          </button>
-        </div>
-
-        {/* Profile Picture */}
-        <div className="flex items-center space-x-6 mb-6">
+        <h4 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Profile Picture</h4>
+        <div className="flex items-center space-x-6">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-2xl font-bold">
-              {profileData.displayName.charAt(0).toUpperCase()}
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-2xl font-bold">
+              {user.name.charAt(0).toUpperCase()}
             </div>
-            <button
-              onClick={handleProfilePictureUpload}
-              className="absolute -bottom-1 -right-1 w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all duration-200"
-            >
+            <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg">
               <Camera className="w-4 h-4" />
             </button>
           </div>
           <div className="flex-1">
-            <h3 className="element-text font-semibold text-lg mb-1">{profileData.displayName}</h3>
-            <p className="element-text-small text-gray-500 mb-3">{profileData.bio}</p>
-            <div className="flex space-x-2">
-              <button
-                onClick={handleProfilePictureUpload}
-                className="element-button-secondary text-sm px-3 py-1"
-              >
-                <Upload className="w-3 h-3 mr-1" />
-                Upload
+            <div className="flex space-x-3">
+              <button className="element-button">
+                <Camera className="w-4 h-4" />
+                Upload Photo
               </button>
-              <button className="element-button-secondary text-sm px-3 py-1 text-red-600 hover:bg-red-50">
-                <Trash2 className="w-3 h-3 mr-1" />
+              <button className="element-button-secondary">
                 Remove
               </button>
             </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+              JPG, PNG or GIF. Max size 5MB.
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Profile Form */}
+      {/* Profile Information */}
+      <div className="element-card p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Profile Information</h4>
+          <button
+            onClick={() => isEditingProfile ? handleProfileSave() : setIsEditingProfile(true)}
+            className={isEditingProfile ? "element-button" : "element-button-secondary"}
+          >
+            {isEditingProfile ? 'Save Changes' : 'Edit Profile'}
+          </button>
+        </div>
+
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Display Name
             </label>
-            <input
-              type="text"
-              value={profileData.displayName}
-              onChange={(e) => setProfileData(prev => ({ ...prev, displayName: e.target.value }))}
-              disabled={!isEditingProfile}
-              className={`element-input ${!isEditingProfile ? 'bg-gray-50 cursor-not-allowed' : ''}`}
-            />
+            {isEditingProfile ? (
+              <input
+                type="text"
+                value={profileData.displayName}
+                onChange={(e) => setProfileData(prev => ({ ...prev, displayName: e.target.value }))}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+            ) : (
+              <p className="text-gray-900 dark:text-white font-medium">{profileData.displayName}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Bio
             </label>
-            <textarea
-              value={profileData.bio}
-              onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
-              disabled={!isEditingProfile}
-              rows={3}
-              className={`element-input resize-none ${!isEditingProfile ? 'bg-gray-50 cursor-not-allowed' : ''}`}
-              placeholder="Tell others about yourself..."
-            />
+            {isEditingProfile ? (
+              <textarea
+                value={profileData.bio}
+                onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
+                placeholder="Tell others about yourself..."
+              />
+            ) : (
+              <p className="text-gray-700 dark:text-gray-300">{profileData.bio}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <MapPin className="w-4 h-4 inline mr-1" />
               Location
             </label>
-            <div className="relative">
+            {isEditingProfile ? (
               <input
                 type="text"
                 value={profileData.location}
                 onChange={(e) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
-                disabled={!isEditingProfile}
-                className={`element-input pl-10 ${!isEditingProfile ? 'bg-gray-50 cursor-not-allowed' : ''}`}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                placeholder="Your location"
               />
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
+            ) : (
+              <p className="text-gray-700 dark:text-gray-300">{profileData.location}</p>
+            )}
           </div>
-
-          {isEditingProfile && (
-            <div className="flex space-x-3 pt-4">
-              <button
-                onClick={handleProfileSave}
-                className="element-button flex-1"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </button>
-              <button
-                onClick={() => setIsEditingProfile(false)}
-                className="element-button-secondary flex-1"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
         </div>
+
+        {isEditingProfile && (
+          <div className="flex space-x-3 mt-6">
+            <button
+              onClick={handleProfileSave}
+              className="element-button"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={() => setIsEditingProfile(false)}
+              className="element-button-secondary"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Personal Information */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Info className="w-5 h-5 mr-2" />
-          Personal Information
-        </h4>
+        <h4 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Personal Information</h4>
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Mail className="w-5 h-5 text-gray-600" />
+              <Mail className="w-5 h-5 text-gray-500" />
               <div>
-                <p className="element-text font-medium">Email Address</p>
-                <p className="element-text-small text-gray-500">{profileData.email}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</p>
+                <p className="text-gray-900 dark:text-white">{profileData.email}</p>
               </div>
             </div>
-            <button className="element-button-secondary text-sm">
-              Change
-            </button>
+            <button className="element-button-secondary text-sm">Change</button>
           </div>
 
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-gray-600" />
+              <Phone className="w-5 h-5 text-gray-500" />
               <div>
-                <p className="element-text font-medium">Phone Number</p>
-                <p className="element-text-small text-gray-500">{profileData.phone}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</p>
+                <p className="text-gray-900 dark:text-white">{profileData.phone}</p>
               </div>
             </div>
-            <button className="element-button-secondary text-sm">
-              Change
-            </button>
+            <button className="element-button-secondary text-sm">Change</button>
           </div>
 
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Calendar className="w-5 h-5 text-gray-600" />
+              <Calendar className="w-5 h-5 text-gray-500" />
               <div>
-                <p className="element-text font-medium">Member Since</p>
-                <p className="element-text-small text-gray-500">{profileData.joinDate}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Member Since</p>
+                <p className="text-gray-900 dark:text-white">January 2024</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Password Section */}
+      {/* Password & Security */}
       <div className="element-card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h4 className="element-text font-semibold flex items-center">
-            <Key className="w-5 h-5 mr-2" />
-            Password & Security
-          </h4>
+        <div className="flex items-center justify-between mb-6">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Password & Security</h4>
           <button
             onClick={() => setIsChangingPassword(!isChangingPassword)}
-            className="element-button-secondary text-sm"
+            className={isChangingPassword ? "element-button-secondary" : "element-button"}
           >
             {isChangingPassword ? 'Cancel' : 'Change Password'}
           </button>
         </div>
 
-        {!isChangingPassword ? (
-          <div className="space-y-3">
-            <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <div>
-                <p className="element-text font-medium text-green-900">Password is secure</p>
-                <p className="element-text-small text-green-700">Last changed 30 days ago</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <p className="element-text-small text-gray-500">Password Strength</p>
-                <p className="element-text font-semibold text-green-600">Strong</p>
-              </div>
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <p className="element-text-small text-gray-500">Two-Factor Auth</p>
-                <p className="element-text font-semibold text-green-600">Enabled</p>
-              </div>
-            </div>
-          </div>
-        ) : (
+        {isChangingPassword ? (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Current Password
               </label>
               <div className="relative">
                 <input
                   type={showPasswords.current ? 'text' : 'password'}
-                  value={passwordData.currentPassword}
-                  onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                  className="element-input pr-10"
+                  value={passwordData.current}
+                  onChange={(e) => setPasswordData(prev => ({ ...prev, current: e.target.value }))}
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   placeholder="Enter current password"
                 />
                 <button
@@ -492,21 +438,21 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                   onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPasswords.current ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPasswords.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 New Password
               </label>
               <div className="relative">
                 <input
                   type={showPasswords.new ? 'text' : 'password'}
-                  value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                  className="element-input pr-10"
+                  value={passwordData.new}
+                  onChange={(e) => setPasswordData(prev => ({ ...prev, new: e.target.value }))}
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   placeholder="Enter new password"
                 />
                 <button
@@ -514,21 +460,54 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                   onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPasswords.new ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              
+              {passwordData.new && (
+                <div className="mt-3">
+                  <div className="space-y-2">
+                    {Object.entries(validatePassword(passwordData.new).requirements).map(([key, met]) => (
+                      <div key={key} className={`flex items-center space-x-2 text-sm ${met ? 'text-green-600' : 'text-gray-500'}`}>
+                        <div className={`w-4 h-4 rounded-full flex items-center justify-center ${met ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                          {met ? <Check className="w-3 h-3" /> : <span className="w-2 h-2 bg-current rounded-full" />}
+                        </div>
+                        <span>
+                          {key === 'length' && 'At least 8 characters'}
+                          {key === 'uppercase' && 'One uppercase letter'}
+                          {key === 'number' && 'One number'}
+                          {key === 'special' && 'One special character'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-3">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Strength:</span>
+                      <div className={`px-2 py-1 rounded text-xs font-medium ${
+                        validatePassword(passwordData.new).strength === 'weak' ? 'bg-red-100 text-red-700' :
+                        validatePassword(passwordData.new).strength === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-green-100 text-green-700'
+                      }`}>
+                        {validatePassword(passwordData.new).strength.toUpperCase()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Confirm New Password
               </label>
               <div className="relative">
                 <input
                   type={showPasswords.confirm ? 'text' : 'password'}
-                  value={passwordData.confirmPassword}
-                  onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                  className="element-input pr-10"
+                  value={passwordData.confirm}
+                  onChange={(e) => setPasswordData(prev => ({ ...prev, confirm: e.target.value }))}
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   placeholder="Confirm new password"
                 />
                 <button
@@ -536,92 +515,545 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                   onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPasswords.confirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {passwordData.confirm && passwordData.new !== passwordData.confirm && (
+                <p className="text-red-600 text-sm mt-1">Passwords do not match</p>
+              )}
             </div>
 
-            {/* Password Requirements */}
-            <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="element-text-small font-medium text-blue-900 mb-2">Password Requirements:</p>
-              <ul className="element-text-small text-blue-700 space-y-1">
-                <li className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${passwordData.newPassword.length >= 8 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                  <span>At least 8 characters</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${/[A-Z]/.test(passwordData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                  <span>One uppercase letter</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${/[0-9]/.test(passwordData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                  <span>One number</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${/[!@#$%^&*]/.test(passwordData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                  <span>One special character</span>
-                </li>
-              </ul>
+            <div className="flex space-x-3 pt-4">
+              <button
+                onClick={handlePasswordChange}
+                disabled={!passwordData.current || !passwordData.new || !passwordData.confirm || passwordData.new !== passwordData.confirm}
+                className="element-button disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Update Password
+              </button>
+              <button
+                onClick={() => {
+                  setIsChangingPassword(false);
+                  setPasswordData({ current: '', new: '', confirm: '' });
+                }}
+                className="element-button-secondary"
+              >
+                Cancel
+              </button>
             </div>
-
-            <button
-              onClick={handlePasswordChange}
-              className="element-button w-full"
-              disabled={!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
-            >
-              <Key className="w-4 h-4 mr-2" />
-              Update Password
-            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</p>
+                <p className="text-gray-500 text-sm">Last changed 30 days ago</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-green-600">Strong</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Two-factor authentication</p>
+                <p className="text-gray-500 text-sm">Add an extra layer of security</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-green-600">Enabled</span>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
       {/* Account Actions */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Settings className="w-5 h-5 mr-2" />
-          Account Actions
-        </h4>
+        <h4 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Account Actions</h4>
         <div className="space-y-3">
-          <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="element-text font-medium">Download My Data</p>
-                <p className="element-text-small text-gray-500">Export all your account data</p>
+          <button className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200">
+            <div className="flex items-center space-x-3">
+              <Download className="w-5 h-5 text-blue-600" />
+              <div className="text-left">
+                <p className="font-medium text-gray-900 dark:text-white">Download My Data</p>
+                <p className="text-sm text-gray-500">Export your account information</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
             </div>
+            <ChevronRight className="w-5 h-5 text-gray-400" />
           </button>
-          
-          <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="element-text font-medium">Deactivate Account</p>
-                <p className="element-text-small text-gray-500">Temporarily disable your account</p>
+
+          <button className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200">
+            <div className="flex items-center space-x-3">
+              <UserX className="w-5 h-5 text-yellow-600" />
+              <div className="text-left">
+                <p className="font-medium text-gray-900 dark:text-white">Deactivate Account</p>
+                <p className="text-sm text-gray-500">Temporarily disable your account</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
             </div>
+            <ChevronRight className="w-5 h-5 text-gray-400" />
           </button>
-          
-          <button className="w-full text-left p-3 rounded-lg border border-red-200 hover:bg-red-50 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="element-text font-medium text-red-600">Delete Account</p>
-                <p className="element-text-small text-red-500">Permanently delete your account and data</p>
+
+          <button className="w-full flex items-center justify-between p-4 border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-200">
+            <div className="flex items-center space-x-3">
+              <Trash2 className="w-5 h-5 text-red-600" />
+              <div className="text-left">
+                <p className="font-medium text-red-900 dark:text-red-400">Delete Account</p>
+                <p className="text-sm text-red-700 dark:text-red-500">Permanently delete your account and data</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-red-400" />
             </div>
+            <AlertTriangle className="w-5 h-5 text-red-600" />
           </button>
         </div>
       </div>
     </div>
   );
 
+  const renderPreferences = () => (
+    <div className="space-y-6">
+      {/* Language Settings */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-6 flex items-center text-gray-900 dark:text-white">
+          <Languages className="w-5 h-5 mr-2" />
+          Application Language
+        </h4>
+        <div className="space-y-3">
+          <LanguageOption
+            title="English"
+            subtitle="English (US)"
+            flag="🇺🇸"
+            selected={language === 'en'}
+            onClick={() => setLanguage('en')}
+          />
+          <LanguageOption
+            title="العربية"
+            subtitle="Arabic (Iraq)"
+            flag="🇮🇶"
+            selected={language === 'ar'}
+            onClick={() => setLanguage('ar')}
+          />
+        </div>
+      </div>
+
+      {/* Timezone Settings */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-6 flex items-center text-gray-900 dark:text-white">
+          <Globe className="w-5 h-5 mr-2" />
+          Time Zone
+        </h4>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Select your timezone
+            </label>
+            <select
+              value={timezone}
+              onChange={(e) => setTimezone(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            >
+              <option value="Asia/Baghdad">Baghdad (GMT+3)</option>
+              <option value="Asia/Kuwait">Kuwait (GMT+3)</option>
+              <option value="Asia/Riyadh">Riyadh (GMT+3)</option>
+              <option value="Asia/Dubai">Dubai (GMT+4)</option>
+              <option value="Europe/London">London (GMT+0)</option>
+              <option value="America/New_York">New York (GMT-5)</option>
+              <option value="Europe/Berlin">Berlin (GMT+1)</option>
+              <option value="Asia/Tokyo">Tokyo (GMT+9)</option>
+            </select>
+          </div>
+          
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <Info className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div>
+                <h5 className="text-sm font-medium text-blue-900 dark:text-blue-400">Current Time</h5>
+                <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                  {new Date().toLocaleString('en-US', { 
+                    timeZone: timezone,
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                  })}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Display Time Format */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Display Format</h4>
+        <div className="space-y-4">
+          <ToggleItem
+            title="24-hour time format"
+            description="Display time in 24-hour format instead of 12-hour"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Show seconds"
+            description="Display seconds in timestamps"
+            enabled={false}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Relative timestamps"
+            description="Show 'just now', '5 minutes ago' instead of exact time"
+            enabled={true}
+            onChange={() => {}}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderVoiceVideo = () => (
+    <div className="space-y-6">
+      {/* Voice Settings */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-6 flex items-center text-gray-900 dark:text-white">
+          <Mic className="w-5 h-5 mr-2" />
+          Voice Settings
+        </h4>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <Volume2 className="w-4 h-4 inline mr-1" />
+              Microphone Volume: {voiceSettings.inputVolume}%
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={voiceSettings.inputVolume}
+              onChange={(e) => setVoiceSettings(prev => ({ ...prev, inputVolume: parseInt(e.target.value) }))}
+              className="w-full slider"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <Headphones className="w-4 h-4 inline mr-1" />
+              Speaker Volume: {voiceSettings.outputVolume}%
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={voiceSettings.outputVolume}
+              onChange={(e) => setVoiceSettings(prev => ({ ...prev, outputVolume: parseInt(e.target.value) }))}
+              className="w-full slider"
+            />
+          </div>
+
+          <div className="space-y-4">
+            <ToggleItem
+              title="Noise Suppression"
+              description="Reduce background noise during calls"
+              enabled={voiceSettings.noiseSuppression}
+              onChange={(enabled) => setVoiceSettings(prev => ({ ...prev, noiseSuppression: enabled }))}
+            />
+            <ToggleItem
+              title="Echo Cancellation"
+              description="Prevent echo during voice calls"
+              enabled={voiceSettings.echoCancellation}
+              onChange={(enabled) => setVoiceSettings(prev => ({ ...prev, echoCancellation: enabled }))}
+            />
+            <ToggleItem
+              title="Auto Gain Control"
+              description="Automatically adjust microphone sensitivity"
+              enabled={voiceSettings.autoGainControl}
+              onChange={(enabled) => setVoiceSettings(prev => ({ ...prev, autoGainControl: enabled }))}
+            />
+          </div>
+
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="flex items-center space-x-3">
+              <MicOff className="w-5 h-5 text-blue-600" />
+              <div>
+                <h5 className="text-sm font-medium text-blue-900 dark:text-blue-400">Test Microphone</h5>
+                <p className="text-sm text-blue-700 dark:text-blue-300">Click to test your microphone settings</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Video Settings */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-6 flex items-center text-gray-900 dark:text-white">
+          <Video className="w-5 h-5 mr-2" />
+          Video Settings
+        </h4>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Video Resolution
+            </label>
+            <select
+              value={videoSettings.resolution}
+              onChange={(e) => setVideoSettings(prev => ({ ...prev, resolution: e.target.value }))}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            >
+              <option value="480p">480p (Standard)</option>
+              <option value="720p">720p (HD)</option>
+              <option value="1080p">1080p (Full HD)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Frame Rate: {videoSettings.frameRate} FPS
+            </label>
+            <input
+              type="range"
+              min="15"
+              max="60"
+              step="15"
+              value={videoSettings.frameRate}
+              onChange={(e) => setVideoSettings(prev => ({ ...prev, frameRate: parseInt(e.target.value) }))}
+              className="w-full slider"
+            />
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>15 FPS</span>
+              <span>30 FPS</span>
+              <span>45 FPS</span>
+              <span>60 FPS</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <ToggleItem
+              title="Mirror Video"
+              description="Mirror your video preview (like a mirror)"
+              enabled={videoSettings.mirrorVideo}
+              onChange={(enabled) => setVideoSettings(prev => ({ ...prev, mirrorVideo: enabled }))}
+            />
+            <ToggleItem
+              title="Background Blur"
+              description="Blur your background during video calls"
+              enabled={videoSettings.backgroundBlur}
+              onChange={(enabled) => setVideoSettings(prev => ({ ...prev, backgroundBlur: enabled }))}
+            />
+          </div>
+
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+            <div className="flex items-center space-x-3">
+              <VideoOff className="w-5 h-5 text-green-600" />
+              <div>
+                <h5 className="text-sm font-medium text-green-900 dark:text-green-400">Test Camera</h5>
+                <p className="text-sm text-green-700 dark:text-green-300">Click to test your camera settings</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Call Settings */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Call Settings</h4>
+        <div className="space-y-4">
+          <ToggleItem
+            title="Auto-answer calls"
+            description="Automatically answer incoming calls after 3 rings"
+            enabled={false}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Call waiting"
+            description="Allow incoming calls while on another call"
+            enabled={true}
+            onChange={() => {}}
+          />
+          <ToggleItem
+            title="Push to talk"
+            description="Hold spacebar to talk (mute by default)"
+            enabled={false}
+            onChange={() => {}}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderLabs = () => (
+    <div className="space-y-6">
+      {/* Encryption Overview */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-6 flex items-center text-gray-900 dark:text-white">
+          <Shield className="w-5 h-5 mr-2 text-green-600" />
+          End-to-End Encryption
+        </h4>
+        
+        <div className="space-y-6">
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+            <div className="flex items-start space-x-4">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center flex-shrink-0">
+                <Lock className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h5 className="text-lg font-semibold text-green-900 dark:text-green-400 mb-2">
+                  Your Messages Are Secure
+                </h5>
+                <p className="text-green-800 dark:text-green-300 leading-relaxed">
+                  TELE IRAQ uses end-to-end encryption to ensure that only you and the person you're communicating with can read what is sent. Nobody in between, not even TELE IRAQ, can access your messages.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h5 className="text-base font-semibold text-gray-900 dark:text-white mb-4">How End-to-End Encryption Works</h5>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-semibold text-sm">1</span>
+                </div>
+                <div>
+                  <h6 className="font-medium text-gray-900 dark:text-white">Key Generation</h6>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    When you start a conversation, your device generates a unique pair of cryptographic keys - a public key and a private key.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-semibold text-sm">2</span>
+                </div>
+                <div>
+                  <h6 className="font-medium text-gray-900 dark:text-white">Key Exchange</h6>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    Your device shares your public key with the recipient, while keeping your private key secret and secure on your device.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-semibold text-sm">3</span>
+                </div>
+                <div>
+                  <h6 className="font-medium text-gray-900 dark:text-white">Message Encryption</h6>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    When you send a message, it's encrypted using the recipient's public key, making it unreadable to anyone except the intended recipient.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-semibold text-sm">4</span>
+                </div>
+                <div>
+                  <h6 className="font-medium text-gray-900 dark:text-white">Message Decryption</h6>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    Only the recipient can decrypt and read the message using their private key, which never leaves their device.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h5 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Why Encryption Matters</h5>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Shield className="w-5 h-5 text-red-600" />
+                  <h6 className="font-medium text-red-900 dark:text-red-400">Privacy Protection</h6>
+                </div>
+                <p className="text-red-800 dark:text-red-300 text-sm">
+                  Prevents unauthorized access to your personal conversations and sensitive information.
+                </p>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Eye className="w-5 h-5 text-blue-600" />
+                  <h6 className="font-medium text-blue-900 dark:text-blue-400">Data Security</h6>
+                </div>
+                <p className="text-blue-800 dark:text-blue-300 text-sm">
+                  Protects your messages from being intercepted during transmission over the internet.
+                </p>
+              </div>
+
+              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Key className="w-5 h-5 text-green-600" />
+                  <h6 className="font-medium text-green-900 dark:text-green-400">Identity Verification</h6>
+                </div>
+                <p className="text-green-800 dark:text-green-300 text-sm">
+                  Ensures that messages come from the claimed sender and haven't been tampered with.
+                </p>
+              </div>
+
+              <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Globe className="w-5 h-5 text-purple-600" />
+                  <h6 className="font-medium text-purple-900 dark:text-purple-400">Freedom of Speech</h6>
+                </div>
+                <p className="text-purple-800 dark:text-purple-300 text-sm">
+                  Enables secure communication in regions where privacy and free speech are restricted.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+              <div>
+                <h6 className="font-medium text-yellow-900 dark:text-yellow-400">Important Note</h6>
+                <p className="text-yellow-800 dark:text-yellow-300 text-sm mt-1">
+                  End-to-end encryption is automatically enabled for all conversations in TELE IRAQ. You don't need to do anything to activate it - your messages are secure by default.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Technical Details */}
+      <div className="element-card p-6">
+        <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Technical Implementation</h4>
+        <div className="space-y-4">
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+            <h6 className="font-medium text-gray-900 dark:text-white mb-2">Encryption Algorithm</h6>
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
+              TELE IRAQ uses the Signal Protocol with AES-256 encryption and ECDH key exchange for maximum security.
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+            <h6 className="font-medium text-gray-900 dark:text-white mb-2">Perfect Forward Secrecy</h6>
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
+              Each message uses a unique encryption key, so even if one key is compromised, past and future messages remain secure.
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+            <h6 className="font-medium text-gray-900 dark:text-white mb-2">Open Source</h6>
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
+              Our encryption implementation is based on open-source protocols that have been audited by security experts worldwide.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderSecurityPrivacy = () => (
-    <div className="space-y-6 settings-scrollbar">
+    <div className="space-y-6">
       {/* Privacy Settings */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <Eye className="w-5 h-5 mr-2" />
           Privacy
         </h4>
@@ -655,7 +1087,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
       {/* Security Settings */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <Shield className="w-5 h-5 mr-2" />
           Security
         </h4>
@@ -689,7 +1121,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
       {/* Data & Storage */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <Monitor className="w-5 h-5 mr-2" />
           Data & Storage
         </h4>
@@ -723,11 +1155,11 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
       {/* Blocked Users */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <EyeOff className="w-5 h-5 mr-2" />
           Blocked Users
         </h4>
-        <p className="element-text-small text-gray-500 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           You haven't blocked anyone yet
         </p>
         <button className="element-button-secondary">
@@ -738,9 +1170,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderAppearance = () => (
-    <div className="space-y-6 settings-scrollbar">
+    <div className="space-y-6">
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <Palette className="w-5 h-5 mr-2" />
           Theme
         </h4>
@@ -769,62 +1201,8 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         </div>
       </div>
 
-      {/* Message Layout */}
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4">Message Layout</h4>
-        <div className="space-y-3">
-          <MessageLayoutOption
-            title="Modern"
-            description="Clean, modern message bubbles with rounded corners"
-            selected={messageLayout === 'modern'}
-            onClick={() => setMessageLayout('modern')}
-          />
-          <MessageLayoutOption
-            title="Message Bubbles"
-            description="Traditional chat bubbles with distinct sender colors"
-            selected={messageLayout === 'bubbles'}
-            onClick={() => setMessageLayout('bubbles')}
-          />
-          <MessageLayoutOption
-            title="IRC (Experimental)"
-            description="Classic IRC-style text layout for power users"
-            selected={messageLayout === 'irc'}
-            onClick={() => setMessageLayout('irc')}
-            experimental={true}
-          />
-        </div>
-      </div>
-
-      {/* Font Size */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4">Font Size</h4>
-        <div className="space-y-3">
-          <FontSizeOption
-            title="Small"
-            description="Compact text for more content"
-            size="small"
-            selected={fontSize === 'small'}
-            onClick={() => setFontSize('small')}
-          />
-          <FontSizeOption
-            title="Medium"
-            description="Standard text size (recommended)"
-            size="medium"
-            selected={fontSize === 'medium'}
-            onClick={() => setFontSize('medium')}
-          />
-          <FontSizeOption
-            title="Large"
-            description="Larger text for better readability"
-            size="large"
-            selected={fontSize === 'large'}
-            onClick={() => setFontSize('large')}
-          />
-        </div>
-      </div>
-
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4">Display</h4>
+        <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Display</h4>
         <div className="space-y-4">
           <ToggleItem
             title="Compact mode"
@@ -850,9 +1228,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderNotifications = () => (
-    <div className="space-y-6 settings-scrollbar">
+    <div className="space-y-6">
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           <Bell className="w-5 h-5 mr-2" />
           Notifications
         </h4>
@@ -886,519 +1264,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     </div>
   );
 
-  const renderPreferences = () => (
-    <div className="space-y-6 settings-scrollbar">
-      {/* Application Language */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Globe className="w-5 h-5 mr-2" />
-          Application Language
-        </h4>
-        <div className="space-y-3">
-          <LanguageOption
-            title="English"
-            subtitle="English"
-            flag="🇺🇸"
-            selected={language === 'en'}
-            onClick={() => setLanguage('en')}
-          />
-          <LanguageOption
-            title="العربية"
-            subtitle="Arabic"
-            flag="🇮🇶"
-            selected={language === 'ar'}
-            onClick={() => setLanguage('ar')}
-          />
-        </div>
-      </div>
-
-      {/* Display Time & Timezone */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Calendar className="w-5 h-5 mr-2" />
-          Display Time
-        </h4>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Time Zone
-            </label>
-            <select
-              value={timezone}
-              onChange={(e) => setTimezone(e.target.value)}
-              className="element-input"
-            >
-              <option value="Asia/Baghdad">Baghdad (GMT+3)</option>
-              <option value="Asia/Erbil">Erbil (GMT+3)</option>
-              <option value="Asia/Kuwait">Kuwait (GMT+3)</option>
-              <option value="Asia/Riyadh">Riyadh (GMT+3)</option>
-              <option value="Europe/London">London (GMT+0)</option>
-              <option value="America/New_York">New York (GMT-5)</option>
-              <option value="Asia/Dubai">Dubai (GMT+4)</option>
-              <option value="Europe/Berlin">Berlin (GMT+1)</option>
-            </select>
-          </div>
-          
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="element-text-small text-blue-900">
-              <strong>Current time:</strong> {new Date().toLocaleString('en-US', { 
-                timeZone: timezone,
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* General Preferences */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4">General Preferences</h4>
-        <div className="space-y-4">
-          <ToggleItem
-            title="Auto-start on system boot"
-            description="Launch TELE IRAQ when your device starts"
-            enabled={true}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Minimize to system tray"
-            description="Keep app running in background when closed"
-            enabled={false}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Send messages with Enter"
-            description="Press Enter to send, Shift+Enter for new line"
-            enabled={true}
-            onChange={() => {}}
-          />
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderVoiceVideo = () => (
-    <div className="space-y-6 settings-scrollbar">
-      {/* Voice Settings */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Mic className="w-5 h-5 mr-2" />
-          Voice Settings
-        </h4>
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Microphone Volume: {microphoneVolume}%
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={microphoneVolume}
-              onChange={(e) => setMicrophoneVolume(Number(e.target.value))}
-              className="slider w-full"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Speaker Volume: {speakerVolume}%
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={speakerVolume}
-              onChange={(e) => setSpeakerVolume(Number(e.target.value))}
-              className="slider w-full"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <ToggleItem
-              title="Echo Cancellation"
-              description="Reduce echo during voice calls"
-              enabled={echoCancellation}
-              onChange={setEchoCancellation}
-            />
-            <ToggleItem
-              title="Noise Suppression"
-              description="Filter out background noise"
-              enabled={noiseSuppression}
-              onChange={setNoiseSuppression}
-            />
-            <ToggleItem
-              title="Push to Talk"
-              description="Hold a key to transmit voice"
-              enabled={false}
-              onChange={() => {}}
-            />
-          </div>
-
-          <button className="element-button-secondary w-full">
-            <Mic className="w-4 h-4 mr-2" />
-            Test Microphone
-          </button>
-        </div>
-      </div>
-
-      {/* Video Settings */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Video className="w-5 h-5 mr-2" />
-          Video Settings
-        </h4>
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Camera Quality
-            </label>
-            <div className="space-y-2">
-              <CameraQualityOption
-                title="720p HD"
-                description="Standard quality, lower bandwidth"
-                quality="720p"
-                selected={cameraQuality === '720p'}
-                onClick={() => setCameraQuality('720p')}
-              />
-              <CameraQualityOption
-                title="1080p Full HD"
-                description="High quality, recommended"
-                quality="1080p"
-                selected={cameraQuality === '1080p'}
-                onClick={() => setCameraQuality('1080p')}
-              />
-              <CameraQualityOption
-                title="4K Ultra HD"
-                description="Highest quality, requires fast internet"
-                quality="4k"
-                selected={cameraQuality === '4k'}
-                onClick={() => setCameraQuality('4k')}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <ToggleItem
-              title="Auto-adjust video quality"
-              description="Automatically optimize based on connection"
-              enabled={true}
-              onChange={() => {}}
-            />
-            <ToggleItem
-              title="Mirror my video"
-              description="Show your video mirrored like a mirror"
-              enabled={true}
-              onChange={() => {}}
-            />
-            <ToggleItem
-              title="Always show video preview"
-              description="Display video preview before joining calls"
-              enabled={false}
-              onChange={() => {}}
-            />
-          </div>
-
-          <button className="element-button-secondary w-full">
-            <Video className="w-4 h-4 mr-2" />
-            Test Camera
-          </button>
-        </div>
-      </div>
-
-      {/* Call Settings */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4">Call Settings</h4>
-        <div className="space-y-4">
-          <ToggleItem
-            title="Incoming call sounds"
-            description="Play ringtone for incoming calls"
-            enabled={true}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Call waiting"
-            description="Allow incoming calls during active calls"
-            enabled={true}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Auto-answer calls"
-            description="Automatically answer calls from contacts"
-            enabled={false}
-            onChange={() => {}}
-          />
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderLabs = () => (
-    <div className="space-y-6 settings-scrollbar">
-      {/* End-to-End Encryption Education */}
-      <div className="element-card p-6 border-2 border-red-200 bg-red-50">
-        <h4 className="element-text font-semibold mb-4 flex items-center text-red-900">
-          <Shield className="w-6 h-6 mr-2" />
-          Understanding End-to-End Encryption
-        </h4>
-        
-        {/* What is E2E Encryption */}
-        <div className="mb-6">
-          <h5 className="element-text font-semibold mb-3 text-red-800">📚 What is End-to-End Encryption?</h5>
-          <p className="element-text text-red-700 leading-relaxed mb-3">
-            End-to-end encryption is a security method that ensures only you and the person you're communicating with can read your messages. Nobody else, including TELE IRAQ, can access your private conversations.
-          </p>
-          <div className="bg-white p-4 rounded-lg border border-red-200">
-            <p className="element-text-small text-red-600 font-medium">
-              🔒 Your messages are locked with a special key that only you and your recipient have.
-            </p>
-          </div>
-        </div>
-
-        {/* How it Works */}
-        <div className="mb-6">
-          <h5 className="element-text font-semibold mb-3 text-red-800">🧠 How Does It Work?</h5>
-          <div className="space-y-3">
-            <div className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-red-200">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-red-600 font-bold text-sm">1</span>
-              </div>
-              <div>
-                <p className="element-text font-medium text-red-900">🔑 Key Generation</p>
-                <p className="element-text-small text-red-700">Your device creates unique cryptographic keys for each conversation</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-red-200">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-red-600 font-bold text-sm">2</span>
-              </div>
-              <div>
-                <p className="element-text font-medium text-red-900">🔒 Message Encryption</p>
-                <p className="element-text-small text-red-700">Your message is scrambled using the recipient's public key</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-red-200">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-red-600 font-bold text-sm">3</span>
-              </div>
-              <div>
-                <p className="element-text font-medium text-red-900">🖥️ Secure Transmission</p>
-                <p className="element-text-small text-red-700">The encrypted message travels through our servers, but we can't read it</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-red-200">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-red-600 font-bold text-sm">4</span>
-              </div>
-              <div>
-                <p className="element-text font-medium text-red-900">✅ Message Decryption</p>
-                <p className="element-text-small text-red-700">Only the recipient's private key can unlock and read the message</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Why Important */}
-        <div className="mb-6">
-          <h5 className="element-text font-semibold mb-3 text-red-800">❤️ Why Is This Important?</h5>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="p-3 bg-white rounded-lg border border-red-200">
-              <p className="element-text font-medium text-red-900 mb-1">🛡️ Privacy Protection</p>
-              <p className="element-text-small text-red-700">Your personal conversations stay private, even from us</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg border border-red-200">
-              <p className="element-text font-medium text-red-900 mb-1">✅ Security Assurance</p>
-              <p className="element-text-small text-red-700">Protection against hackers and data breaches</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg border border-red-200">
-              <p className="element-text font-medium text-red-900 mb-1">🌍 Freedom of Speech</p>
-              <p className="element-text-small text-red-700">Communicate freely without fear of surveillance</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg border border-red-200">
-              <p className="element-text font-medium text-red-900 mb-1">👥 Trust Building</p>
-              <p className="element-text-small text-red-700">Stronger relationships through secure communication</p>
-            </div>
-          </div>
-        </div>
-
-        {/* TELE IRAQ Commitment */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-red-600 to-red-700 rounded-lg text-white">
-          <h5 className="font-semibold mb-3 flex items-center">
-            <span className="text-2xl mr-2">🇮🇶</span>
-            TELE IRAQ's Commitment: "Built for Iraq, Secured for Everyone"
-          </h5>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
-              <span>We cannot read your messages</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
-              <span>We cannot access your calls</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
-              <span>We cannot share your data</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
-              <span>Your keys stay on your device</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Technical Implementation */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Lock className="w-5 h-5 mr-2" />
-          Technical Implementation
-        </h4>
-        <div className="space-y-4">
-          <div>
-            <h5 className="element-text font-medium mb-2">Encryption Standards</h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="element-text-small font-medium">AES-256 Encryption</p>
-                <p className="element-text-small text-gray-600">Military-grade message encryption</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="element-text-small font-medium">RSA-4096 Key Exchange</p>
-                <p className="element-text-small text-gray-600">Secure key distribution</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="element-text-small font-medium">Perfect Forward Secrecy</p>
-                <p className="element-text-small text-gray-600">Past messages stay secure</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="element-text-small font-medium">Double Ratchet Algorithm</p>
-                <p className="element-text-small text-gray-600">Advanced key management</p>
-              </div>
-            </div>
-          </div>
-          
-          <div>
-            <h5 className="element-text font-medium mb-2">Security Features</h5>
-            <div className="space-y-2">
-              <div className="flex items-center space-x-3 p-2 bg-green-50 rounded-lg">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <span className="element-text-small">Message authentication prevents tampering</span>
-              </div>
-              <div className="flex items-center space-x-3 p-2 bg-green-50 rounded-lg">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <span className="element-text-small">Key verification ensures secure connections</span>
-              </div>
-              <div className="flex items-center space-x-3 p-2 bg-green-50 rounded-lg">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <span className="element-text-small">Secure key backup protects against device loss</span>
-              </div>
-              <div className="flex items-center space-x-3 p-2 bg-green-50 rounded-lg">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <span className="element-text-small">Cross-device sync maintains security</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Security Verification */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <Eye className="w-5 h-5 mr-2" />
-          Security Verification
-        </h4>
-        <div className="space-y-4">
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h5 className="element-text font-medium text-blue-900 mb-2">🔍 Verify Your Conversations</h5>
-            <p className="element-text-small text-blue-700 mb-3">
-              Each conversation has a unique security code (fingerprint) that you can verify with your contact to ensure your connection is secure.
-            </p>
-            <button className="element-button-secondary text-sm">
-              Learn How to Verify
-            </button>
-          </div>
-          
-          <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-            <h5 className="element-text font-medium text-yellow-900 mb-2">⚠️ Security Warnings</h5>
-            <p className="element-text-small text-yellow-700">
-              TELE IRAQ will warn you if someone tries to intercept your messages or if there are any security concerns with your conversations.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Experimental Features */}
-      <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
-          <TestTube className="w-5 h-5 mr-2" />
-          Experimental Features
-        </h4>
-        <div className="space-y-4">
-          <ToggleItem
-            title="Enhanced Message Reactions"
-            description="Use custom emojis and animated reactions"
-            enabled={false}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Voice Message Transcription"
-            description="Automatically convert voice messages to text"
-            enabled={false}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Advanced Search Filters"
-            description="Search messages by date, sender, and content type"
-            enabled={true}
-            onChange={() => {}}
-          />
-          <ToggleItem
-            title="Message Scheduling"
-            description="Schedule messages to be sent at specific times"
-            enabled={false}
-            onChange={() => {}}
-          />
-        </div>
-      </div>
-
-      {/* Beta Program */}
-      <div className="element-card p-6 border-2 border-blue-200 bg-blue-50">
-        <h4 className="element-text font-semibold mb-4 flex items-center text-blue-900">
-          <Star className="w-5 h-5 mr-2" />
-          Join Our Beta Program
-        </h4>
-        <p className="element-text text-blue-700 mb-4">
-          Get early access to new features and help shape the future of TELE IRAQ. Beta features may be unstable and are not recommended for critical communications.
-        </p>
-        <div className="flex items-center space-x-3">
-          <button className="element-button">
-            Join Beta Program
-          </button>
-          <div className="flex items-center space-x-2 text-blue-600">
-            <AlertCircle className="w-4 h-4" />
-            <span className="element-text-small">Beta features may be unstable</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const renderGenericSection = (title: string, icon: React.ReactNode) => (
-    <div className="space-y-6 settings-scrollbar">
+    <div className="space-y-6">
       <div className="element-card p-6">
-        <h4 className="element-text font-semibold mb-4 flex items-center">
+        <h4 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
           {icon}
           {title}
         </h4>
-        <p className="element-text-small text-gray-500 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           {title} settings will be available in future updates.
         </p>
         <div className="space-y-3">
@@ -1422,24 +1295,20 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         return renderMainSettings();
       case 'account':
         return renderAccount();
-      case 'security-privacy':
-        return renderSecurityPrivacy();
-      case 'appearance':
-        return renderAppearance();
-      case 'notifications':
-        return renderNotifications();
       case 'preferences':
         return renderPreferences();
       case 'voice-video':
         return renderVoiceVideo();
       case 'labs':
         return renderLabs();
+      case 'security-privacy':
+        return renderSecurityPrivacy();
+      case 'appearance':
+        return renderAppearance();
+      case 'notifications':
+        return renderNotifications();
       case 'sessions':
         return renderGenericSection('Sessions', <Smartphone className="w-5 h-5 mr-2" />);
-      case 'keyboard':
-        return renderGenericSection('Keyboard', <Keyboard className="w-5 h-5 mr-2" />);
-      case 'sidebar':
-        return renderGenericSection('Sidebar', <Sidebar className="w-5 h-5 mr-2" />);
       case 'encryption':
         return renderGenericSection('Encryption', <Lock className="w-5 h-5 mr-2" />);
       case 'help':
@@ -1451,8 +1320,8 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
   return (
     <div className="flex-content">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-200 flex-shrink-0">
+      {/* Header with improved contrast */}
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 bg-white dark:bg-gray-900">
         <div className="flex items-center space-x-3">
           {currentView !== 'main' && (
             <button
@@ -1462,7 +1331,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
               <ArrowLeft className="w-4 h-4" />
             </button>
           )}
-          <h2 className="element-title">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {currentView === 'main' ? 'Settings' : 
              currentView === 'security-privacy' ? 'Security & Privacy' :
              currentView === 'voice-video' ? 'Voice & Video' :
@@ -1471,13 +1340,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="settings-container p-4">
+      {/* Content with custom scrollbar */}
+      <div className="settings-container settings-scrollbar p-4">
         {renderCurrentView()}
         
         {/* End marker */}
         <div className="text-center py-8">
-          <p className="element-text-small text-gray-400">End of settings</p>
+          <p className="text-sm text-gray-400">End of settings</p>
         </div>
       </div>
     </div>
@@ -1497,20 +1366,20 @@ const SettingItem: React.FC<SettingItemProps> = ({ icon, title, description, onC
     <button 
       onClick={onClick}
       className={`w-full element-card p-4 text-left element-hover group ${
-        highlight ? 'border-red-200 bg-red-50' : ''
+        highlight ? 'border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800' : ''
       }`}
     >
       <div className="flex items-center space-x-3">
         <div className={`transition-colors flex-shrink-0 ${
           highlight 
             ? 'text-red-600' 
-            : 'text-gray-600 group-hover:text-red-600'
+            : 'text-gray-600 dark:text-gray-400 group-hover:text-red-600'
         }`}>
           {icon}
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="element-text font-medium">{title}</h4>
-          <p className="element-text-small text-gray-500">{description}</p>
+          <h4 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
         </div>
         <ChevronRight className="w-4 h-4 text-gray-400" />
       </div>
@@ -1529,8 +1398,8 @@ const ToggleItem: React.FC<ToggleItemProps> = ({ title, description, enabled, on
   return (
     <div className="flex items-center justify-between">
       <div className="flex-1 min-w-0">
-        <h4 className="element-text font-medium">{title}</h4>
-        <p className="element-text-small text-gray-500">{description}</p>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h4>
+        <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
       </div>
       <label className="relative inline-flex items-center cursor-pointer ml-4">
         <input
@@ -1539,7 +1408,7 @@ const ToggleItem: React.FC<ToggleItemProps> = ({ title, description, enabled, on
           checked={enabled}
           onChange={(e) => onChange(e.target.checked)}
         />
-        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+        <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
       </label>
     </div>
   );
@@ -1559,90 +1428,19 @@ const ThemeOption: React.FC<ThemeOptionProps> = ({ icon, title, description, sel
       onClick={onClick}
       className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
         selected
-          ? 'border-red-500 bg-red-50'
-          : 'border-gray-200 hover:border-gray-300'
+          ? 'border-red-500 bg-red-50 dark:bg-red-900/20 dark:border-red-600'
+          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
       }`}
     >
       <div className="flex items-center space-x-3">
-        <div className={`${selected ? 'text-red-600' : 'text-gray-600'}`}>
+        <div className={`${selected ? 'text-red-600' : 'text-gray-600 dark:text-gray-400'}`}>
           {icon}
         </div>
         <div className="text-left">
-          <h4 className="element-text font-medium">{title}</h4>
-          <p className="element-text-small text-gray-500">{description}</p>
+          <h4 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
         </div>
         {selected && <Check className="w-5 h-5 text-red-600 ml-auto" />}
-      </div>
-    </button>
-  );
-};
-
-interface MessageLayoutOptionProps {
-  title: string;
-  description: string;
-  selected: boolean;
-  onClick: () => void;
-  experimental?: boolean;
-}
-
-const MessageLayoutOption: React.FC<MessageLayoutOptionProps> = ({ title, description, selected, onClick, experimental = false }) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
-        selected
-          ? 'border-red-500 bg-red-50'
-          : 'border-gray-200 hover:border-gray-300'
-      }`}
-    >
-      <div className="flex items-center space-x-3">
-        <div className="text-left flex-1">
-          <div className="flex items-center space-x-2">
-            <h4 className="element-text font-medium">{title}</h4>
-            {experimental && (
-              <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
-                Experimental
-              </span>
-            )}
-          </div>
-          <p className="element-text-small text-gray-500">{description}</p>
-        </div>
-        {selected && <Check className="w-5 h-5 text-red-600" />}
-      </div>
-    </button>
-  );
-};
-
-interface FontSizeOptionProps {
-  title: string;
-  description: string;
-  size: 'small' | 'medium' | 'large';
-  selected: boolean;
-  onClick: () => void;
-}
-
-const FontSizeOption: React.FC<FontSizeOptionProps> = ({ title, description, size, selected, onClick }) => {
-  const sizeClasses = {
-    small: 'text-sm',
-    medium: 'text-base',
-    large: 'text-lg'
-  };
-
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
-        selected
-          ? 'border-red-500 bg-red-50'
-          : 'border-gray-200 hover:border-gray-300'
-      }`}
-    >
-      <div className="flex items-center space-x-3">
-        <div className="text-left flex-1">
-          <h4 className={`font-medium ${sizeClasses[size]}`}>{title}</h4>
-          <p className="element-text-small text-gray-500">{description}</p>
-        </div>
-        {selected && <Check className="w-5 h-5 text-red-600" />}
       </div>
     </button>
   );
@@ -1662,46 +1460,17 @@ const LanguageOption: React.FC<LanguageOptionProps> = ({ title, subtitle, flag, 
       onClick={onClick}
       className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
         selected
-          ? 'border-red-500 bg-red-50'
-          : 'border-gray-200 hover:border-gray-300'
+          ? 'border-red-500 bg-red-50 dark:bg-red-900/20 dark:border-red-600'
+          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
       }`}
     >
       <div className="flex items-center space-x-3">
         <span className="text-2xl">{flag}</span>
         <div className="text-left flex-1">
-          <h4 className="element-text font-medium">{title}</h4>
-          <p className="element-text-small text-gray-500">{subtitle}</p>
+          <h4 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{subtitle}</p>
         </div>
         {selected && <Check className="w-5 h-5 text-red-600" />}
-      </div>
-    </button>
-  );
-};
-
-interface CameraQualityOptionProps {
-  title: string;
-  description: string;
-  quality: '720p' | '1080p' | '4k';
-  selected: boolean;
-  onClick: () => void;
-}
-
-const CameraQualityOption: React.FC<CameraQualityOptionProps> = ({ title, description, quality, selected, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full p-3 rounded-lg border transition-all duration-200 ${
-        selected
-          ? 'border-red-500 bg-red-50'
-          : 'border-gray-200 hover:border-gray-300'
-      }`}
-    >
-      <div className="flex items-center space-x-3">
-        <div className="text-left flex-1">
-          <h4 className="element-text font-medium">{title}</h4>
-          <p className="element-text-small text-gray-500">{description}</p>
-        </div>
-        {selected && <Check className="w-4 h-4 text-red-600" />}
       </div>
     </button>
   );
@@ -1716,10 +1485,10 @@ interface SecurityStatusItemProps {
 const SecurityStatusItem: React.FC<SecurityStatusItemProps> = ({ title, status, isActive }) => {
   return (
     <div className="flex items-center justify-between">
-      <span className="element-text">{title}</span>
+      <span className="text-sm text-gray-900 dark:text-white">{title}</span>
       <div className="flex items-center space-x-2">
         <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-        <span className={`element-text-small font-medium ${isActive ? 'text-green-600' : 'text-gray-500'}`}>
+        <span className={`text-sm font-medium ${isActive ? 'text-green-600 dark:text-green-400' : 'text-gray-500'}`}>
           {status}
         </span>
         {isActive && <Check className="w-4 h-4 text-green-600" />}
