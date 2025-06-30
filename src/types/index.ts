@@ -5,6 +5,25 @@ export interface User {
   avatar?: string;
   status: 'online' | 'away' | 'offline';
   lastSeen?: Date;
+  recoveryKey?: string;
+  deviceId?: string;
+  trustedDevices?: TrustedDevice[];
+}
+
+export interface TrustedDevice {
+  id: string;
+  name: string;
+  type: 'desktop' | 'mobile' | 'tablet';
+  lastUsed: Date;
+  isCurrentDevice: boolean;
+  verified: boolean;
+}
+
+export interface RecoveryKeyData {
+  key: string;
+  createdAt: Date;
+  lastUsed?: Date;
+  deviceCount: number;
 }
 
 export interface Chat {

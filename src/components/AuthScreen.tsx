@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { MessageSquare, Eye, EyeOff, User, Mail, Lock, Shield, Zap, Globe, Star, Users } from 'lucide-react';
+import { MessageSquare, Eye, EyeOff, User, Mail, Lock, Shield, Zap, Globe, Star, Users, Key } from 'lucide-react';
 import { User as UserType } from '../types';
+import RecoveryKeySetup from './RecoveryKeySetup';
+import DeviceVerification from './DeviceVerification';
+import { getDeviceInfo } from '../utils/recoveryKey';
 
 interface AuthScreenProps {
   onLogin: (user: UserType) => void;
@@ -10,6 +13,9 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showRecoveryKeySetup, setShowRecoveryKeySetup] = useState(false);
+  const [showDeviceVerification, setShowDeviceVerification] = useState(false);
+  const [pendingUser, setPendingUser] = useState<UserType | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,15 +29,80 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
 
+    const deviceInfo = getDeviceInfo();
     const user: UserType = {
       id: Date.now().toString(),
       name: isLogin ? formData.email.split('@')[0] : formData.name,
       email: formData.email,
-      status: 'online'
+      status: 'online',
+      deviceId: deviceInfo.id,
+      trustedDevices: []
     };
 
-    onLogin(user);
+    // Simulate checking if user has recovery key and if device is trusted
+    const hasRecoveryKey = isLogin; // In real app, check from server
+    const isDeviceTrusted = false; // In real app, check from server
+    const storedRecoveryKey = hasRecoveryKey ? 'ABCD1234EFGH5678IJKL9012MNOP3456QRST7890UVWX1234YZAB5678CDEF9012' : undefined;
+
+    if (isLogin && hasRecoveryKey && !isDeviceTrusted) {
+      // Device verification required
+      setPendingUser({ ...user, recoveryKey: storedRecoveryKey });
+      setShowDeviceVerification(true);
+    } else if (!isLogin) {
+      // New user - setup recovery key
+      setPendingUser(user);
+      setShowRecoveryKeySetup(true);
+    } else {
+      // Direct login (trusted device or no recovery key)
+      onLogin(user);
+    }
+
     setIsLoading(false);
+  };
+
+  const handleRecoveryKeySetupComplete = (recoveryKey: string) => {
+    if (pendingUser) {
+      const userWithRecoveryKey = {
+        ...pendingUser,
+        recoveryKey,
+        trustedDevices: [{
+          id: pendingUser.deviceId || 'unknown',
+          name: getDeviceInfo().name,
+          type: getDeviceInfo().type,
+          lastUsed: new Date(),
+          isCurrentDevice: true,
+          verified: true
+        }]
+      };
+      onLogin(userWithRecoveryKey);
+    }
+    setShowRecoveryKeySetup(false);
+    setPendingUser(null);
+  };
+
+  const handleDeviceVerified = (deviceId: string) => {
+    if (pendingUser) {
+      const userWithTrustedDevice = {
+        ...pendingUser,
+        trustedDevices: [{
+          id: deviceId,
+          name: getDeviceInfo().name,
+          type: getDeviceInfo().type,
+          lastUsed: new Date(),
+          isCurrentDevice: true,
+          verified: true
+        }]
+      };
+      onLogin(userWithTrustedDevice);
+    }
+    setShowDeviceVerification(false);
+    setPendingUser(null);
+  };
+
+  const handleBackToAuth = () => {
+    setShowRecoveryKeySetup(false);
+    setShowDeviceVerification(false);
+    setPendingUser(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +111,29 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       [e.target.name]: e.target.value
     }));
   };
+
+  // Show recovery key setup screen
+  if (showRecoveryKeySetup && pendingUser) {
+    return (
+      <RecoveryKeySetup
+        onComplete={handleRecoveryKeySetupComplete}
+        onBack={handleBackToAuth}
+        isFirstTime={true}
+      />
+    );
+  }
+
+  // Show device verification screen
+  if (showDeviceVerification && pendingUser) {
+    return (
+      <DeviceVerification
+        onVerified={handleDeviceVerified}
+        onBack={handleBackToAuth}
+        userEmail={pendingUser.email}
+        storedRecoveryKey={pendingUser.recoveryKey}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex auth-scrollbar">
@@ -74,6 +168,16 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               <div>
                 <h3 className="text-lg font-semibold text-white">End-to-end encrypted</h3>
                 <p className="text-white/80">Your messages are secured with military-grade encryption that only you and the recipient can access.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <Key className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Recovery Key Protection</h3>
+                <p className="text-white/80">Secure device verification system protects your account from unauthorized access.</p>
               </div>
             </div>
             
@@ -235,11 +339,26 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <div>
                   <h4 className="text-sm font-medium text-red-900">End-to-end encrypted</h4>
                   <p className="text-sm text-red-700 mt-1">
-                    Your messages are secured with encryption that ensures only you and the recipient can read them.
+                    Your messages are secured with encryption and recovery key protection that ensures only you and the recipient can read them.
                   </p>
                 </div>
               </div>
             </div>
+
+            {/* Recovery Key Info for New Users */}
+            {!isLogin && (
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-start space-x-3">
+                  <Key className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-medium text-blue-900">Recovery Key Setup</h4>
+                    <p className="text-sm text-blue-700 mt-1">
+                      After creating your account, you'll set up a recovery key to secure your device access and protect your encrypted messages.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
