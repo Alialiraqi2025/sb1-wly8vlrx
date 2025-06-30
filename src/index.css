@@ -311,13 +311,14 @@ body {
   box-shadow: 0 0 0 2px var(--element-bg);
 }
 
-/* Layout utilities */
+/* Layout utilities - Fixed positioning and z-index issues */
 .app-container {
   min-height: 100vh;
   overflow: visible;
   display: flex;
   flex-direction: column;
   background: var(--element-bg-secondary);
+  position: relative;
 }
 
 .app-header {
@@ -325,18 +326,22 @@ body {
   background: var(--element-bg);
   border-bottom: 1px solid var(--element-border);
   box-shadow: var(--element-shadow);
+  position: relative;
+  z-index: 10;
 }
 
 .app-main {
   flex: 1;
   overflow: visible;
   min-height: 0;
+  position: relative;
 }
 
 .flex-container {
   display: flex;
   min-height: calc(100vh - 64px);
   overflow: visible;
+  position: relative;
 }
 
 .flex-sidebar {
@@ -350,6 +355,8 @@ body {
   flex-direction: column;
   background: var(--element-sidebar);
   border-right: 1px solid var(--element-border);
+  position: relative;
+  z-index: 5;
 }
 
 .flex-main {
@@ -360,6 +367,8 @@ body {
   display: flex;
   flex-direction: column;
   background: var(--element-bg);
+  position: relative;
+  z-index: 1;
 }
 
 .flex-content {
@@ -367,6 +376,7 @@ body {
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .flex-scroll {
@@ -388,13 +398,14 @@ body {
   overscroll-behavior: contain;
 }
 
-/* Element-style chat list */
+/* Element-style chat list - Fixed container positioning */
 .chat-list-container {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
   max-height: 100%;
+  position: relative;
 }
 
 .chat-item {
@@ -403,6 +414,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   background: var(--element-bg);
+  position: relative;
 }
 
 .chat-item:hover {
@@ -422,6 +434,7 @@ body {
   min-height: 0;
   max-height: 100%;
   background: var(--element-bg);
+  position: relative;
 }
 
 /* Element-style settings container */
@@ -431,6 +444,7 @@ body {
   overflow-x: hidden;
   min-height: 0;
   max-height: 100%;
+  position: relative;
 }
 
 /* Element-style typography with improved contrast */
@@ -521,7 +535,7 @@ body {
   justify-content: center;
 }
 
-/* Element-style encryption indicator */
+/* Element-style encryption indicator - Fixed positioning */
 .encryption-indicator {
   background: rgba(13, 189, 139, 0.1);
   border: 1px solid rgba(13, 189, 139, 0.2);
@@ -533,6 +547,8 @@ body {
   font-size: 12px;
   color: var(--element-primary);
   font-weight: 500;
+  position: relative;
+  z-index: 2;
 }
 
 /* Responsive design */
@@ -555,11 +571,13 @@ body {
     height: 40vh;
     min-height: 280px;
     flex: 0 0 auto;
+    z-index: 3;
   }
   
   .flex-main {
     height: 60vh;
     flex: 1;
+    z-index: 2;
   }
   
   .message-bubble {
@@ -717,6 +735,7 @@ button, input, textarea, select {
 /* Element-style room list */
 .room-list {
   background: var(--element-sidebar);
+  position: relative;
 }
 
 .room-item {
@@ -726,6 +745,7 @@ button, input, textarea, select {
   cursor: pointer;
   transition: background-color 0.2s ease;
   border-radius: 0;
+  position: relative;
 }
 
 .room-item:hover {
@@ -742,6 +762,8 @@ button, input, textarea, select {
   background: var(--element-bg);
   border-top: 1px solid var(--element-border);
   padding: 12px 16px;
+  position: relative;
+  z-index: 3;
 }
 
 .composer-input {
@@ -769,10 +791,12 @@ button, input, textarea, select {
 .timeline {
   padding: 16px;
   background: var(--element-bg);
+  position: relative;
 }
 
 .timeline-item {
   margin-bottom: 8px;
+  position: relative;
 }
 
 .timeline-item.continuation {
@@ -857,6 +881,8 @@ button, input, textarea, select {
   box-shadow: var(--element-shadow-lg);
   padding: 4px 0;
   min-width: 160px;
+  position: relative;
+  z-index: 100;
 }
 
 .context-menu-item {
@@ -895,6 +921,8 @@ button, input, textarea, select {
   max-width: 90vw;
   max-height: 90vh;
   overflow: auto;
+  position: relative;
+  z-index: 1001;
 }
 
 .modal-header {
@@ -921,4 +949,24 @@ button, input, textarea, select {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+}
+
+/* Fixed: Empty state positioning */
+.empty-state {
+  position: relative;
+  z-index: 1;
+  background: var(--element-bg);
+}
+
+/* Fixed: Ensure proper stacking context */
+.chat-window-container {
+  position: relative;
+  z-index: 1;
+  background: var(--element-bg);
+}
+
+.sidebar-container {
+  position: relative;
+  z-index: 2;
+  background: var(--element-sidebar);
 }

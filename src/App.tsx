@@ -237,7 +237,7 @@ function App() {
       <main className="app-main">
         <div className="flex-container">
           {/* Sidebar */}
-          <div className="flex-sidebar">
+          <div className="flex-sidebar sidebar-container">
             <div className="flex-content">
               {currentView === 'chats' && (
                 <ChatList
@@ -267,7 +267,7 @@ function App() {
           </div>
 
           {/* Chat Window */}
-          <div className="flex-main">
+          <div className="flex-main chat-window-container">
             <div className="flex-content">
               {selectedChat ? (
                 <ChatWindow
@@ -277,7 +277,7 @@ function App() {
                   onSendMessage={handleSendMessage}
                 />
               ) : (
-                <div className="flex items-center justify-center h-full p-6">
+                <div className="flex items-center justify-center h-full p-6 empty-state">
                   <div className="text-center animate-fade-in">
                     <div className="element-card p-12 mb-6 inline-block">
                       <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
