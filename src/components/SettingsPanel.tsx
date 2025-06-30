@@ -467,7 +467,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
               <ArrowLeft className="w-4 h-4" />
             </button>
           )}
-          <h2 className="element-title">
+          <h2 className="text-2xl font-bold text-red-600">
             {currentView === 'main' ? 'Settings' : 
              currentView === 'security-privacy' ? 'Security & Privacy' :
              currentView === 'voice-video' ? 'Voice & Video' :
@@ -477,7 +477,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
       </div>
 
       {/* Content */}
-      <div className="settings-container scrollable p-4">
+      <div className="settings-container settings-scrollbar flex-1 overflow-y-auto p-4">
         {renderCurrentView()}
         
         {/* End marker */}
