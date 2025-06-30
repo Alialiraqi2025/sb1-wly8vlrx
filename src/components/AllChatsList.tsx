@@ -62,8 +62,8 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
         </div>
       </div>
 
-      {/* Chat List */}
-      <div className="chat-list-content">
+      {/* Chat List with Custom Scrollbar */}
+      <div className="chat-list-content chat-scrollbar">
         {filteredChats.map((chat) => {
           const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
           

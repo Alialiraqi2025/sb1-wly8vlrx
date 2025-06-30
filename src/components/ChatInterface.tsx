@@ -134,8 +134,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
+      {/* Messages with Custom Scrollbar */}
+      <div className="flex-1 overflow-y-auto bg-gray-50 p-4 messages-scrollbar">
         <div className="space-y-1">
           {messages.map((message, index) => {
             const prevMessage = messages[index - 1];

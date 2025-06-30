@@ -74,38 +74,90 @@ body {
   }
 }
 
-/* Custom Settings Scrollbar */
+/* Premium Settings Scrollbar - TELE IRAQ Style */
 .settings-scrollbar::-webkit-scrollbar {
-  width: 12px;
+  width: 14px;
   background: transparent;
 }
 
 .settings-scrollbar::-webkit-scrollbar-track {
-  background: var(--element-bg-secondary);
-  border-radius: 6px;
-  margin: 4px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 8px;
+  margin: 6px;
+  border: 1px solid #e2e8f0;
 }
 
 .settings-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border-radius: 6px;
-  border: 2px solid var(--element-bg-secondary);
+  border-radius: 8px;
+  border: 2px solid #f8fafc;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
   transition: all 0.3s ease;
 }
 
 .settings-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b91c1c, #991b1b);
-  transform: scale(1.1);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
 }
 
 .settings-scrollbar::-webkit-scrollbar-thumb:active {
   background: linear-gradient(135deg, #991b1b, #7f1d1d);
+  transform: scale(0.95);
+}
+
+.settings-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* Firefox scrollbar for settings */
 .settings-scrollbar {
   scrollbar-width: auto;
-  scrollbar-color: #dc2626 var(--element-bg-secondary);
+  scrollbar-color: #dc2626 #f8fafc;
+}
+
+/* Chat List Scrollbar */
+.chat-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: var(--element-bg-secondary);
+  border-radius: 6px;
+  margin: 4px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 6px;
+  border: 1px solid var(--element-bg-secondary);
+  transition: all 0.2s ease;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+}
+
+/* Messages Scrollbar */
+.messages-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.messages-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.messages-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.6);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.messages-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 38, 38, 0.8);
 }
 
 /* Element-style scrollbar for other areas */
@@ -445,13 +497,14 @@ body {
   background: var(--element-bg);
 }
 
-/* Settings container */
+/* Settings container with enhanced scrolling */
 .settings-container {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
   background: var(--element-bg);
+  padding-right: 4px; /* Space for scrollbar */
 }
 
 /* Element-style typography with improved contrast */
@@ -674,6 +727,15 @@ body {
   .app-header {
     height: 56px;
   }
+  
+  /* Mobile scrollbar adjustments */
+  .settings-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -684,6 +746,15 @@ body {
   
   .main-content-section {
     height: 65vh;
+  }
+  
+  /* Smaller scrollbars on mobile */
+  .settings-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .settings-scrollbar::-webkit-scrollbar-track {
+    margin: 4px;
   }
 }
 
@@ -706,6 +777,10 @@ body {
   .app-name, .username, .chat-name, .sender-name {
     color: #000000 !important;
   }
+  
+  .settings-scrollbar::-webkit-scrollbar-thumb {
+    background: #000000;
+  }
 }
 
 /* Reduced motion support */
@@ -717,6 +792,10 @@ body {
   }
   
   .element-hover:hover {
+    transform: none;
+  }
+  
+  .settings-scrollbar::-webkit-scrollbar-thumb:hover {
     transform: none;
   }
 }
