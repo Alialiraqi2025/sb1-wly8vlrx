@@ -122,7 +122,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   };
 
   const renderMainSettings = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 force-scroll">
       {/* Profile Section */}
       <div className="element-card p-6">
         <div className="flex items-center space-x-4 mb-6">
@@ -256,11 +256,24 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           />
         </div>
       </div>
+
+      {/* Extra content to ensure scrolling */}
+      <div className="space-y-4">
+        {Array.from({ length: 10 }, (_, i) => (
+          <div key={i} className="element-card p-4">
+            <h4 className="font-medium text-gray-900 mb-2">Demo Section {i + 1}</h4>
+            <p className="text-sm text-gray-600">
+              This is additional content to demonstrate the custom scrollbar functionality in the settings panel.
+              The scrollbar should be visible and styled with the TELE IRAQ red gradient design.
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
   const renderAccount = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 force-scroll">
       {/* Profile Section */}
       <div className="element-card p-6">
         <h4 className="text-lg font-bold text-red-600 mb-6 flex items-center">
@@ -596,11 +609,24 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           </div>
         )}
       </div>
+
+      {/* Extra content to ensure scrolling */}
+      <div className="space-y-4">
+        {Array.from({ length: 8 }, (_, i) => (
+          <div key={i} className="element-card p-4">
+            <h4 className="font-medium text-gray-900 mb-2">Account Demo Section {i + 1}</h4>
+            <p className="text-sm text-gray-600">
+              This is additional content to demonstrate the enhanced account page scrollbar functionality.
+              The account scrollbar features a premium red gradient design with enhanced hover effects.
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
   const renderSecurityPrivacy = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 force-scroll">
       {/* Privacy Settings */}
       <div className="element-card p-6">
         <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
@@ -716,11 +742,23 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           Manage blocked users
         </button>
       </div>
+
+      {/* Extra content to ensure scrolling */}
+      <div className="space-y-4">
+        {Array.from({ length: 6 }, (_, i) => (
+          <div key={i} className="element-card p-4">
+            <h4 className="font-medium text-gray-900 mb-2">Security Demo Section {i + 1}</h4>
+            <p className="text-sm text-gray-600">
+              This is additional content to demonstrate the security & privacy page scrollbar functionality.
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
   const renderAppearance = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 force-scroll">
       <div className="element-card p-6">
         <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
           <Palette className="w-5 h-5 mr-2" />
@@ -774,11 +812,23 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           />
         </div>
       </div>
+
+      {/* Extra content to ensure scrolling */}
+      <div className="space-y-4">
+        {Array.from({ length: 8 }, (_, i) => (
+          <div key={i} className="element-card p-4">
+            <h4 className="font-medium text-gray-900 mb-2">Appearance Demo Section {i + 1}</h4>
+            <p className="text-sm text-gray-600">
+              This is additional content to demonstrate the appearance page scrollbar functionality.
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
   const renderNotifications = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 force-scroll">
       <div className="element-card p-6">
         <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
           <Bell className="w-5 h-5 mr-2" />
@@ -811,11 +861,23 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           />
         </div>
       </div>
+
+      {/* Extra content to ensure scrolling */}
+      <div className="space-y-4">
+        {Array.from({ length: 10 }, (_, i) => (
+          <div key={i} className="element-card p-4">
+            <h4 className="font-medium text-gray-900 mb-2">Notifications Demo Section {i + 1}</h4>
+            <p className="text-sm text-gray-600">
+              This is additional content to demonstrate the notifications page scrollbar functionality.
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
   const renderGenericSection = (title: string, icon: React.ReactNode) => (
-    <div className="space-y-6">
+    <div className="space-y-6 force-scroll">
       <div className="element-card p-6">
         <h4 className="text-lg font-bold text-red-600 mb-4 flex items-center">
           {icon}
@@ -835,6 +897,19 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
             />
           ))}
         </div>
+      </div>
+
+      {/* Extra content to ensure scrolling */}
+      <div className="space-y-4">
+        {Array.from({ length: 12 }, (_, i) => (
+          <div key={i} className="element-card p-4">
+            <h4 className="font-medium text-gray-900 mb-2">{title} Demo Section {i + 1}</h4>
+            <p className="text-sm text-gray-600">
+              This is additional content to demonstrate the {title.toLowerCase()} page scrollbar functionality.
+              The custom scrollbar should be visible and interactive with TELE IRAQ branding.
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -894,8 +969,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="settings-container settings-scrollbar flex-1 overflow-y-auto p-4">
+      {/* Content with Enhanced Scrollbar */}
+      <div className={`settings-container flex-1 overflow-y-auto p-4 ${
+        currentView === 'account' ? 'account-scrollbar' : 'settings-scrollbar'
+      }`}>
         {renderCurrentView()}
         
         {/* End marker */}

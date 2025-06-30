@@ -80,34 +80,38 @@ body {
 
 /* Premium Settings Scrollbar - TELE IRAQ Style */
 .settings-scrollbar::-webkit-scrollbar {
-  width: 14px;
+  width: 16px;
   background: transparent;
 }
 
 .settings-scrollbar::-webkit-scrollbar-track {
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border-radius: 8px;
-  margin: 6px;
+  border-radius: 10px;
+  margin: 8px;
   border: 1px solid #e2e8f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .settings-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border-radius: 8px;
-  border: 2px solid #f8fafc;
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  border-radius: 10px;
+  border: 3px solid #f8fafc;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
   transition: all 0.3s ease;
+  min-height: 40px;
 }
 
 .settings-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b91c1c, #991b1b);
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  border: 2px solid #f8fafc;
 }
 
 .settings-scrollbar::-webkit-scrollbar-thumb:active {
   background: linear-gradient(135deg, #991b1b, #7f1d1d);
   transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.5);
 }
 
 .settings-scrollbar::-webkit-scrollbar-corner {
@@ -120,113 +124,165 @@ body {
   scrollbar-color: #dc2626 #f8fafc;
 }
 
+/* Account Page Scrollbar - Enhanced */
+.account-scrollbar::-webkit-scrollbar {
+  width: 18px;
+  background: transparent;
+}
+
+.account-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border-radius: 12px;
+  margin: 10px;
+  border: 2px solid #fecaca;
+  box-shadow: inset 0 2px 4px rgba(220, 38, 38, 0.1);
+}
+
+.account-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c, #991b1b);
+  border-radius: 12px;
+  border: 4px solid #fef2f2;
+  box-shadow: 0 3px 8px rgba(220, 38, 38, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 50px;
+}
+
+.account-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b, #7f1d1d);
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.5);
+  border: 3px solid #fef2f2;
+}
+
+.account-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #991b1b, #7f1d1d, #6b1d1d);
+  transform: scale(0.9);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.6);
+}
+
+/* Firefox scrollbar for account */
+.account-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #dc2626 #fef2f2;
+}
+
 /* Chat List Scrollbar */
 .chat-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
   background: transparent;
 }
 
 .chat-scrollbar::-webkit-scrollbar-track {
   background: var(--element-bg-secondary);
-  border-radius: 6px;
-  margin: 4px;
+  border-radius: 8px;
+  margin: 6px;
+  border: 1px solid var(--element-border);
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border-radius: 6px;
-  border: 1px solid var(--element-bg-secondary);
+  border-radius: 8px;
+  border: 2px solid var(--element-bg-secondary);
   transition: all 0.2s ease;
+  min-height: 30px;
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: scale(1.05);
 }
 
 /* Firefox scrollbar for chat list */
 .chat-scrollbar {
-  scrollbar-width: thin;
+  scrollbar-width: auto;
   scrollbar-color: #dc2626 var(--element-bg-secondary);
 }
 
 /* Messages Scrollbar */
 .messages-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
   background: transparent;
 }
 
 .messages-scrollbar::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
+  border-radius: 6px;
+  margin: 4px;
 }
 
 .messages-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(220, 38, 38, 0.6);
-  border-radius: 4px;
+  background: rgba(220, 38, 38, 0.7);
+  border-radius: 6px;
   transition: all 0.2s ease;
+  min-height: 25px;
 }
 
 .messages-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(220, 38, 38, 0.8);
+  background: rgba(220, 38, 38, 0.9);
+  transform: scale(1.1);
 }
 
 /* Firefox scrollbar for messages */
 .messages-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(220, 38, 38, 0.6) transparent;
+  scrollbar-color: rgba(220, 38, 38, 0.7) transparent;
 }
 
 /* Auth Screen Scrollbar */
 .auth-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
   background: transparent;
 }
 
 .auth-scrollbar::-webkit-scrollbar-track {
   background: rgba(220, 38, 38, 0.1);
-  border-radius: 6px;
-  margin: 4px;
+  border-radius: 8px;
+  margin: 6px;
 }
 
 .auth-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.2s ease;
+  min-height: 30px;
 }
 
 .auth-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b91c1c, #991b1b);
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
 /* Firefox scrollbar for auth */
 .auth-scrollbar {
-  scrollbar-width: thin;
+  scrollbar-width: auto;
   scrollbar-color: #dc2626 rgba(220, 38, 38, 0.1);
 }
 
 /* Main App Scrollbar */
 .app-scrollbar::-webkit-scrollbar {
-  width: 12px;
+  width: 14px;
   background: transparent;
 }
 
 .app-scrollbar::-webkit-scrollbar-track {
   background: var(--element-bg-tertiary);
-  border-radius: 6px;
-  margin: 4px;
+  border-radius: 8px;
+  margin: 6px;
+  border: 1px solid var(--element-border);
 }
 
 .app-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border-radius: 6px;
-  border: 1px solid var(--element-bg);
+  border-radius: 8px;
+  border: 2px solid var(--element-bg);
   transition: all 0.2s ease;
+  min-height: 35px;
 }
 
 .app-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b91c1c, #991b1b);
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+  transform: scale(1.05);
 }
 
 /* Firefox scrollbar for main app */
@@ -237,57 +293,62 @@ body {
 
 /* Sidebar Scrollbar */
 .sidebar-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
   background: transparent;
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-track {
   background: var(--element-sidebar);
-  border-radius: 4px;
-  margin: 2px;
+  border-radius: 6px;
+  margin: 4px;
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(220, 38, 38, 0.7);
-  border-radius: 4px;
+  background: rgba(220, 38, 38, 0.8);
+  border-radius: 6px;
   transition: all 0.2s ease;
+  min-height: 25px;
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(220, 38, 38, 0.9);
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.1);
 }
 
 /* Firefox scrollbar for sidebar */
 .sidebar-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(220, 38, 38, 0.7) var(--element-sidebar);
+  scrollbar-color: rgba(220, 38, 38, 0.8) var(--element-sidebar);
 }
 
 /* Modal/Popup Scrollbar */
 .modal-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
   background: transparent;
 }
 
 .modal-scrollbar::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
+  border-radius: 4px;
+  margin: 2px;
 }
 
 .modal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(220, 38, 38, 0.5);
-  border-radius: 3px;
+  background: rgba(220, 38, 38, 0.6);
+  border-radius: 4px;
   transition: all 0.2s ease;
+  min-height: 20px;
 }
 
 .modal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(220, 38, 38, 0.7);
+  background: rgba(220, 38, 38, 0.8);
+  transform: scale(1.1);
 }
 
 /* Firefox scrollbar for modals */
 .modal-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(220, 38, 38, 0.5) transparent;
+  scrollbar-color: rgba(220, 38, 38, 0.6) transparent;
 }
 
 /* Element-style scrollbar for fallback */
@@ -627,14 +688,20 @@ body {
   background: var(--element-bg);
 }
 
-/* Settings container with enhanced scrolling */
+/* Settings container with forced scrolling */
 .settings-container {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto !important;
   overflow-x: hidden;
   min-height: 0;
+  max-height: calc(100vh - 120px); /* Force height constraint */
   background: var(--element-bg);
-  padding-right: 4px; /* Space for scrollbar */
+  padding-right: 8px; /* Space for scrollbar */
+}
+
+/* Force content to be scrollable */
+.force-scroll {
+  min-height: calc(100vh + 100px); /* Force content to exceed viewport */
 }
 
 /* Element-style typography with improved contrast */
@@ -832,6 +899,23 @@ body {
   .sidebar-section {
     width: 260px;
   }
+  
+  /* Adjust scrollbar sizes for tablets */
+  .settings-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  .account-scrollbar::-webkit-scrollbar {
+    width: 14px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .app-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -863,6 +947,10 @@ body {
     width: 10px;
   }
   
+  .account-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
+  
   .chat-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
@@ -889,6 +977,10 @@ body {
   
   .settings-scrollbar::-webkit-scrollbar-track {
     margin: 4px;
+  }
+  
+  .account-scrollbar::-webkit-scrollbar {
+    width: 10px;
   }
   
   .chat-scrollbar::-webkit-scrollbar {
@@ -924,6 +1016,10 @@ body {
     background: #000000;
   }
   
+  .account-scrollbar::-webkit-scrollbar-thumb {
+    background: #000000;
+  }
+  
   .chat-scrollbar::-webkit-scrollbar-thumb {
     background: #000000;
   }
@@ -946,6 +1042,10 @@ body {
   }
   
   .settings-scrollbar::-webkit-scrollbar-thumb:hover {
+    transform: none;
+  }
+  
+  .account-scrollbar::-webkit-scrollbar-thumb:hover {
     transform: none;
   }
   
