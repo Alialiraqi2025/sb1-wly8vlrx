@@ -261,39 +261,37 @@ function App() {
 
       {/* Main Content */}
       <main className="app-main">
-        <div className="flex-container">
+        <div className="main-layout">
           {/* Sidebar */}
-          <div className="flex-sidebar">
-            <div className="flex-content">
-              {currentView === 'all-chats' && (
-                <AllChatsList
-                  chats={chats}
-                  onChatSelect={handleChatSelect}
-                  currentUserId={currentUser.id}
-                />
-              )}
-              {currentView === 'groups' && (
-                <div className="p-6 text-center flex-1 flex items-center justify-center">
-                  <div className="element-card p-8">
-                    <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
-                    <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
-                    <button className="element-button">
-                      <Hash className="w-4 h-4" />
-                      Create Room
-                    </button>
-                  </div>
+          <div className="sidebar-section">
+            {currentView === 'all-chats' && (
+              <AllChatsList
+                chats={chats}
+                onChatSelect={handleChatSelect}
+                currentUserId={currentUser.id}
+              />
+            )}
+            {currentView === 'groups' && (
+              <div className="p-6 text-center flex-1 flex items-center justify-center">
+                <div className="element-card p-8">
+                  <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
+                  <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
+                  <button className="element-button">
+                    <Hash className="w-4 h-4" />
+                    Create Room
+                  </button>
                 </div>
-              )}
-              {currentView === 'settings' && (
-                <SettingsPanel user={currentUser} />
-              )}
-            </div>
+              </div>
+            )}
+            {currentView === 'settings' && (
+              <SettingsPanel user={currentUser} />
+            )}
           </div>
 
           {/* Main Content Area - Empty when no chat selected */}
-          <div className="flex-main">
-            {/* Empty area - no message displayed */}
+          <div className="main-content-section">
+            {/* Empty area */}
           </div>
         </div>
       </main>
