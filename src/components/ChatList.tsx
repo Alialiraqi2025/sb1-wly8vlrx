@@ -58,58 +58,67 @@ const ChatList: React.FC<ChatListProps> = ({ chats, selectedChat, onChatSelect, 
         </div>
       </div>
 
-      {/* Chat List */}
-      <div className="flex-scroll scrollable mobile-scroll">
-        {filteredChats.map((chat) => {
-          const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
-          const isSelected = selectedChat?.id === chat.id;
-          
-          return (
-            <div
-              key={chat.id}
-              onClick={() => onChatSelect(chat)}
-              className={`p-4 sm:p-6 border-b border-white/10 cursor-pointer transition-all duration-300 hover:bg-white/10 ${
-                isSelected ? 'bg-white/20 border-white/30 shadow-lg' : ''
-              }`}
-            >
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                {/* Avatar */}
-                <div className="relative flex-shrink-0">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 gradient-primary rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-base sm:text-xl">
-                      {chat.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  {chat.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-400 border-2 sm:border-3 border-white rounded-full status-online"></div>
-                  )}
-                </div>
-                
-                {/* Chat Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1 sm:mb-2">
-                    <h3 className="text-base sm:text-lg font-bold text-white truncate">{chat.name}</h3>
-                    <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-                      {chat.lastMessageTime && (
-                        <span className="text-xs sm:text-sm text-white/60 font-medium">
-                          {formatTime(chat.lastMessageTime)}
-                        </span>
-                      )}
-                      {chat.unreadCount > 0 && (
-                        <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs sm:text-sm rounded-full w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center font-bold shadow-lg">
-                          {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
-                        </div>
-                      )}
+      {/* Chat List - Now properly scrollable */}
+      <div className="chat-list-container scrollable mobile-scroll">
+        <div className="space-y-0">
+          {filteredChats.map((chat) => {
+            const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
+            const isSelected = selectedChat?.id === chat.id;
+            
+            return (
+              <div
+                key={chat.id}
+                onClick={() => onChatSelect(chat)}
+                className={`p-4 sm:p-6 border-b border-white/10 cursor-pointer transition-all duration-300 hover:bg-white/10 ${
+                  isSelected ? 'bg-white/20 border-white/30 shadow-lg' : ''
+                }`}
+              >
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  {/* Avatar */}
+                  <div className="relative flex-shrink-0">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 gradient-primary rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-base sm:text-xl">
+                        {chat.name.charAt(0).toUpperCase()}
+                      </span>
                     </div>
+                    {chat.isOnline && (
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-400 border-2 sm:border-3 border-white rounded-full status-online"></div>
+                    )}
                   </div>
-                  <p className="text-white/70 truncate text-sm sm:text-lg">
-                    {chat.lastMessage || 'No messages yet'}
-                  </p>
+                  
+                  {/* Chat Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1 sm:mb-2">
+                      <h3 className="text-base sm:text-lg font-bold text-white truncate">{chat.name}</h3>
+                      <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+                        {chat.lastMessageTime && (
+                          <span className="text-xs sm:text-sm text-white/60 font-medium">
+                            {formatTime(chat.lastMessageTime)}
+                          </span>
+                        )}
+                        {chat.unreadCount > 0 && (
+                          <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs sm:text-sm rounded-full w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center font-bold shadow-lg">
+                            {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-white/70 truncate text-sm sm:text-lg">
+                      {chat.lastMessage || 'No messages yet'}
+                    </p>
+                  </div>
                 </div>
               </div>
+            );
+          })}
+          
+          {/* Add extra content to demonstrate scrolling */}
+          {filteredChats.length > 0 && (
+            <div className="p-4 sm:p-6 text-center">
+              <p className="text-white/50 text-sm">End of chat list</p>
             </div>
-          );
-        })}
+          )}
+        </div>
       </div>
     </div>
   );

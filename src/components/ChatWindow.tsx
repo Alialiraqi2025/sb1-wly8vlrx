@@ -122,17 +122,38 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-scroll scrollable mobile-scroll p-4 sm:p-6 space-y-4 sm:space-y-6">
-        {messages.map((message) => (
-          <MessageBubble
-            key={message.id}
-            message={message}
-            isOwn={message.senderId === currentUserId}
-            senderName={message.senderId === currentUserId ? 'You' : otherParticipant?.name || 'Unknown'}
-          />
-        ))}
-        <div ref={messagesEndRef} />
+      {/* Messages - Now properly scrollable */}
+      <div className="messages-container scrollable mobile-scroll p-4 sm:p-6">
+        <div className="space-y-4 sm:space-y-6">
+          {messages.map((message) => (
+            <MessageBubble
+              key={message.id}
+              message={message}
+              isOwn={message.senderId === currentUserId}
+              senderName={message.senderId === currentUserId ? 'You' : otherParticipant?.name || 'Unknown'}
+            />
+          ))}
+          
+          {/* Add some demo messages to show scrolling */}
+          {Array.from({ length: 10 }, (_, i) => (
+            <MessageBubble
+              key={`demo-${i}`}
+              message={{
+                id: `demo-${i}`,
+                chatId: chat.id,
+                senderId: i % 2 === 0 ? currentUserId : 'other',
+                content: `This is demo message ${i + 1} to demonstrate scrolling functionality. You should be able to scroll through all these messages easily.`,
+                timestamp: new Date(Date.now() - (i * 300000)),
+                type: 'text',
+                encrypted: true
+              }}
+              isOwn={i % 2 === 0}
+              senderName={i % 2 === 0 ? 'You' : otherParticipant?.name || 'Unknown'}
+            />
+          ))}
+          
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Message Input */}
