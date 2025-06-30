@@ -44,21 +44,25 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-green-500 to-teal-600 p-12 flex-col justify-center">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-12 flex-col justify-center">
         <div className="max-w-md">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
-              <MessageSquare className="w-7 h-7 text-white" />
+            <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center p-2">
+              <img 
+                src="/new TI logo.png" 
+                alt="TELE IRAQ" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <h1 className="text-3xl font-bold text-white">TELE IRAQ</h1>
           </div>
           
           <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
-            Secure messaging for everyone
+            Secure Communication for Iraq
           </h2>
           
           <p className="text-xl text-white/90 mb-12 leading-relaxed">
-            Own your conversations. No ads, no corporate surveillance, just the largest open network for secure messaging.
+            Connect with confidence. Built for Iraq, secured for everyone. Experience messaging without compromise.
           </p>
 
           {/* Features */}
@@ -69,7 +73,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">End-to-end encrypted</h3>
-                <p className="text-white/80">Your messages are secured with locks that only you and the recipient have the keys to.</p>
+                <p className="text-white/80">Your messages are secured with military-grade encryption that only you and the recipient can access.</p>
               </div>
             </div>
             
@@ -78,8 +82,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <Globe className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Decentralized</h3>
-                <p className="text-white/80">No single point of control or failure. A global open network of servers.</p>
+                <h3 className="text-lg font-semibold text-white">Made for Iraq</h3>
+                <p className="text-white/80">Designed with Iraqi users in mind, supporting local needs and cultural preferences.</p>
               </div>
             </div>
             
@@ -89,7 +93,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">Fast & reliable</h3>
-                <p className="text-white/80">Instant messaging, file sharing, voice and video calls.</p>
+                <p className="text-white/80">Lightning-fast messaging, crystal-clear voice calls, and seamless file sharing.</p>
               </div>
             </div>
           </div>
@@ -97,11 +101,11 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
           <div className="mt-12 flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               <Star className="w-5 h-5 text-yellow-300" />
-              <span className="text-white/90">4.2/5 on app stores</span>
+              <span className="text-white/90">Trusted by thousands</span>
             </div>
             <div className="flex items-center space-x-2">
               <Users className="w-5 h-5 text-white" />
-              <span className="text-white/90">50M+ users</span>
+              <span className="text-white/90">Growing community</span>
             </div>
           </div>
         </div>
@@ -112,8 +116,12 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center space-x-3 mb-8">
-            <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
-              <MessageSquare className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img 
+                src="/new TI logo.png" 
+                alt="TELE IRAQ" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <h1 className="text-2xl font-bold text-gray-900">TELE IRAQ</h1>
           </div>
@@ -195,7 +203,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full element-button py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <div className="element-spinner"></div>
@@ -213,7 +221,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 {isLogin ? "Don't have an account?" : 'Already have an account?'}
                 <button
                   onClick={() => setIsLogin(!isLogin)}
-                  className="text-green-600 hover:text-green-700 font-medium ml-1"
+                  className="text-red-600 hover:text-red-700 font-medium ml-1"
                 >
                   {isLogin ? 'Create one' : 'Sign in'}
                 </button>
@@ -221,12 +229,12 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             </div>
 
             {/* Security Notice */}
-            <div className="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="mt-8 p-4 bg-red-50 rounded-lg border border-red-200">
               <div className="flex items-start space-x-3">
-                <Shield className="w-5 h-5 text-green-600 mt-0.5" />
+                <Shield className="w-5 h-5 text-red-600 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-medium text-green-900">End-to-end encrypted</h4>
-                  <p className="text-sm text-green-700 mt-1">
+                  <h4 className="text-sm font-medium text-red-900">End-to-end encrypted</h4>
+                  <p className="text-sm text-red-700 mt-1">
                     Your messages are secured with encryption that ensures only you and the recipient can read them.
                   </p>
                 </div>

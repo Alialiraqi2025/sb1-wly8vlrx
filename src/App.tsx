@@ -148,16 +148,20 @@ function App() {
       <div className="h-screen bg-white flex items-center justify-center">
         <div className="text-center animate-fade-in">
           <div className="element-card p-12 mb-8 inline-block">
-            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <MessageSquare className="w-8 h-8 text-white" />
+            <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+              <img 
+                src="/new TI logo.png" 
+                alt="TELE IRAQ" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2 app-name">TELE IRAQ</h1>
-            <p className="text-gray-600">Secure messaging for everyone</p>
+            <p className="text-gray-600">Secure Communication</p>
           </div>
           <div className="flex items-center justify-center space-x-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
           </div>
         </div>
       </div>
@@ -192,8 +196,12 @@ function App() {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img 
+                  src="/new TI logo.png" 
+                  alt="TELE IRAQ" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-xl font-bold app-name">TELE IRAQ</h1>
@@ -206,7 +214,7 @@ function App() {
                 onClick={() => setCurrentView('all-chats')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'all-chats'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-red-100 text-red-700'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
@@ -216,7 +224,7 @@ function App() {
                 onClick={() => setCurrentView('groups')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'groups'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-red-100 text-red-700'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
@@ -226,7 +234,7 @@ function App() {
                 onClick={() => setCurrentView('settings')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'settings'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-red-100 text-red-700'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >

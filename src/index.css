@@ -31,10 +31,10 @@ body {
   overflow: hidden;
 }
 
-/* Element-style color scheme */
+/* TELE IRAQ color scheme */
 :root {
-  --element-primary: #0dbd8b;
-  --element-primary-dark: #0a9d73;
+  --element-primary: #dc2626;
+  --element-primary-dark: #b91c1c;
   --element-secondary: #368bd6;
   --element-accent: #ff5b55;
   --element-bg: #ffffff;
@@ -241,7 +241,7 @@ body {
 .element-input:focus {
   outline: none;
   border-color: var(--element-primary);
-  box-shadow: 0 0 0 3px rgba(13, 189, 139, 0.1);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .element-input::placeholder {
@@ -510,8 +510,8 @@ body {
 
 /* Encryption indicator */
 .encryption-indicator {
-  background: rgba(13, 189, 139, 0.1);
-  border: 1px solid rgba(13, 189, 139, 0.2);
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
   border-radius: 16px;
   padding: 4px 12px;
   display: flex;
@@ -755,11 +755,11 @@ button, input, textarea, select {
 
 /* Selection styles */
 ::selection {
-  background: rgba(13, 189, 139, 0.2);
+  background: rgba(220, 38, 38, 0.2);
   color: var(--element-text);
 }
 
 ::-moz-selection {
-  background: rgba(13, 189, 139, 0.2);
+  background: rgba(220, 38, 38, 0.2);
   color: var(--element-text);
 }
