@@ -699,11 +699,6 @@ body {
   padding-right: 8px; /* Space for scrollbar */
 }
 
-/* Force content to be scrollable */
-.force-scroll {
-  min-height: calc(100vh + 100px); /* Force content to exceed viewport */
-}
-
 /* Element-style typography with improved contrast */
 .element-title {
   font-size: 24px;
