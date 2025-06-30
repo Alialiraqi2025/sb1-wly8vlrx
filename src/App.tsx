@@ -291,17 +291,9 @@ function App() {
             </div>
           </div>
 
-          {/* Main Content Area */}
+          {/* Main Content Area - Empty when no chat selected */}
           <div className="flex-main chat-window-container">
-            <div className="empty-state">
-              <div className="text-center animate-fade-in">
-                <div className="element-card p-12 mb-6 inline-block">
-                  <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
-                  <p className="text-gray-600">Choose a chat from the sidebar to start messaging</p>
-                </div>
-              </div>
-            </div>
+            {/* Empty area - no message displayed */}
           </div>
         </div>
       </main>
