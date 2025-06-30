@@ -13,65 +13,65 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
     switch (message.type) {
       case 'image':
         return (
-          <div className="space-y-2">
-            <div className="bg-white/10 rounded-lg p-2">
-              <div className="w-48 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm">📷 Image</span>
+          <div className="space-y-3">
+            <div className="bg-white/20 rounded-2xl p-4">
+              <div className="w-64 h-40 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white text-lg font-medium">📷 Image</span>
               </div>
             </div>
-            {message.content && <p>{message.content}</p>}
+            {message.content && <p className="text-lg">{message.content}</p>}
           </div>
         );
       
       case 'file':
         return (
-          <div className="flex items-center space-x-3 bg-white/10 rounded-lg p-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white text-sm">📄</span>
+          <div className="flex items-center space-x-4 bg-white/20 rounded-2xl p-4">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-lg">📄</span>
             </div>
             <div>
-              <p className="font-medium">{message.content}</p>
-              <p className="text-xs opacity-75">Click to download</p>
+              <p className="font-semibold text-lg">{message.content}</p>
+              <p className="text-sm opacity-75">Click to download</p>
             </div>
           </div>
         );
       
       case 'voice':
         return (
-          <div className="flex items-center space-x-3 bg-white/10 rounded-lg p-3">
-            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm">🎤</span>
+          <div className="flex items-center space-x-4 bg-white/20 rounded-2xl p-4">
+            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white text-lg">🎤</span>
             </div>
             <div className="flex-1">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <div className="flex space-x-1">
-                  {[...Array(20)].map((_, i) => (
+                  {[...Array(25)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-1 bg-white/60 rounded-full"
-                      style={{ height: `${Math.random() * 20 + 10}px` }}
+                      className="w-1 bg-white/70 rounded-full"
+                      style={{ height: `${Math.random() * 24 + 12}px` }}
                     />
                   ))}
                 </div>
-                <span className="text-xs opacity-75">0:03</span>
+                <span className="text-sm opacity-75 font-medium">0:03</span>
               </div>
             </div>
           </div>
         );
       
       default:
-        return <p>{message.content}</p>;
+        return <p className="text-lg leading-relaxed">{message.content}</p>;
     }
   };
 
   return (
     <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} animate-slide-up`}>
-      <div className={`message-bubble ${isOwn ? 'sent' : 'received'} p-4`}>
+      <div className={`message-bubble ${isOwn ? 'sent' : 'received'} p-5`}>
         {renderMessageContent()}
-        <div className="flex items-center justify-between mt-2 text-xs opacity-75">
-          <span>{formatTime(message.timestamp)}</span>
+        <div className="flex items-center justify-between mt-3 text-sm opacity-75">
+          <span className="font-medium">{formatTime(message.timestamp)}</span>
           {message.encrypted && (
-            <span className="ml-2">🔒</span>
+            <span className="ml-3 text-lg">🔒</span>
           )}
         </div>
       </div>

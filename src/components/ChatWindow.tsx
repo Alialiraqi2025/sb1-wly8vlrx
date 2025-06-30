@@ -79,43 +79,43 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
   return (
     <div className="flex flex-col h-full">
       {/* Chat Header */}
-      <div className="glass border-b border-white/10 p-4">
+      <div className="glass-strong border-b border-white/20 p-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             <div className="relative">
-              <div className="w-10 h-10 gradient-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">
+              <div className="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-xl">
                   {chat.name.charAt(0).toUpperCase()}
                 </span>
               </div>
               {chat.isOnline && (
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 border-2 border-gray-900 rounded-full status-online"></div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full status-online"></div>
               )}
             </div>
             <div>
-              <h3 className="font-semibold text-white">{chat.name}</h3>
-              <p className="text-sm text-gray-400">
+              <h3 className="text-xl font-bold text-white">{chat.name}</h3>
+              <p className="text-lg text-white/70">
                 {chat.isOnline ? 'Online' : 'Last seen recently'}
               </p>
             </div>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <button className="p-2 hover:bg-white/10 rounded-xl transition-colors text-gray-400 hover:text-white">
-              <Phone className="w-5 h-5" />
+          <div className="flex items-center space-x-3">
+            <button className="p-3 hover:bg-white/20 rounded-2xl transition-all duration-300 text-white/70 hover:text-white hover-scale">
+              <Phone className="w-6 h-6" />
             </button>
-            <button className="p-2 hover:bg-white/10 rounded-xl transition-colors text-gray-400 hover:text-white">
-              <Video className="w-5 h-5" />
+            <button className="p-3 hover:bg-white/20 rounded-2xl transition-all duration-300 text-white/70 hover:text-white hover-scale">
+              <Video className="w-6 h-6" />
             </button>
-            <button className="p-2 hover:bg-white/10 rounded-xl transition-colors text-gray-400 hover:text-white">
-              <MoreVertical className="w-5 h-5" />
+            <button className="p-3 hover:bg-white/20 rounded-2xl transition-all duration-300 text-white/70 hover:text-white hover-scale">
+              <MoreVertical className="w-6 h-6" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <MessageBubble
             key={message.id}
@@ -128,14 +128,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
       </div>
 
       {/* Message Input */}
-      <div className="glass border-t border-white/10 p-4">
-        <div className="flex items-end space-x-3">
+      <div className="glass-strong border-t border-white/20 p-6">
+        <div className="flex items-end space-x-4">
           {/* Attachment Button */}
           <button
             onClick={handleFileUpload}
-            className="p-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-xl transition-colors"
+            className="p-4 text-white/70 hover:text-white hover:bg-white/20 rounded-2xl transition-all duration-300 hover-scale"
           >
-            <Paperclip className="w-5 h-5" />
+            <Paperclip className="w-6 h-6" />
           </button>
 
           {/* Message Input */}
@@ -146,22 +146,22 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
               onChange={(e) => setMessageInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="w-full px-4 py-3 pr-12 glass rounded-2xl text-white placeholder-gray-400 focus-ring resize-none"
+              className="w-full input-glass pr-14 text-lg resize-none focus-ring"
               rows={1}
-              style={{ minHeight: '48px', maxHeight: '120px' }}
+              style={{ minHeight: '56px', maxHeight: '140px' }}
             />
             
             {/* Emoji Button */}
             <button
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors hover-scale"
             >
-              <Smile className="w-5 h-5" />
+              <Smile className="w-6 h-6" />
             </button>
 
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div className="absolute bottom-full right-0 mb-2">
+              <div className="absolute bottom-full right-0 mb-3">
                 <EmojiPicker onEmojiSelect={handleEmojiSelect} />
               </div>
             )}
@@ -171,20 +171,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
           {messageInput.trim() ? (
             <button
               onClick={handleSendMessage}
-              className="gradient-primary p-3 rounded-xl hover-lift text-white"
+              className="btn-primary p-4 hover-lift hover-glow"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-6 h-6" />
             </button>
           ) : (
             <button
               onClick={handleVoiceRecord}
-              className={`p-3 rounded-xl transition-all ${
+              className={`p-4 rounded-2xl transition-all duration-300 ${
                 isRecording
-                  ? 'bg-red-500 text-white animate-pulse'
-                  : 'text-gray-400 hover:text-white hover:bg-white/10'
-              }`}
+                  ? 'bg-red-500 text-white animate-pulse shadow-lg'
+                  : 'text-white/70 hover:text-white hover:bg-white/20'
+              } hover-scale`}
             >
-              <Mic className="w-5 h-5" />
+              <Mic className="w-6 h-6" />
             </button>
           )}
         </div>
