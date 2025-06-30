@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical } from 'lucide-react';
+import { Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Lock, Zap } from 'lucide-react';
 import { Chat, Message } from '../types';
 import MessageBubble from './MessageBubble';
 import EmojiPicker from './EmojiPicker';
@@ -153,6 +153,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
           ))}
           
           <div ref={messagesEndRef} />
+        </div>
+      </div>
+
+      {/* E2E Encryption Indicator - Now positioned above message input */}
+      <div className="flex justify-center px-4 sm:px-6 pb-2">
+        <div className="glass-strong rounded-full px-4 py-2 sm:px-6 sm:py-3 flex items-center space-x-2 sm:space-x-3 shadow-xl animate-fade-in">
+          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
+          <span className="text-sm sm:text-base text-green-300 font-semibold">E2E Encrypted</span>
+          <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 animate-pulse" />
         </div>
       </div>
 
