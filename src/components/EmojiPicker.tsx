@@ -17,17 +17,19 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({ onEmojiSelect }) => {
   ];
 
   return (
-    <div className="glass-strong rounded-2xl p-6 w-96 max-h-64 overflow-y-auto animate-slide-up shadow-xl">
-      <div className="grid grid-cols-8 gap-3">
-        {emojis.map((emoji, index) => (
-          <button
-            key={index}
-            onClick={() => onEmojiSelect(emoji)}
-            className="text-2xl hover:bg-white/20 rounded-xl p-3 transition-all duration-200 hover-scale"
-          >
-            {emoji}
-          </button>
-        ))}
+    <div className="element-card w-80 max-h-48 overflow-y-auto animate-slide-up">
+      <div className="p-4">
+        <div className="grid grid-cols-8 gap-2">
+          {emojis.map((emoji, index) => (
+            <button
+              key={index}
+              onClick={() => onEmojiSelect(emoji)}
+              className="text-lg hover:bg-gray-100 rounded-lg p-2 transition-all duration-200"
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

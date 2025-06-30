@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, MessageCircle, Users, Settings } from 'lucide-react';
+import { MessageSquare, Users, Settings, Hash } from 'lucide-react';
 import AuthScreen from './components/AuthScreen';
 import ChatList from './components/ChatList';
 import ChatWindow from './components/ChatWindow';
@@ -14,26 +14,14 @@ function App() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Check if mobile
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
     // Simulate app initialization
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1500);
 
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('resize', checkMobile);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -147,17 +135,19 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center overflow-hidden">
+      <div className="h-screen bg-white flex items-center justify-center">
         <div className="text-center animate-fade-in">
-          <div className="glass-strong rounded-3xl p-12 mb-8 inline-block animate-glow">
-            <Shield className="w-20 h-20 text-white mx-auto animate-pulse-slow" />
+          <div className="element-card p-12 mb-8 inline-block">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <MessageSquare className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Element</h1>
+            <p className="text-gray-600">Secure messaging for everyone</p>
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">SecureChat</h1>
-          <p className="text-xl text-white/80 mb-8 font-medium">End-to-End Encrypted Messaging</p>
-          <div className="flex items-center justify-center space-x-3">
-            <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-            <div className="w-3 h-3 bg-white/70 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-3 h-3 bg-white/50 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
           </div>
         </div>
       </div>
@@ -169,75 +159,72 @@ function App() {
   }
 
   return (
-    <div className="app-container bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
-      {/* Header */}
-      <header className="app-header glass-strong border-b border-white/20">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 sm:h-20">
+    <div className="app-container">
+      {/* Header - Element style */}
+      <header className="app-header">
+        <div className="px-4 lg:px-6">
+          <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-3 sm:space-x-4">
-              <div className="gradient-primary p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg">
-                <Shield className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
+                <MessageSquare className="w-5 h-5 text-white" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">SecureChat</h1>
-                <p className="text-xs sm:text-sm text-white/70 font-medium">End-to-End Encrypted</p>
+                <h1 className="text-xl font-bold text-gray-900">Element</h1>
               </div>
             </div>
 
             {/* Navigation */}
-            <nav className="flex items-center space-x-1 sm:space-x-2">
+            <nav className="flex items-center space-x-1">
               <button
                 onClick={() => setCurrentView('chats')}
-                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 font-medium ${
+                className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'chats'
-                    ? 'bg-white/20 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                    ? 'bg-green-100 text-green-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
-                <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                <MessageSquare className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setCurrentView('groups')}
-                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 font-medium ${
+                className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'groups'
-                    ? 'bg-white/20 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                    ? 'bg-green-100 text-green-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
-                <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+                <Hash className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setCurrentView('settings')}
-                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 font-medium ${
+                className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'settings'
-                    ? 'bg-white/20 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                    ? 'bg-green-100 text-green-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
-                <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
+                <Settings className="w-5 h-5" />
               </button>
             </nav>
 
             {/* User Info */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center space-x-3">
               <div className="text-right hidden lg:block">
-                <p className="text-sm sm:text-lg font-semibold text-white">{currentUser.name}</p>
-                <div className="flex items-center justify-end space-x-2">
-                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full status-online"></div>
-                  <p className="text-xs sm:text-sm text-green-300 font-medium">Online</p>
+                <p className="text-sm font-medium text-gray-900">{currentUser.name}</p>
+                <div className="flex items-center justify-end space-x-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <p className="text-xs text-green-600">Online</p>
                 </div>
               </div>
-              <div className="gradient-primary p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg">
-                <span className="text-white font-bold text-sm sm:text-lg">
-                  {currentUser.name.charAt(0).toUpperCase()}
-                </span>
+              <div className="element-avatar">
+                {currentUser.name.charAt(0).toUpperCase()}
               </div>
               <button
                 onClick={handleLogout}
-                className="text-white/70 hover:text-red-300 p-2 sm:p-3 rounded-xl sm:rounded-2xl hover:bg-red-500/20 transition-all duration-300"
+                className="text-gray-600 hover:text-red-600 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
               >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
               </button>
@@ -246,11 +233,11 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content - Now allows scrolling */}
+      {/* Main Content */}
       <main className="app-main">
         <div className="flex-container">
           {/* Sidebar */}
-          <div className="flex-sidebar glass-strong border-r border-white/20">
+          <div className="flex-sidebar">
             <div className="flex-content">
               {currentView === 'chats' && (
                 <ChatList
@@ -261,14 +248,14 @@ function App() {
                 />
               )}
               {currentView === 'groups' && (
-                <div className="p-6 sm:p-8 text-center flex-1 flex items-center justify-center">
-                  <div className="card-glass">
-                    <Users className="w-12 h-12 sm:w-16 sm:h-16 text-white mx-auto mb-4 sm:mb-6" />
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Groups</h3>
-                    <p className="text-white/70 mb-4 sm:mb-6 text-base sm:text-lg">Create and manage group chats</p>
-                    <button className="btn-primary hover-lift">
-                      <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
-                      New Group
+                <div className="p-6 text-center flex-1 flex items-center justify-center">
+                  <div className="element-card p-8">
+                    <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
+                    <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
+                    <button className="element-button">
+                      <Hash className="w-4 h-4" />
+                      Create Room
                     </button>
                   </div>
                 </div>
@@ -292,11 +279,11 @@ function App() {
               ) : (
                 <div className="flex items-center justify-center h-full p-6">
                   <div className="text-center animate-fade-in">
-                    <div className="glass-strong rounded-3xl p-8 sm:p-12 mb-6 sm:mb-8 inline-block">
-                      <MessageCircle className="w-16 h-16 sm:w-20 sm:h-20 text-white mx-auto" />
+                    <div className="element-card p-12 mb-6 inline-block">
+                      <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
+                      <p className="text-gray-600">Choose a chat from the sidebar to start messaging</p>
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Select a conversation</h3>
-                    <p className="text-lg sm:text-xl text-white/70">Choose a chat to start messaging securely</p>
                   </div>
                 </div>
               )}

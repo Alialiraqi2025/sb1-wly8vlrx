@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Plus, MessageCircle } from 'lucide-react';
+import { Search, Plus, MessageSquare, Hash } from 'lucide-react';
 import { Chat } from '../types';
 import { formatTime } from '../utils/dateUtils';
 
@@ -20,14 +20,14 @@ const ChatList: React.FC<ChatListProps> = ({ chats, selectedChat, onChatSelect, 
 
   if (chats.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-6 sm:p-8 text-center">
-        <div className="card-glass mb-6 sm:mb-8">
-          <MessageCircle className="w-16 h-16 sm:w-20 sm:h-20 text-white mx-auto mb-4 sm:mb-6" />
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">No chats yet</h3>
-          <p className="text-white/70 mb-6 sm:mb-8 text-base sm:text-lg">Start a conversation to begin messaging securely</p>
-          <button className="btn-primary hover-lift">
-            <Plus className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
-            Start New Chat
+      <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+        <div className="element-card p-8 mb-6">
+          <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No conversations yet</h3>
+          <p className="text-gray-600 mb-6">Start a conversation to begin messaging securely</p>
+          <button className="element-button">
+            <Plus className="w-4 h-4" />
+            Start chat
           </button>
         </div>
       </div>
@@ -37,30 +37,30 @@ const ChatList: React.FC<ChatListProps> = ({ chats, selectedChat, onChatSelect, 
   return (
     <div className="flex-content">
       {/* Header */}
-      <div className="p-4 sm:p-6 lg:p-8 border-b border-white/20 flex-shrink-0">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-white">Chats</h2>
-          <button className="btn-primary p-2 sm:p-3 hover-lift">
-            <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+      <div className="p-4 border-b border-gray-200 flex-shrink-0">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="element-title">Chats</h2>
+          <button className="element-button-secondary p-2">
+            <Plus className="w-4 h-4" />
           </button>
         </div>
         
         {/* Search */}
-        <div className="relative">
+        <div className="search-container">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search chats..."
-            className="w-full input-glass pl-10 sm:pl-12 text-base sm:text-lg focus-ring"
+            placeholder="Search conversations..."
+            className="search-input"
           />
-          <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-white/60" />
+          <Search className="search-icon" />
         </div>
       </div>
 
-      {/* Chat List - Now properly scrollable */}
-      <div className="chat-list-container scrollable mobile-scroll">
-        <div className="space-y-0">
+      {/* Chat List */}
+      <div className="chat-list-container scrollable">
+        <div className="room-list">
           {filteredChats.map((chat) => {
             const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
             const isSelected = selectedChat?.id === chat.id;
@@ -69,41 +69,41 @@ const ChatList: React.FC<ChatListProps> = ({ chats, selectedChat, onChatSelect, 
               <div
                 key={chat.id}
                 onClick={() => onChatSelect(chat)}
-                className={`p-4 sm:p-6 border-b border-white/10 cursor-pointer transition-all duration-300 hover:bg-white/10 ${
-                  isSelected ? 'bg-white/20 border-white/30 shadow-lg' : ''
-                }`}
+                className={`room-item ${isSelected ? 'active' : ''}`}
               >
-                <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="flex items-center space-x-3 w-full">
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 gradient-primary rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg">
-                      <span className="text-white font-bold text-base sm:text-xl">
-                        {chat.name.charAt(0).toUpperCase()}
-                      </span>
+                    <div className="element-avatar-large">
+                      {chat.type === 'group' ? (
+                        <Hash className="w-5 h-5" />
+                      ) : (
+                        chat.name.charAt(0).toUpperCase()
+                      )}
                     </div>
-                    {chat.isOnline && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-400 border-2 sm:border-3 border-white rounded-full status-online"></div>
+                    {chat.isOnline && chat.type === 'direct' && (
+                      <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                     )}
                   </div>
                   
                   {/* Chat Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1 sm:mb-2">
-                      <h3 className="text-base sm:text-lg font-bold text-white truncate">{chat.name}</h3>
-                      <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="element-text font-semibold truncate">{chat.name}</h3>
+                      <div className="flex items-center space-x-2 flex-shrink-0">
                         {chat.lastMessageTime && (
-                          <span className="text-xs sm:text-sm text-white/60 font-medium">
+                          <span className="element-text-small">
                             {formatTime(chat.lastMessageTime)}
                           </span>
                         )}
                         {chat.unreadCount > 0 && (
-                          <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs sm:text-sm rounded-full w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center font-bold shadow-lg">
+                          <div className="element-badge">
                             {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
                           </div>
                         )}
                       </div>
                     </div>
-                    <p className="text-white/70 truncate text-sm sm:text-lg">
+                    <p className="element-text-small text-gray-500 truncate">
                       {chat.lastMessage || 'No messages yet'}
                     </p>
                   </div>
@@ -111,13 +111,6 @@ const ChatList: React.FC<ChatListProps> = ({ chats, selectedChat, onChatSelect, 
               </div>
             );
           })}
-          
-          {/* Add extra content to demonstrate scrolling */}
-          {filteredChats.length > 0 && (
-            <div className="p-4 sm:p-6 text-center">
-              <p className="text-white/50 text-sm">End of chat list</p>
-            </div>
-          )}
         </div>
       </div>
     </div>

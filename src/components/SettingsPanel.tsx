@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Bell, Shield, Palette, Globe, HelpCircle, Star, Award } from 'lucide-react';
+import { User, Bell, Shield, Palette, Globe, HelpCircle, Star, Award, Check } from 'lucide-react';
 import { User as UserType } from '../types';
 
 interface SettingsPanelProps {
@@ -10,134 +10,126 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   return (
     <div className="flex-content">
       {/* Header */}
-      <div className="p-4 sm:p-6 lg:p-8 border-b border-white/20 flex-shrink-0">
-        <h2 className="text-xl sm:text-2xl font-bold text-white">Settings</h2>
+      <div className="p-4 border-b border-gray-200 flex-shrink-0">
+        <h2 className="element-title">Settings</h2>
       </div>
 
-      {/* Content - Now properly scrollable */}
-      <div className="settings-container scrollable mobile-scroll p-4 sm:p-6 lg:p-8">
-        <div className="space-y-6 sm:space-y-8">
+      {/* Content */}
+      <div className="settings-container scrollable p-4">
+        <div className="space-y-6">
           {/* Profile Section */}
-          <div className="card-glass">
-            <div className="flex items-center space-x-4 sm:space-x-6 mb-6 sm:mb-8">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 gradient-primary rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
-                <span className="text-white text-xl sm:text-2xl font-bold">
-                  {user.name.charAt(0).toUpperCase()}
-                </span>
+          <div className="element-card p-6">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="element-avatar-large">
+                {user.name.charAt(0).toUpperCase()}
               </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="text-xl sm:text-2xl font-bold text-white truncate">{user.name}</h3>
-                <p className="text-white/70 text-base sm:text-lg truncate">{user.email}</p>
-                <div className="flex items-center space-x-2 sm:space-x-3 mt-2">
-                  <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-400 status-online"></div>
-                  <span className="text-sm sm:text-lg text-green-300 font-medium">Online</span>
+              <div className="flex-1 min-w-0">
+                <h3 className="element-text font-semibold text-lg">{user.name}</h3>
+                <p className="element-text-small text-gray-500">{user.email}</p>
+                <div className="flex items-center space-x-2 mt-1">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="element-text-small text-green-600">Online</span>
                 </div>
               </div>
             </div>
             
-            <button className="w-full btn-secondary text-base sm:text-lg py-3 sm:py-4">
-              Edit Profile
+            <button className="element-button-secondary w-full">
+              Edit profile
             </button>
           </div>
 
-          {/* Settings Options */}
-          <div className="space-y-3 sm:space-y-4">
+          {/* Settings Categories */}
+          <div className="space-y-2">
             <SettingItem
-              icon={<Bell className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<Bell className="w-5 h-5" />}
               title="Notifications"
               description="Manage your notification preferences"
             />
             
             <SettingItem
-              icon={<Shield className="w-5 h-5 sm:w-6 sm:h-6" />}
-              title="Privacy & Security"
-              description="Control your privacy settings"
+              icon={<Shield className="w-5 h-5" />}
+              title="Security & Privacy"
+              description="Control your security settings"
             />
             
             <SettingItem
-              icon={<Palette className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<Palette className="w-5 h-5" />}
               title="Appearance"
-              description="Customize the app's look and feel"
+              description="Customize the app's appearance"
             />
             
             <SettingItem
-              icon={<Globe className="w-5 h-5 sm:w-6 sm:h-6" />}
-              title="Language"
-              description="Change your language preferences"
+              icon={<Globe className="w-5 h-5" />}
+              title="Language & Region"
+              description="Change language and region settings"
             />
             
             <SettingItem
-              icon={<HelpCircle className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<HelpCircle className="w-5 h-5" />}
               title="Help & Support"
               description="Get help and contact support"
             />
           </div>
 
-          {/* Security Info */}
-          <div className="card-glass">
-            <h4 className="text-lg sm:text-xl font-bold text-green-400 mb-4 sm:mb-6 flex items-center">
-              <Shield className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
+          {/* Security Status */}
+          <div className="element-card p-6">
+            <h4 className="element-text font-semibold mb-4 flex items-center">
+              <Shield className="w-5 h-5 mr-2 text-green-600" />
               Security Status
             </h4>
-            <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-white text-base sm:text-lg">End-to-End Encryption</span>
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-green-400 font-semibold text-sm sm:text-base">Active</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-white text-base sm:text-lg">Two-Factor Authentication</span>
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-green-400 font-semibold text-sm sm:text-base">Enabled</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-white text-base sm:text-lg">Secure Backup</span>
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-green-400 font-semibold text-sm sm:text-base">Active</span>
-                </div>
-              </div>
+            <div className="space-y-3">
+              <SecurityStatusItem
+                title="End-to-end encryption"
+                status="Active"
+                isActive={true}
+              />
+              <SecurityStatusItem
+                title="Cross-signing"
+                status="Verified"
+                isActive={true}
+              />
+              <SecurityStatusItem
+                title="Secure backup"
+                status="Enabled"
+                isActive={true}
+              />
             </div>
           </div>
 
-          {/* App Info */}
-          <div className="card-glass">
-            <h4 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 flex items-center">
-              <Award className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
-              About SecureChat
+          {/* About */}
+          <div className="element-card p-6">
+            <h4 className="element-text font-semibold mb-4 flex items-center">
+              <Award className="w-5 h-5 mr-2" />
+              About Element
             </h4>
-            <div className="space-y-2 sm:space-y-3 text-white/80 text-base sm:text-lg">
-              <p>Version 2.1.0</p>
-              <p>Built with military-grade encryption</p>
-              <p>© 2025 SecureChat. All rights reserved.</p>
+            <div className="space-y-2 element-text-small text-gray-600">
+              <p>Version 1.11.50</p>
+              <p>Built on Matrix protocol</p>
+              <p>© 2024 Element. All rights reserved.</p>
             </div>
             
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 mt-4 sm:mt-6">
-              <div className="flex items-center space-x-2">
-                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
-                <span className="text-white/80 text-sm sm:text-base">4.9/5 Rating</span>
+            <div className="flex items-center space-x-4 mt-4">
+              <div className="flex items-center space-x-1">
+                <Star className="w-4 h-4 text-yellow-500" />
+                <span className="element-text-small text-gray-600">4.2/5 rating</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
-                <span className="text-white/80 text-sm sm:text-base">SOC 2 Certified</span>
+              <div className="flex items-center space-x-1">
+                <Shield className="w-4 h-4 text-green-500" />
+                <span className="element-text-small text-gray-600">Open source</span>
               </div>
             </div>
           </div>
 
-          {/* Additional content to demonstrate scrolling */}
-          <div className="card-glass">
-            <h4 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">Additional Settings</h4>
-            <div className="space-y-3 sm:space-y-4">
+          {/* Additional Settings for Demo */}
+          <div className="element-card p-6">
+            <h4 className="element-text font-semibold mb-4">Advanced</h4>
+            <div className="space-y-2">
               {Array.from({ length: 5 }, (_, i) => (
                 <SettingItem
                   key={i}
-                  icon={<Star className="w-5 h-5 sm:w-6 sm:h-6" />}
-                  title={`Setting Option ${i + 1}`}
-                  description={`This is an additional setting option to demonstrate scrolling functionality.`}
+                  icon={<Star className="w-5 h-5" />}
+                  title={`Advanced Setting ${i + 1}`}
+                  description={`Configure advanced option ${i + 1}`}
                 />
               ))}
             </div>
@@ -145,7 +137,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
           {/* End marker */}
           <div className="text-center py-4">
-            <p className="text-white/50 text-sm">End of settings</p>
+            <p className="element-text-small text-gray-400">End of settings</p>
           </div>
         </div>
       </div>
@@ -161,17 +153,38 @@ interface SettingItemProps {
 
 const SettingItem: React.FC<SettingItemProps> = ({ icon, title, description }) => {
   return (
-    <button className="w-full card-glass text-left hover:bg-white/20 transition-all duration-300 group hover-lift">
-      <div className="flex items-center space-x-3 sm:space-x-4">
-        <div className="text-blue-400 group-hover:text-blue-300 transition-colors flex-shrink-0">
+    <button className="w-full element-card p-4 text-left element-hover group">
+      <div className="flex items-center space-x-3">
+        <div className="text-gray-600 group-hover:text-green-600 transition-colors flex-shrink-0">
           {icon}
         </div>
-        <div className="min-w-0 flex-1">
-          <h4 className="text-base sm:text-lg font-semibold text-white">{title}</h4>
-          <p className="text-white/70 text-sm sm:text-base">{description}</p>
+        <div className="flex-1 min-w-0">
+          <h4 className="element-text font-medium">{title}</h4>
+          <p className="element-text-small text-gray-500">{description}</p>
         </div>
       </div>
     </button>
+  );
+};
+
+interface SecurityStatusItemProps {
+  title: string;
+  status: string;
+  isActive: boolean;
+}
+
+const SecurityStatusItem: React.FC<SecurityStatusItemProps> = ({ title, status, isActive }) => {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="element-text">{title}</span>
+      <div className="flex items-center space-x-2">
+        <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+        <span className={`element-text-small font-medium ${isActive ? 'text-green-600' : 'text-gray-500'}`}>
+          {status}
+        </span>
+        {isActive && <Check className="w-4 h-4 text-green-600" />}
+      </div>
+    </div>
   );
 };
 

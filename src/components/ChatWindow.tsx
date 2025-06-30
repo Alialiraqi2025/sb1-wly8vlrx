@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Lock, Zap } from 'lucide-react';
+import { Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield } from 'lucide-react';
 import { Chat, Message } from '../types';
 import MessageBubble from './MessageBubble';
 import EmojiPicker from './EmojiPicker';
-import { formatTime } from '../utils/dateUtils';
 
 interface ChatWindowProps {
   chat: Chat;
@@ -29,7 +28,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
     // Auto-resize textarea
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 140)}px`;
+      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 120)}px`;
     }
   }, [messageInput]);
 
@@ -64,7 +63,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
       onSendMessage('🎤 Voice message', 'voice');
     } else {
       setIsRecording(true);
-      // In a real app, start recording here
       setTimeout(() => {
         setIsRecording(false);
       }, 3000);
@@ -87,68 +85,75 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
   return (
     <div className="flex-content">
       {/* Chat Header */}
-      <div className="glass-strong border-b border-white/20 p-4 sm:p-6 flex-shrink-0">
+      <div className="border-b border-gray-200 p-4 flex-shrink-0 bg-white">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 gradient-primary rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-base sm:text-xl">
-                  {chat.name.charAt(0).toUpperCase()}
-                </span>
+              <div className="element-avatar-large">
+                {chat.name.charAt(0).toUpperCase()}
               </div>
               {chat.isOnline && (
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-400 border-2 border-white rounded-full status-online"></div>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
               )}
             </div>
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-white">{chat.name}</h3>
-              <p className="text-sm sm:text-lg text-white/70">
-                {chat.isOnline ? 'Online' : 'Last seen recently'}
+              <h3 className="element-text font-semibold">{chat.name}</h3>
+              <p className="element-text-small text-gray-500">
+                {chat.isOnline ? 'Active now' : 'Last seen recently'}
               </p>
             </div>
           </div>
           
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <button className="p-2 sm:p-3 hover:bg-white/20 rounded-xl sm:rounded-2xl transition-all duration-300 text-white/70 hover:text-white hover-scale">
-              <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
+          <div className="flex items-center space-x-2">
+            <button className="element-button-secondary p-2">
+              <Phone className="w-4 h-4" />
             </button>
-            <button className="p-2 sm:p-3 hover:bg-white/20 rounded-xl sm:rounded-2xl transition-all duration-300 text-white/70 hover:text-white hover-scale">
-              <Video className="w-5 h-5 sm:w-6 sm:h-6" />
+            <button className="element-button-secondary p-2">
+              <Video className="w-4 h-4" />
             </button>
-            <button className="p-2 sm:p-3 hover:bg-white/20 rounded-xl sm:rounded-2xl transition-all duration-300 text-white/70 hover:text-white hover-scale">
-              <MoreVertical className="w-5 h-5 sm:w-6 sm:h-6" />
+            <button className="element-button-secondary p-2">
+              <MoreVertical className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Messages - Now properly scrollable */}
-      <div className="messages-container scrollable mobile-scroll p-4 sm:p-6">
-        <div className="space-y-4 sm:space-y-6">
-          {messages.map((message) => (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              isOwn={message.senderId === currentUserId}
-              senderName={message.senderId === currentUserId ? 'You' : otherParticipant?.name || 'Unknown'}
-            />
-          ))}
+      {/* Messages */}
+      <div className="messages-container scrollable timeline">
+        <div className="space-y-1">
+          {messages.map((message, index) => {
+            const prevMessage = messages[index - 1];
+            const isContinuation = prevMessage && 
+              prevMessage.senderId === message.senderId && 
+              (message.timestamp.getTime() - prevMessage.timestamp.getTime()) < 300000; // 5 minutes
+
+            return (
+              <MessageBubble
+                key={message.id}
+                message={message}
+                isOwn={message.senderId === currentUserId}
+                senderName={message.senderId === currentUserId ? 'You' : otherParticipant?.name || 'Unknown'}
+                isContinuation={isContinuation}
+              />
+            );
+          })}
           
-          {/* Add some demo messages to show scrolling */}
-          {Array.from({ length: 10 }, (_, i) => (
+          {/* Demo messages for scrolling */}
+          {Array.from({ length: 15 }, (_, i) => (
             <MessageBubble
               key={`demo-${i}`}
               message={{
                 id: `demo-${i}`,
                 chatId: chat.id,
-                senderId: i % 2 === 0 ? currentUserId : 'other',
-                content: `This is demo message ${i + 1} to demonstrate scrolling functionality. You should be able to scroll through all these messages easily.`,
+                senderId: i % 3 === 0 ? currentUserId : 'other',
+                content: `This is demo message ${i + 1}. Element has a clean, professional interface that makes messaging feel natural and efficient.`,
                 timestamp: new Date(Date.now() - (i * 300000)),
                 type: 'text',
                 encrypted: true
               }}
-              isOwn={i % 2 === 0}
-              senderName={i % 2 === 0 ? 'You' : otherParticipant?.name || 'Unknown'}
+              isOwn={i % 3 === 0}
+              senderName={i % 3 === 0 ? 'You' : otherParticipant?.name || 'Unknown'}
+              isContinuation={false}
             />
           ))}
           
@@ -156,24 +161,23 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
         </div>
       </div>
 
-      {/* E2E Encryption Indicator - Now positioned above message input */}
-      <div className="flex justify-center px-4 sm:px-6 pb-2">
-        <div className="glass-strong rounded-full px-4 py-2 sm:px-6 sm:py-3 flex items-center space-x-2 sm:space-x-3 shadow-xl animate-fade-in">
-          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
-          <span className="text-sm sm:text-base text-green-300 font-semibold">E2E Encrypted</span>
-          <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 animate-pulse" />
+      {/* Encryption Indicator */}
+      <div className="flex justify-center px-4 pb-2">
+        <div className="encryption-indicator">
+          <Shield className="w-3 h-3" />
+          <span>Messages are end-to-end encrypted</span>
         </div>
       </div>
 
-      {/* Message Input */}
-      <div className="glass-strong border-t border-white/20 p-4 sm:p-6 flex-shrink-0">
-        <div className="flex items-end space-x-3 sm:space-x-4">
+      {/* Message Composer */}
+      <div className="message-composer">
+        <div className="flex items-end space-x-3">
           {/* Attachment Button */}
           <button
             onClick={handleFileUpload}
-            className="p-3 sm:p-4 text-white/70 hover:text-white hover:bg-white/20 rounded-xl sm:rounded-2xl transition-all duration-300 hover-scale flex-shrink-0"
+            className="element-button-secondary p-2 flex-shrink-0"
           >
-            <Paperclip className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Paperclip className="w-4 h-4" />
           </button>
 
           {/* Message Input */}
@@ -183,22 +187,22 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="w-full input-glass pr-12 sm:pr-14 text-base sm:text-lg auto-resize focus-ring"
+              placeholder="Write a message..."
+              className="composer-input w-full auto-resize"
               rows={1}
             />
             
             {/* Emoji Button */}
             <button
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors hover-scale"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              <Smile className="w-5 h-5 sm:w-6 sm:h-6" />
+              <Smile className="w-4 h-4" />
             </button>
 
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div className="absolute bottom-full right-0 mb-3 z-10">
+              <div className="absolute bottom-full right-0 mb-2 z-10">
                 <EmojiPicker onEmojiSelect={handleEmojiSelect} />
               </div>
             )}
@@ -208,20 +212,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, messages, currentUserId, 
           {messageInput.trim() ? (
             <button
               onClick={handleSendMessage}
-              className="btn-primary p-3 sm:p-4 hover-lift hover-glow flex-shrink-0"
+              className="element-button p-2 flex-shrink-0"
             >
-              <Send className="w-5 h-5 sm:w-6 sm:h-6" />
+              <Send className="w-4 h-4" />
             </button>
           ) : (
             <button
               onClick={handleVoiceRecord}
-              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 flex-shrink-0 ${
+              className={`p-2 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 isRecording
-                  ? 'bg-red-500 text-white animate-pulse shadow-lg'
-                  : 'text-white/70 hover:text-white hover:bg-white/20'
-              } hover-scale`}
+                  ? 'bg-red-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
             >
-              <Mic className="w-5 h-5 sm:w-6 sm:h-6" />
+              <Mic className="w-4 h-4" />
             </button>
           )}
         </div>
