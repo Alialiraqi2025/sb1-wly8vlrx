@@ -990,6 +990,14 @@ body {
   margin-left: 8px;
 }
 
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* Responsive design */
 @media (max-width: 1024px) {
   .sidebar-section {
