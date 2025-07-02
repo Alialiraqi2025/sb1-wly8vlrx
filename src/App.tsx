@@ -4,6 +4,8 @@ import AuthScreen from './components/AuthScreen';
 import AllChatsList from './components/AllChatsList';
 import ChatInterface from './components/ChatInterface';
 import SettingsPanel from './components/SettingsPanel';
+import HomeMenuDropdown from './components/HomeMenuDropdown';
+import LinkDeviceModal from './components/LinkDeviceModal';
 import RecoveryKeyNotice from './components/RecoveryKeyNotice';
 import RecoveryKeySetup from './components/RecoveryKeySetup';
 import { User, Chat, Message } from './types';
@@ -20,6 +22,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [showRecoveryKeyNotice, setShowRecoveryKeyNotice] = useState(false);
   const [showRecoveryKeySetup, setShowRecoveryKeySetup] = useState(false);
+  const [showLinkDeviceModal, setShowLinkDeviceModal] = useState(false);
 
   useEffect(() => {
     // Simulate app initialization
@@ -60,6 +63,7 @@ function App() {
     setCurrentView('all-chats');
     setShowRecoveryKeyNotice(false);
     setShowRecoveryKeySetup(false);
+    setShowLinkDeviceModal(false);
   };
 
   const handleChatSelect = (chat: Chat) => {
@@ -188,6 +192,25 @@ function App() {
     setShowRecoveryKeyNotice(true);
   };
 
+  // Home menu handlers
+  const handleLinkDevice = () => {
+    setShowLinkDeviceModal(true);
+  };
+
+  const handleNotifications = () => {
+    setCurrentView('settings');
+    // In a real app, you might navigate to a specific settings section
+  };
+
+  const handleSecurityPrivacy = () => {
+    setCurrentView('settings');
+    // In a real app, you might navigate to security section
+  };
+
+  const handleAllSettings = () => {
+    setCurrentView('settings');
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen bg-white flex items-center justify-center">
@@ -248,6 +271,13 @@ function App() {
           onRemindLater={handleRemindLater}
           userEmail={currentUser.email}
         />
+
+        {/* Link Device Modal */}
+        <LinkDeviceModal
+          isOpen={showLinkDeviceModal}
+          onClose={() => setShowLinkDeviceModal(false)}
+          userEmail={currentUser.email}
+        />
       </div>
     );
   }
@@ -275,6 +305,15 @@ function App() {
 
             {/* Navigation */}
             <nav className="flex items-center space-x-1">
+              {/* Home Menu Dropdown */}
+              <HomeMenuDropdown
+                onLinkDevice={handleLinkDevice}
+                onNotifications={handleNotifications}
+                onSecurityPrivacy={handleSecurityPrivacy}
+                onAllSettings={handleAllSettings}
+                onSignOut={handleLogout}
+              />
+              
               <button
                 onClick={() => setCurrentView('all-chats')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
@@ -319,14 +358,6 @@ function App() {
               <div className="element-avatar">
                 {currentUser.name.charAt(0).toUpperCase()}
               </div>
-              <button
-                onClick={handleLogout}
-                className="text-gray-600 hover:text-red-600 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
@@ -375,6 +406,13 @@ function App() {
         onClose={handleCloseRecoveryKeyNotice}
         onSetupRecoveryKey={handleSetupRecoveryKey}
         onRemindLater={handleRemindLater}
+        userEmail={currentUser.email}
+      />
+
+      {/* Link Device Modal */}
+      <LinkDeviceModal
+        isOpen={showLinkDeviceModal}
+        onClose={() => setShowLinkDeviceModal(false)}
         userEmail={currentUser.email}
       />
     </div>
