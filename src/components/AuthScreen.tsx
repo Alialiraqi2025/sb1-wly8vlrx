@@ -39,22 +39,40 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       trustedDevices: []
     };
 
-    // Simulate checking if user has recovery key and if device is trusted
-    const hasRecoveryKey = isLogin; // In real app, check from server
-    const isDeviceTrusted = false; // In real app, check from server
-    const storedRecoveryKey = hasRecoveryKey ? 'ABCD1234EFGH5678IJKL9012MNOP3456QRST7890UVWX1234YZAB5678CDEF9012' : undefined;
-
-    if (isLogin && hasRecoveryKey && !isDeviceTrusted) {
-      // Device verification required
-      setPendingUser({ ...user, recoveryKey: storedRecoveryKey });
-      setShowDeviceVerification(true);
-    } else if (!isLogin) {
-      // New user - setup recovery key
+    if (isLogin) {
+      // For existing users - check if they have a recovery key and if device is trusted
+      // Simulate checking user data from server
+      const userHasRecoveryKey = Math.random() > 0.3; // 70% chance user has recovery key
+      const isDeviceTrusted = Math.random() > 0.7; // 30% chance device is trusted
+      
+      if (userHasRecoveryKey && !isDeviceTrusted) {
+        // User has recovery key but device is not trusted - require verification
+        const storedRecoveryKey = 'ABCD1234EFGH5678IJKL9012MNOP3456QRST7890UVWX1234YZAB5678CDEF9012';
+        setPendingUser({ ...user, recoveryKey: storedRecoveryKey });
+        setShowDeviceVerification(true);
+      } else if (!userHasRecoveryKey) {
+        // User doesn't have recovery key - direct login but will show notice later
+        onLogin(user);
+      } else {
+        // Device is trusted - direct login
+        const storedRecoveryKey = 'ABCD1234EFGH5678IJKL9012MNOP3456QRST7890UVWX1234YZAB5678CDEF9012';
+        onLogin({ 
+          ...user, 
+          recoveryKey: storedRecoveryKey,
+          trustedDevices: [{
+            id: deviceInfo.id,
+            name: deviceInfo.name,
+            type: deviceInfo.type,
+            lastUsed: new Date(),
+            isCurrentDevice: true,
+            verified: true
+          }]
+        });
+      }
+    } else {
+      // New user - setup recovery key after account creation
       setPendingUser(user);
       setShowRecoveryKeySetup(true);
-    } else {
-      // Direct login (trusted device or no recovery key)
-      onLogin(user);
     }
 
     setIsLoading(false);
@@ -354,6 +372,21 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                     <h4 className="text-sm font-medium text-blue-900">Recovery Key Setup</h4>
                     <p className="text-sm text-blue-700 mt-1">
                       After creating your account, you'll set up a recovery key to secure your device access and protect your encrypted messages.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Login Info */}
+            {isLogin && (
+              <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-start space-x-3">
+                  <Shield className="w-5 h-5 text-green-600 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-medium text-green-900">Secure Login</h4>
+                    <p className="text-sm text-green-700 mt-1">
+                      If you don't have a recovery key yet, you'll be prompted to set one up after logging in for enhanced security.
                     </p>
                   </div>
                 </div>
