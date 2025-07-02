@@ -4,6 +4,8 @@ import AuthScreen from './components/AuthScreen';
 import AllChatsList from './components/AllChatsList';
 import ChatInterface from './components/ChatInterface';
 import SettingsPanel from './components/SettingsPanel';
+import RecoveryKeyNotice from './components/RecoveryKeyNotice';
+import RecoveryKeySetup from './components/RecoveryKeySetup';
 import { User, Chat, Message } from './types';
 import { generateDemoData } from './utils/demoData';
 
@@ -16,6 +18,8 @@ function App() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showRecoveryKeyNotice, setShowRecoveryKeyNotice] = useState(false);
+  const [showRecoveryKeySetup, setShowRecoveryKeySetup] = useState(false);
 
   useEffect(() => {
     // Simulate app initialization
@@ -31,6 +35,16 @@ function App() {
       // Load demo data when user logs in
       const demoChats = generateDemoData();
       setChats(demoChats);
+      
+      // Check if user needs to set up recovery key
+      // In a real app, this would check if the user has a recovery key
+      const hasRecoveryKey = currentUser.recoveryKey;
+      if (!hasRecoveryKey) {
+        // Show notice after a short delay for better UX
+        setTimeout(() => {
+          setShowRecoveryKeyNotice(true);
+        }, 1000);
+      }
     }
   }, [currentUser]);
 
@@ -44,6 +58,8 @@ function App() {
     setChats([]);
     setMessages([]);
     setCurrentView('all-chats');
+    setShowRecoveryKeyNotice(false);
+    setShowRecoveryKeySetup(false);
   };
 
   const handleChatSelect = (chat: Chat) => {
@@ -143,6 +159,35 @@ function App() {
     }, Math.random() * 1000 + 1000);
   };
 
+  const handleSetupRecoveryKey = () => {
+    setShowRecoveryKeyNotice(false);
+    setShowRecoveryKeySetup(true);
+  };
+
+  const handleRecoveryKeySetupComplete = (recoveryKey: string) => {
+    if (currentUser) {
+      setCurrentUser({
+        ...currentUser,
+        recoveryKey
+      });
+    }
+    setShowRecoveryKeySetup(false);
+  };
+
+  const handleRemindLater = () => {
+    setShowRecoveryKeyNotice(false);
+    // In a real app, you might set a reminder for later
+  };
+
+  const handleCloseRecoveryKeyNotice = () => {
+    setShowRecoveryKeyNotice(false);
+  };
+
+  const handleBackFromRecoveryKeySetup = () => {
+    setShowRecoveryKeySetup(false);
+    setShowRecoveryKeyNotice(true);
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen bg-white flex items-center justify-center">
@@ -172,6 +217,17 @@ function App() {
     return <AuthScreen onLogin={handleLogin} />;
   }
 
+  // Show recovery key setup screen
+  if (showRecoveryKeySetup) {
+    return (
+      <RecoveryKeySetup
+        onComplete={handleRecoveryKeySetupComplete}
+        onBack={handleBackFromRecoveryKeySetup}
+        isFirstTime={true}
+      />
+    );
+  }
+
   // Chat Interface View - Full Screen
   if (currentView === 'chat-interface' && selectedChat) {
     return (
@@ -182,6 +238,15 @@ function App() {
           currentUserId={currentUser.id}
           onSendMessage={handleSendMessage}
           onBack={handleBackToAllChats}
+        />
+        
+        {/* Recovery Key Notice Overlay */}
+        <RecoveryKeyNotice
+          isOpen={showRecoveryKeyNotice}
+          onClose={handleCloseRecoveryKeyNotice}
+          onSetupRecoveryKey={handleSetupRecoveryKey}
+          onRemindLater={handleRemindLater}
+          userEmail={currentUser.email}
         />
       </div>
     );
@@ -303,6 +368,15 @@ function App() {
           )}
         </div>
       </main>
+
+      {/* Recovery Key Notice Overlay */}
+      <RecoveryKeyNotice
+        isOpen={showRecoveryKeyNotice}
+        onClose={handleCloseRecoveryKeyNotice}
+        onSetupRecoveryKey={handleSetupRecoveryKey}
+        onRemindLater={handleRemindLater}
+        userEmail={currentUser.email}
+      />
     </div>
   );
 }
