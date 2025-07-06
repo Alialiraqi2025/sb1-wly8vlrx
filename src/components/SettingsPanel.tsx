@@ -337,12 +337,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderMainMenu = () => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader('Settings', 'Manage your account and preferences')}
       {renderSuccessError()}
       
       <div className="flex-1 overflow-y-auto settings-scrollbar">
-        <div className="p-6">
+        <div className="scrollable-content p-6">
           {/* User Info Card */}
           <div className="element-card p-6 mb-6">
             <div className="flex items-center space-x-4">
@@ -406,12 +406,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderProfileSection = () => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader('Profile', 'Edit your profile information and photo')}
       {renderSuccessError()}
       
       <div className="flex-1 overflow-y-auto settings-scrollbar">
-        <div className="p-6 space-y-6">
+        <div className="scrollable-content p-6 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold text-gray-900">Profile Information</h3>
             {!isEditingProfile ? (
@@ -578,12 +578,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderSecuritySection = () => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader('Security & Privacy', 'Manage your security settings and privacy controls')}
       {renderSuccessError()}
       
       <div className="flex-1 overflow-y-auto settings-scrollbar">
-        <div className="p-6 space-y-6">
+        <div className="scrollable-content p-6 space-y-6">
           {/* Password Change */}
           <div className="element-card p-6">
             <div className="flex items-center justify-between mb-4">
@@ -817,12 +817,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderNotificationsSection = () => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader('Notifications', 'Manage notification preferences and sounds')}
       {renderSuccessError()}
       
       <div className="flex-1 overflow-y-auto settings-scrollbar">
-        <div className="p-6 space-y-6">
+        <div className="scrollable-content p-6 space-y-6">
           <div className="element-card p-6">
             <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
               <Bell className="w-5 h-5 mr-2 text-red-600" />
@@ -866,12 +866,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderAppearanceSection = () => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader('Appearance', 'Customize the look and feel of the app')}
       {renderSuccessError()}
       
       <div className="flex-1 overflow-y-auto settings-scrollbar">
-        <div className="p-6 space-y-6">
+        <div className="scrollable-content p-6 space-y-6">
           <div className="element-card p-6">
             <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
               <Palette className="w-5 h-5 mr-2 text-red-600" />
@@ -954,12 +954,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderDevicesSection = () => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader('Devices', 'Manage your linked devices and active sessions')}
       {renderSuccessError()}
       
       <div className="flex-1 overflow-y-auto settings-scrollbar">
-        <div className="p-6 space-y-6">
+        <div className="scrollable-content p-6 space-y-6">
           <div className="element-card p-6">
             <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
               <Smartphone className="w-5 h-5 mr-2 text-red-600" />
@@ -1031,16 +1031,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   );
 
   const renderPlaceholderSection = (title: string, icon: React.ElementType, description: string) => (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       {renderHeader(title, description)}
       
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            {React.createElement(icon, { className: "w-8 h-8 text-gray-400" })}
+      <div className="flex-1 overflow-y-auto settings-scrollbar">
+        <div className="scrollable-content flex items-center justify-center min-h-full">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              {React.createElement(icon, { className: "w-8 h-8 text-gray-400" })}
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+            <p className="text-gray-600">Coming soon...</p>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-          <p className="text-gray-600">Coming soon...</p>
         </div>
       </div>
     </div>

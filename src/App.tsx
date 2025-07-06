@@ -284,7 +284,7 @@ function App() {
 
   // Main App View - Full Page Views
   return (
-    <div className="app-container app-scrollbar">
+    <div className="app-container">
       {/* Header - Element style */}
       <header className="app-header">
         <div className="px-4 lg:px-6">
@@ -364,10 +364,10 @@ function App() {
       </header>
 
       {/* Main Content - Full Page Views */}
-      <main className="app-main">
-        <div className="h-full w-full">
+      <main className="app-main overflow-hidden">
+        <div className="h-full w-full overflow-hidden">
           {currentView === 'all-chats' && (
-            <div className="h-full bg-white">
+            <div className="h-full bg-white overflow-hidden">
               <AllChatsList
                 chats={chats}
                 onChatSelect={handleChatSelect}
@@ -377,23 +377,25 @@ function App() {
           )}
           
           {currentView === 'groups' && (
-            <div className="h-full bg-white p-6 flex items-center justify-center app-scrollbar overflow-y-auto">
-              <div className="text-center">
-                <div className="element-card p-8">
-                  <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
-                  <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
-                  <button className="element-button">
-                    <Hash className="w-4 h-4" />
-                    Create Room
-                  </button>
+            <div className="h-full bg-white overflow-y-auto app-scrollbar">
+              <div className="scrollable-content p-6 flex items-center justify-center min-h-full">
+                <div className="text-center">
+                  <div className="element-card p-8">
+                    <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
+                    <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
+                    <button className="element-button">
+                      <Hash className="w-4 h-4" />
+                      Create Room
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           )}
           
           {currentView === 'settings' && (
-            <div className="h-full bg-white">
+            <div className="h-full bg-white overflow-hidden">
               <SettingsPanel user={currentUser} />
             </div>
           )}

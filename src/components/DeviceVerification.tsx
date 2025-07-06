@@ -325,9 +325,9 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 overflow-y-auto settings-scrollbar">
       <div className="w-full max-w-md">
-        <div className="element-card p-8">
+        <div className="element-card p-8 my-4">
           {renderCurrentStep()}
         </div>
       </div>
