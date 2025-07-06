@@ -1136,6 +1136,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                   </div>
                 </div>
               ))}
+            </div>
 
             <div className="mt-6 pt-4 border-t border-gray-200">
               <button className="w-full element-button-secondary text-red-600 hover:bg-red-50">
