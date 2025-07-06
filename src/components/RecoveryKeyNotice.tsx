@@ -75,7 +75,7 @@ const RecoveryKeyNotice: React.FC<RecoveryKeyNoticeProps> = ({
           </button>
           
           <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Shield className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Secure Your Account</h2>

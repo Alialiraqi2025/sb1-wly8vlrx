@@ -216,15 +216,15 @@ function App() {
       <div className="h-screen bg-white flex items-center justify-center">
         <div className="text-center animate-fade-in">
           <div className="element-card p-12 mb-8 inline-block">
-            <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+            <div className="w-32 h-32 mx-auto mb-6 flex items-center justify-center">
               <img 
                 src="/new TI logo.png" 
                 alt="TELE IRAQ" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain drop-shadow-lg"
               />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 app-name">TELE IRAQ</h1>
-            <p className="text-gray-600">Secure Communication</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-3 app-name">TELE IRAQ</h1>
+            <p className="text-lg text-gray-600">Secure Communication</p>
           </div>
           <div className="flex items-center justify-center space-x-2">
             <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
@@ -291,15 +291,15 @@ function App() {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 flex items-center justify-center">
+              <div className="w-12 h-12 flex items-center justify-center">
                 <img 
                   src="/new TI logo.png" 
                   alt="TELE IRAQ" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain drop-shadow-sm"
                 />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl font-bold app-name">TELE IRAQ</h1>
+                <h1 className="text-2xl font-bold app-name">TELE IRAQ</h1>
               </div>
             </div>
 

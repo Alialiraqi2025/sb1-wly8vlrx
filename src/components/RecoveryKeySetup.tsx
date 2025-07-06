@@ -122,7 +122,7 @@ TELE IRAQ - Secure Communication for Iraq`;
   const renderIntroStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Shield className="w-8 h-8 text-red-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -202,7 +202,7 @@ TELE IRAQ - Secure Communication for Iraq`;
   const renderGenerateStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Recovery Key Generated</h2>
@@ -313,7 +313,7 @@ TELE IRAQ - Secure Communication for Iraq`;
   const renderVerifyStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Lock className="w-8 h-8 text-blue-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Verify Recovery Key</h2>
@@ -376,7 +376,7 @@ TELE IRAQ - Secure Communication for Iraq`;
   const renderCompleteStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Recovery Key Setup Complete</h2>

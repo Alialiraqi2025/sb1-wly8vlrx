@@ -350,11 +350,11 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                 {profileData.avatar ? (
                   <img
                     src={profileData.avatar}
-                    alt="Profile"
-                    className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                    alt="Profile" 
+                    className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                     {profileData.name.charAt(0).toUpperCase()}
                   </div>
                 )}
@@ -1156,7 +1156,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
       
       <div className="flex-1 flex items-center justify-center overflow-y-auto settings-scrollbar">
         <div className="text-center p-6">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             {React.createElement(icon, { className: "w-8 h-8 text-gray-400" })}
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>

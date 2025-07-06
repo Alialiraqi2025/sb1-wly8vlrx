@@ -98,7 +98,7 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   const renderDeviceInfoStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Shield className="w-8 h-8 text-blue-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Device Verification Required</h2>
@@ -171,7 +171,7 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   const renderRecoveryKeyStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Key className="w-8 h-8 text-red-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Enter Recovery Key</h2>
@@ -266,7 +266,7 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   const renderSuccessStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Device Verified Successfully</h2>
