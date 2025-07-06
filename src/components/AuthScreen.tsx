@@ -154,9 +154,9 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex auth-scrollbar">
+    <div className="min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-12 flex-col justify-center auth-scrollbar overflow-y-auto">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-12 flex-col justify-center overflow-y-auto">
         <div className="max-w-md">
           <div className="flex items-center space-x-3 mb-8">
             <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center p-2">
@@ -234,7 +234,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       </div>
 
       {/* Right Side - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-8 auth-scrollbar overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center space-x-3 mb-8">
