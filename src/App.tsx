@@ -409,49 +409,6 @@ function App() {
           )}
           
           {currentView === 'settings' && (
-            <div className="h-full bg-white">
-              <SettingsPanel user={currentUser} />
-            </div>
-          )}
-        </div>
-      </main>
-
-      {/* Recovery Key Notice Overlay */}
-      <RecoveryKeyNotice
-        isOpen={showRecoveryKeyNotice}
-        onClose={handleCloseRecoveryKeyNotice}
-        onSetupRecoveryKey={handleSetupRecoveryKey}
-        onRemindLater={handleRemindLater}
-        userEmail={currentUser.email}
-      />
-
-      {/* Link Device Modal */}
-      <LinkDeviceModal
-        isOpen={showLinkDeviceModal}
-        onClose={() => setShowLinkDeviceModal(false)}
-        userEmail={currentUser.email}
-      />
-    </div>
-  );
-}
-
-export default App;
-                <div className="text-center">
-                  <div className="element-card p-8">
-                    <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
-                    <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
-                    <button className="element-button">
-                      <Hash className="w-4 h-4" />
-                      Create Room
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {currentView === 'settings' && (
             <div className="h-full bg-white overflow-hidden">
               <SettingsPanel user={currentUser} />
             </div>
