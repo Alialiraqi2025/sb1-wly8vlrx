@@ -75,11 +75,11 @@ const RecoveryKeyNotice: React.FC<RecoveryKeyNoticeProps> = ({
           </button>
           
           <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Shield className="w-8 h-8 text-white" />
+            <div className="w-28 h-28 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <Shield className="w-12 h-12 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Secure Your Account</h2>
-            <p className="text-gray-600">Set up a recovery key to protect your encrypted messages</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Secure Your Account</h2>
+            <p className="text-lg text-gray-600">Set up a recovery key to protect your encrypted messages</p>
           </div>
         </div>
 

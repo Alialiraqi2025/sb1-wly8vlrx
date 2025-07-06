@@ -159,14 +159,14 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-12 flex-col justify-center overflow-y-auto">
         <div className="max-w-md">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center p-3">
+            <div className="w-24 h-24 bg-white/20 rounded-2xl flex items-center justify-center p-4">
               <img 
                 src="/new TI logo.png" 
                 alt="TELE IRAQ" 
                 className="w-full h-full object-contain drop-shadow-md"
               />
             </div>
-            <h1 className="text-4xl font-bold text-white">TELE IRAQ</h1>
+            <h1 className="text-5xl font-bold text-white">TELE IRAQ</h1>
           </div>
           
           <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
@@ -238,14 +238,14 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center space-x-3 mb-8">
-            <div className="w-16 h-16 flex items-center justify-center">
+            <div className="w-24 h-24 flex items-center justify-center">
               <img 
                 src="/new TI logo.png" 
                 alt="TELE IRAQ" 
                 className="w-full h-full object-contain drop-shadow-md"
               />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">TELE IRAQ</h1>
+            <h1 className="text-4xl font-bold text-gray-900">TELE IRAQ</h1>
           </div>
 
           <div className="element-card p-8">

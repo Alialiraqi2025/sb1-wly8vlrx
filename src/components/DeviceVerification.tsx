@@ -98,8 +98,8 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   const renderDeviceInfoStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Shield className="w-8 h-8 text-blue-600" />
+        <div className="w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Shield className="w-12 h-12 text-blue-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Device Verification Required</h2>
         <p className="text-gray-600">We need to verify this device for your security</p>
@@ -171,8 +171,8 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   const renderRecoveryKeyStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Key className="w-8 h-8 text-red-600" />
+        <div className="w-28 h-28 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Key className="w-12 h-12 text-red-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Enter Recovery Key</h2>
         <p className="text-gray-600">Use your 64-character recovery key to verify this device</p>
@@ -266,8 +266,8 @@ const DeviceVerification: React.FC<DeviceVerificationProps> = ({
   const renderSuccessStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-          <CheckCircle className="w-8 h-8 text-green-600" />
+        <div className="w-28 h-28 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+          <CheckCircle className="w-12 h-12 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Device Verified Successfully</h2>
         <p className="text-gray-600">Welcome back to TELE IRAQ</p>

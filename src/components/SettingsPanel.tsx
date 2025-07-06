@@ -351,19 +351,19 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                   <img
                     src={profileData.avatar}
                     alt="Profile" 
-                    className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
+                    className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                     {profileData.name.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900">{profileData.name}</h3>
-                <p className="text-gray-600">{profileData.email}</p>
-                <p className="text-sm text-green-600 font-medium">Online</p>
+                <h3 className="text-xl font-semibold text-gray-900">{profileData.name}</h3>
+                <p className="text-lg text-gray-600">{profileData.email}</p>
+                <p className="text-green-600 font-medium">Online</p>
               </div>
               <button
                 onClick={() => setCurrentSection('profile')}
@@ -384,18 +384,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                 className="w-full p-4 element-card hover:shadow-md transition-all duration-200 text-left group"
               >
                 <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 rounded-xl ${item.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}>
-                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                  <div className={`w-16 h-16 rounded-xl ${item.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}>
+                    <item.icon className={`w-8 h-8 ${item.color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 group-hover:text-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-gray-700">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600 group-hover:text-gray-500 line-clamp-2">
+                    <p className="text-gray-600 group-hover:text-gray-500 line-clamp-2">
                       {item.description}
                     </p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors duration-200" />
+                  <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-colors duration-200" />
                 </div>
               </button>
             ))}
@@ -480,19 +480,19 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                   <img
                     src={profileData.avatar}
                     alt="Profile"
-                    className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
+                    className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  <div className="w-28 h-28 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                     {profileData.name.charAt(0).toUpperCase()}
                   </div>
                 )}
                 {isEditingProfile && (
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute -bottom-2 -right-2 w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200"
+                    className="absolute -bottom-2 -right-2 w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200"
                   >
-                    <Camera className="w-4 h-4" />
+                    <Camera className="w-5 h-5" />
                   </button>
                 )}
               </div>
@@ -1156,11 +1156,11 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
       
       <div className="flex-1 flex items-center justify-center overflow-y-auto settings-scrollbar">
         <div className="text-center p-6">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            {React.createElement(icon, { className: "w-8 h-8 text-gray-400" })}
+          <div className="w-28 h-28 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            {React.createElement(icon, { className: "w-12 h-12 text-gray-400" })}
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-          <p className="text-gray-600 mb-8">Coming soon...</p>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-3">{title}</h3>
+          <p className="text-lg text-gray-600 mb-8">Coming soon...</p>
           
           {/* Demo content for scrolling */}
           <div className="space-y-4 max-w-md">

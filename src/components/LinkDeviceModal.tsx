@@ -65,8 +65,8 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
   const renderMethodSelection = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Link className="w-8 h-8 text-blue-600" />
+        <div className="w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Link className="w-12 h-12 text-blue-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Link New Device</h2>
         <p className="text-gray-600">Choose how you want to connect your new device</p>
@@ -78,17 +78,17 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
             setStep('qr');
             generateLinkingCode();
           }}
-          className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 text-left group"
+          className="w-full p-8 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 text-left group"
         >
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex items-center justify-center">
-              <QrCode className="w-6 h-6 text-blue-600" />
+            <div className="w-16 h-16 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex items-center justify-center">
+              <QrCode className="w-8 h-8 text-blue-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-900">
+              <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-900">
                 Scan QR Code
               </h3>
-              <p className="text-sm text-gray-600 group-hover:text-blue-700">
+              <p className="text-gray-600 group-hover:text-blue-700">
                 Use your new device to scan a QR code (Recommended)
               </p>
             </div>
@@ -100,17 +100,17 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
             setStep('manual');
             generateLinkingCode();
           }}
-          className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-all duration-200 text-left group"
+          className="w-full p-8 border-2 border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-all duration-200 text-left group"
         >
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-green-100 group-hover:bg-green-200 rounded-lg flex items-center justify-center">
-              <Key className="w-6 h-6 text-green-600" />
+            <div className="w-16 h-16 bg-green-100 group-hover:bg-green-200 rounded-lg flex items-center justify-center">
+              <Key className="w-8 h-8 text-green-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 group-hover:text-green-900">
+              <h3 className="text-lg font-semibold text-gray-900 group-hover:text-green-900">
                 Manual Entry
               </h3>
-              <p className="text-sm text-gray-600 group-hover:text-green-700">
+              <p className="text-gray-600 group-hover:text-green-700">
                 Enter a linking code manually on your new device
               </p>
             </div>
@@ -142,7 +142,7 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
           ← Back to methods
         </button>
         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <QrCode className="w-8 h-8 text-blue-600" />
+          <QrCode className="w-10 h-10 text-blue-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Scan QR Code</h2>
         <p className="text-gray-600">Use your new device to scan this code</p>
@@ -157,10 +157,10 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
         <>
           {/* QR Code Display */}
           <div className="flex justify-center">
-            <div className="w-64 h-64 bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center">
+            <div className="w-80 h-80 bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center">
               <div className="text-center">
-                <QrCode className="w-24 h-24 text-gray-400 mx-auto mb-4" />
-                <p className="text-sm text-gray-500">QR Code</p>
+                <QrCode className="w-32 h-32 text-gray-400 mx-auto mb-6" />
+                <p className="text-lg text-gray-500">QR Code</p>
                 <p className="text-xs text-gray-400 mt-1">Code: {linkingCode}</p>
               </div>
             </div>
@@ -228,7 +228,7 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
           ← Back to methods
         </button>
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Key className="w-8 h-8 text-green-600" />
+          <Key className="w-10 h-10 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Manual Entry</h2>
         <p className="text-gray-600">Enter this code on your new device</p>

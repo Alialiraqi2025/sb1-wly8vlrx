@@ -1050,8 +1050,8 @@ body {
 
 /* Element-style avatar */
 .element-avatar {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--element-primary);
   color: white;
@@ -1059,21 +1059,21 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
 }
 
 .element-avatar-large {
-  width: 56px;
-  height: 56px;
-  font-size: 22px;
+  width: 64px;
+  height: 64px;
+  font-size: 26px;
   box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
 }
 
 .element-avatar-small {
-  width: 32px;
-  height: 32px;
-  font-size: 14px;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
   box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
 }
 
