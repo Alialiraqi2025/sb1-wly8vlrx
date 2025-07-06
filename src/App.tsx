@@ -284,7 +284,7 @@ function App() {
 
   // Main App View - Full Page Views
   return (
-    <div className="app-container">
+    <div className="app-container app-scrollbar">
       {/* Header - Element style */}
       <header className="app-header">
         <div className="px-4 lg:px-6">
@@ -364,10 +364,10 @@ function App() {
       </header>
 
       {/* Main Content - Full Page Views */}
-      <main className="app-main overflow-hidden">
-        <div className="h-full w-full overflow-hidden">
+      <main className="app-main">
+        <div className="h-full w-full">
           {currentView === 'all-chats' && (
-            <div className="h-full bg-white overflow-hidden">
+            <div className="h-full bg-white">
               <AllChatsList
                 chats={chats}
                 onChatSelect={handleChatSelect}
@@ -377,8 +377,65 @@ function App() {
           )}
           
           {currentView === 'groups' && (
-            <div className="h-full bg-white overflow-y-auto app-scrollbar">
-              <div className="scrollable-content p-6 flex items-center justify-center min-h-full">
+            <div className="h-full bg-white p-6 flex items-center justify-center app-scrollbar overflow-y-auto">
+              <div className="text-center">
+                <div className="element-card p-8">
+                  <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
+                  <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
+                  <button className="element-button">
+                    <Hash className="w-4 h-4" />
+                    Create Room
+                  </button>
+                </div>
+              </div>
+              
+              {/* Demo content for scrolling */}
+              <div className="mt-12 space-y-6">
+                {Array.from({ length: 10 }, (_, i) => (
+                  <div key={i} className="element-card p-6">
+                    <h4 className="font-semibold text-gray-900 mb-2">Demo Room {i + 1}</h4>
+                    <p className="text-gray-600 mb-4">This is a demo room to show scrolling functionality in the groups section.</p>
+                    <div className="flex items-center space-x-4">
+                      <div className="element-avatar-small">
+                        <Hash className="w-3 h-3" />
+                      </div>
+                      <span className="text-sm text-gray-500">{Math.floor(Math.random() * 50) + 1} members</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {currentView === 'settings' && (
+            <div className="h-full bg-white">
+              <SettingsPanel user={currentUser} />
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Recovery Key Notice Overlay */}
+      <RecoveryKeyNotice
+        isOpen={showRecoveryKeyNotice}
+        onClose={handleCloseRecoveryKeyNotice}
+        onSetupRecoveryKey={handleSetupRecoveryKey}
+        onRemindLater={handleRemindLater}
+        userEmail={currentUser.email}
+      />
+
+      {/* Link Device Modal */}
+      <LinkDeviceModal
+        isOpen={showLinkDeviceModal}
+        onClose={() => setShowLinkDeviceModal(false)}
+        userEmail={currentUser.email}
+      />
+    </div>
+  );
+}
+
+export default App;
                 <div className="text-center">
                   <div className="element-card p-8">
                     <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
