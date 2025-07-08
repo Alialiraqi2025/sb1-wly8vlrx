@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield, Square, Play, Pause, X, MapPin, Navigation, Camera, VideoIcon, Users, Plus } from 'lucide-react';
+import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield, Square, Play, Pause, X, MapPin, Navigation, Camera, VideoIcon, Users, Plus, PhoneCall } from 'lucide-react';
 import { Chat, Message } from '../types';
 import MessageBubble from './MessageBubble';
 import EmojiPicker from './EmojiPicker';
+import CallInterface from './CallInterface';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface ChatInterfaceProps {
@@ -36,6 +37,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [showCallInterface, setShowCallInterface] = useState(false);
+  const [callType, setCallType] = useState<'voice' | 'video'>('voice');
+  const [isIncomingCall, setIsIncomingCall] = useState(false);
 
   const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
 
@@ -383,6 +387,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     input.click();
   };
 
+  const handleVoiceCall = () => {
+    setCallType('voice');
+    setIsIncomingCall(false);
+    setShowCallInterface(true);
+  };
+
+  const handleVideoCall = () => {
+    setCallType('video');
+    setIsIncomingCall(false);
+    setShowCallInterface(true);
+  };
+
+  const handleCloseCall = () => {
+    setShowCallInterface(false);
+  };
+
+  // Simulate incoming call (for demo purposes)
+  const simulateIncomingCall = (type: 'voice' | 'video') => {
+    setCallType(type);
+    setIsIncomingCall(true);
+    setShowCallInterface(true);
+  };
+
   return (
     <div className={`h-screen flex flex-col bg-white overflow-hidden chat-interface-container universal-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Camera Capture Overlay */}
@@ -471,10 +498,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
           
           <div className="flex items-center space-x-2">
-            <button className="element-button-secondary p-2">
+            <button 
+              onClick={handleVoiceCall}
+              className="element-button-secondary p-2 hover:bg-green-100 hover:text-green-600 transition-colors"
+              title="Voice Call"
+            >
               <Phone className="w-4 h-4" />
             </button>
-            <button className="element-button-secondary p-2">
+            <button 
+              onClick={handleVideoCall}
+              className="element-button-secondary p-2 hover:bg-blue-100 hover:text-blue-600 transition-colors"
+              title="Video Call"
+            >
               <Video className="w-4 h-4" />
             </button>
             <button className="element-button-secondary p-2">
@@ -729,6 +764,39 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {/* Hidden audio element for preview */}
         <audio ref={audioRef} style={{ display: 'none' }} />
       </div>
+      
+      {/* Call Interface */}
+      {showCallInterface && otherParticipant && (
+        <CallInterface
+          isOpen={showCallInterface}
+          onClose={handleCloseCall}
+          callType={callType}
+          participant={otherParticipant}
+          isIncoming={isIncomingCall}
+          onAccept={() => setIsIncomingCall(false)}
+          onDecline={handleCloseCall}
+        />
+      )}
+      
+      {/* Demo: Simulate incoming calls */}
+      {!showCallInterface && (
+        <div className="fixed bottom-4 right-4 space-y-2 z-40">
+          <button
+            onClick={() => simulateIncomingCall('voice')}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
+          >
+            <Phone className="w-4 h-4" />
+            <span>Simulate Voice Call</span>
+          </button>
+          <button
+            onClick={() => simulateIncomingCall('video')}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
+          >
+            <Video className="w-4 h-4" />
+            <span>Simulate Video Call</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

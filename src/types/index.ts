@@ -80,3 +80,45 @@ export interface CallSession {
   startTime?: Date;
   endTime?: Date;
 }
+
+export interface CallState {
+  isActive: boolean;
+  type: 'voice' | 'video';
+  participant: User;
+  isIncoming: boolean;
+  isConnected: boolean;
+  duration: number;
+  isMuted: boolean;
+  isVideoEnabled: boolean;
+  isSpeakerOn: boolean;
+}
+
+export interface MediaDeviceSettings {
+  audioInputId?: string;
+  videoInputId?: string;
+  audioOutputId?: string;
+  videoQuality: 'low' | 'medium' | 'high';
+  audioQuality: 'low' | 'medium' | 'high';
+  echoCancellation: boolean;
+  noiseSuppression: boolean;
+  autoGainControl: boolean;
+}
+
+export interface CallQuality {
+  audio: {
+    bitrate: number;
+    packetsLost: number;
+    jitter: number;
+  };
+  video: {
+    bitrate: number;
+    packetsLost: number;
+    frameRate: number;
+    resolution: string;
+  };
+  network: {
+    rtt: number;
+    bandwidth: number;
+    quality: 'poor' | 'fair' | 'good' | 'excellent';
+  };
+}

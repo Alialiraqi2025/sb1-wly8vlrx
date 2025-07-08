@@ -629,6 +629,194 @@ body {
   animation: professionalSpin 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* Call interface animations */
+@keyframes callPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.call-pulse {
+  animation: callPulse 2s infinite ease-in-out;
+}
+
+@keyframes callRing {
+  0%, 100% { 
+    transform: scale(1);
+  }
+  50% { 
+    transform: scale(1.1);
+  }
+}
+
+.call-ring {
+  animation: callRing 1s infinite ease-in-out;
+}
+
+/* Call button hover effects */
+.call-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.call-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.call-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Video call interface */
+.video-container {
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+}
+
+/* Call controls fade in/out */
+.call-controls {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.call-controls.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Audio visualizer */
+@keyframes audioWave {
+  0%, 100% { height: 4px; }
+  50% { height: 20px; }
+}
+
+.audio-wave {
+  animation: audioWave 1s infinite ease-in-out;
+}
+
+.audio-wave:nth-child(1) { animation-delay: 0s; }
+.audio-wave:nth-child(2) { animation-delay: 0.1s; }
+.audio-wave:nth-child(3) { animation-delay: 0.2s; }
+.audio-wave:nth-child(4) { animation-delay: 0.3s; }
+.audio-wave:nth-child(5) { animation-delay: 0.4s; }
+
+/* Connection status indicators */
+.connection-indicator {
+  position: relative;
+}
+
+.connection-indicator::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: connectionPulse 2s infinite;
+}
+
+@keyframes connectionPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+.connection-indicator.connecting::after {
+  background: #f59e0b;
+}
+
+.connection-indicator.disconnected::after {
+  background: #ef4444;
+  animation: none;
+}
+
+/* Call quality indicators */
+.quality-indicator {
+  display: flex;
+  align-items: center;
+  space-x: 4px;
+}
+
+.quality-bar {
+  width: 3px;
+  height: 12px;
+  background: #10b981;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.quality-bar.poor {
+  background: #ef4444;
+  height: 4px;
+}
+
+.quality-bar.fair {
+  background: #f59e0b;
+  height: 8px;
+}
+
+.quality-bar.good {
+  background: #10b981;
+  height: 12px;
+}
+
+/* Screen sharing indicator */
+.screen-sharing {
+  position: relative;
+}
+
+.screen-sharing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid #3b82f6;
+  border-radius: 8px;
+  animation: screenSharePulse 2s infinite;
+}
+
+@keyframes screenSharePulse {
+  0%, 100% { 
+    border-color: #3b82f6;
+    opacity: 1;
+  }
+  50% { 
+    border-color: #60a5fa;
+    opacity: 0.7;
+  }
+}
+
 /* Professional QR code generation animation */
 @keyframes qrGenerate {
   0% { 
@@ -2832,6 +3020,15 @@ button[class*="bg-gradient-to-r"] span {
   .messages-scrollbar::-webkit-scrollbar-thumb {
     background: #000000;
   }
+  
+  /* High contrast call interface */
+  .call-button {
+    border: 2px solid #000000;
+  }
+  
+  .video-container {
+    border: 3px solid #000000;
+  }
 }
 
 /* Reduced motion support */
@@ -2856,6 +3053,14 @@ button[class*="bg-gradient-to-r"] span {
   
   .chat-scrollbar::-webkit-scrollbar-thumb:hover {
     transform: none;
+  }
+  
+  .call-pulse {
+    animation: none;
+  }
+  
+  .call-ring {
+    animation: none;
   }
 }
 
@@ -2911,6 +3116,12 @@ button, input, textarea, select {
     min-height: 44px;
     min-width: 44px;
   }
+  
+  /* Larger touch targets for call controls */
+  .call-button {
+    min-width: 56px;
+    min-height: 56px;
+  }
 }
 
 /* Prevent zoom on input focus for iOS */
@@ -2935,3 +3146,129 @@ button, input, textarea, select {
   background: rgba(220, 38, 38, 0.2);
   color: var(--element-text);
 }
+
+/* Call interface responsive design */
+@media (max-width: 768px) {
+  .call-controls {
+    padding: 12px 16px;
+  }
+  
+  .call-button {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .video-container .local-video {
+    width: 120px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .call-controls {
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .call-button {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .video-container .local-video {
+    width: 100px;
+    height: 75px;
+  }
+}
+
+/* Call notification styles */
+.call-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 1000;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Picture-in-picture mode */
+.pip-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 240px;
+  height: 180px;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pip-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Call duration display */
+.call-duration {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Mute indicator */
+.mute-indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Network quality indicator */
+.network-quality {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.network-bar {
+  width: 3px;
+  background: #6b7280;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.network-bar.active {
+  background: #10b981;
+}
+
+.network-bar:nth-child(1) { height: 6px; }
+.network-bar:nth-child(2) { height: 9px; }
+.network-bar:nth-child(3) { height: 12px; }
+.network-bar:nth-child(4) { height: 15px; }
