@@ -380,7 +380,7 @@ function App() {
           )}
           
           {currentView === 'calls' && (
-            <div className="h-full bg-white calls-container calls-page-scrollbar overflow-y-auto">
+            <div className="h-full w-full bg-white calls-container calls-page-scrollbar overflow-hidden flex flex-col">
               <CallsSection
                 currentUserId={currentUser.id}
                 onStartCall={(userId, type) => console.log('Start call:', userId, type)}

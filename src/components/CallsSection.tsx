@@ -168,18 +168,18 @@ const CallsSection: React.FC<CallsSectionProps> = ({ currentUserId, onStartCall 
 
   if (callHistory.length === 0) {
     return (
-      <div className={`calls-wrapper ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
-        <div className="calls-header">
+      <div className={`calls-wrapper h-full w-full flex flex-col overflow-hidden ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+        <div className="calls-header flex-shrink-0">
           <h2 className="element-title">Calls</h2>
         </div>
-        <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+        <div className="flex flex-col items-center justify-center flex-1 p-6 text-center w-full">
           <div className="element-card p-8 mb-6">
             <Phone className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No calls yet</h3>
-            <p className="text-gray-600 mb-6">Start a voice or video call to see your call history here</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('calls.noCalls')}</h3>
+            <p className="text-gray-600 mb-6">{t('calls.startCall')}</p>
             <button className="element-button">
               <Phone className="w-4 h-4" />
-              Make a Call
+              {t('calls.makeCall')}
             </button>
           </div>
         </div>
@@ -188,9 +188,9 @@ const CallsSection: React.FC<CallsSectionProps> = ({ currentUserId, onStartCall 
   }
 
   return (
-    <div className={`calls-wrapper calls-page-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`calls-wrapper h-full w-full flex flex-col overflow-hidden ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <div className="calls-header">
+      <div className="calls-header flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <h2 className="element-title">Calls</h2>
@@ -258,10 +258,10 @@ const CallsSection: React.FC<CallsSectionProps> = ({ currentUserId, onStartCall 
       </div>
 
       {/* Call History List */}
-      <div className="calls-content calls-page-scrollbar overflow-y-auto">
-        <div className="scrollable-content">
+      <div className="calls-content flex-1 overflow-y-auto overflow-x-hidden min-h-0 calls-page-scrollbar">
+        <div className="scrollable-content w-full">
           {filteredCalls.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-12 w-full">
               <Phone className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg font-medium">No calls found</p>
               <p className="text-gray-400 text-sm mt-2">Try adjusting your search or filter</p>
@@ -270,9 +270,9 @@ const CallsSection: React.FC<CallsSectionProps> = ({ currentUserId, onStartCall 
             filteredCalls.map((call) => (
               <div
                 key={call.id}
-                className="call-item element-hover"
+                className="call-item element-hover w-full block"
               >
-                <div className="flex items-center space-x-3 w-full">
+                <div className="flex items-center space-x-3 w-full min-w-0">
                   {/* Avatar and Call Direction */}
                   <div className="relative flex-shrink-0">
                     <div className="element-avatar-large">
