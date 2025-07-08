@@ -234,7 +234,7 @@ function App() {
   }
 
   if (!currentUser) {
-    return <AuthScreen onLogin={handleLoginWithCredentials} />;
+    return <AuthScreen onLogin={handleLogin} />;
   }
 
   // Show recovery key setup screen
