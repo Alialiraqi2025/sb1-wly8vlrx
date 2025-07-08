@@ -745,6 +745,52 @@ body {
    COMPREHENSIVE SCROLLBAR SYSTEM
    ======================================== */
 
+/* Universal Scrollbar - Applied to all pages */
+.universal-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
+
+.universal-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 10px;
+  margin: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.universal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 10px;
+  border: 3px solid #f8fafc;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.universal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+  border: 2px solid #f8fafc;
+}
+
+.universal-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #991b1b, #7f1d1d);
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.4);
+}
+
+.universal-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox universal scrollbar */
+.universal-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #dc2626 #f8fafc;
+}
+
 /* Premium Settings Scrollbar - TELE IRAQ Style */
 .settings-scrollbar::-webkit-scrollbar {
   width: 18px;
@@ -1475,6 +1521,18 @@ body {
 }
 
 /* Enhanced scrolling containers */
+.page-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.page-content {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
 .scrollable-container {
   overflow-y: auto;
   overflow-x: hidden;
@@ -1485,6 +1543,88 @@ body {
 .scrollable-content {
   min-height: 100%;
   padding-bottom: 20px;
+}
+
+/* Main app container with scrolling */
+.main-app-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Chat interface scrolling */
+.chat-interface-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+}
+
+/* All chats list scrolling */
+.all-chats-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Settings panel scrolling */
+.settings-panel-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Groups page scrolling */
+.groups-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Recovery key setup scrolling */
+.recovery-key-container {
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Device verification scrolling */
+.device-verification-container {
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Modal content scrolling */
+.modal-content-scrollable {
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Invite modal scrolling */
+.invite-modal-container {
+  max-height: 95vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Link device modal scrolling */
+.link-device-modal-container {
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Improved main layout containers */
@@ -1638,6 +1778,386 @@ body {
   .settings-container {
     height: calc(45vh - 60px);
   }
+}
+
+/* Page-specific scrollbar enhancements */
+
+/* Home/Main page scrollbar */
+.home-page-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
+
+.home-page-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 10px;
+  margin: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.home-page-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 10px;
+  border: 3px solid #f8fafc;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.home-page-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+}
+
+/* Groups page scrollbar */
+.groups-page-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
+
+.groups-page-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-radius: 10px;
+  margin: 8px;
+  border: 1px solid #bae6fd;
+  box-shadow: inset 0 1px 3px rgba(59, 130, 246, 0.08);
+}
+
+.groups-page-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-radius: 10px;
+  border: 3px solid #f0f9ff;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.groups-page-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.35);
+}
+
+/* Recovery key scrollbar */
+.recovery-key-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
+
+.recovery-key-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-radius: 10px;
+  margin: 8px;
+  border: 1px solid #fbbf24;
+  box-shadow: inset 0 1px 3px rgba(245, 158, 11, 0.08);
+}
+
+.recovery-key-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-radius: 10px;
+  border: 3px solid #fef3c7;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.recovery-key-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.35);
+}
+
+/* Device verification scrollbar */
+.device-verification-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
+
+.device-verification-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-radius: 10px;
+  margin: 8px;
+  border: 1px solid #bbf7d0;
+  box-shadow: inset 0 1px 3px rgba(34, 197, 94, 0.08);
+}
+
+.device-verification-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 10px;
+  border: 3px solid #f0fdf4;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.25);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.device-verification-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.35);
+}
+
+/* Invite modal scrollbar */
+.invite-modal-scrollbar::-webkit-scrollbar {
+  width: 14px;
+  background: transparent;
+}
+
+.invite-modal-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border-radius: 8px;
+  margin: 6px;
+  border: 1px solid #d8b4fe;
+  box-shadow: inset 0 1px 3px rgba(147, 51, 234, 0.08);
+}
+
+.invite-modal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  border-radius: 8px;
+  border: 2px solid #faf5ff;
+  box-shadow: 0 2px 6px rgba(147, 51, 234, 0.25);
+  transition: all 0.3s ease;
+  min-height: 35px;
+}
+
+.invite-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(147, 51, 234, 0.35);
+}
+
+/* Link device modal scrollbar */
+.link-device-modal-scrollbar::-webkit-scrollbar {
+  width: 14px;
+  background: transparent;
+}
+
+.link-device-modal-scrollbar::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border-radius: 8px;
+  margin: 6px;
+  border: 1px solid #a7f3d0;
+  box-shadow: inset 0 1px 3px rgba(16, 185, 129, 0.08);
+}
+
+.link-device-modal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 8px;
+  border: 2px solid #ecfdf5;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+  transition: all 0.3s ease;
+  min-height: 35px;
+}
+
+.link-device-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+}
+
+/* Mobile scrollbar adjustments for all pages */
+@media (max-width: 768px) {
+  .universal-scrollbar::-webkit-scrollbar,
+  .home-page-scrollbar::-webkit-scrollbar,
+  .groups-page-scrollbar::-webkit-scrollbar,
+  .recovery-key-scrollbar::-webkit-scrollbar,
+  .device-verification-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  .universal-scrollbar::-webkit-scrollbar-track,
+  .home-page-scrollbar::-webkit-scrollbar-track,
+  .groups-page-scrollbar::-webkit-scrollbar-track,
+  .recovery-key-scrollbar::-webkit-scrollbar-track,
+  .device-verification-scrollbar::-webkit-scrollbar-track {
+    margin: 6px;
+    border-radius: 8px;
+  }
+  
+  .universal-scrollbar::-webkit-scrollbar-thumb,
+  .home-page-scrollbar::-webkit-scrollbar-thumb,
+  .groups-page-scrollbar::-webkit-scrollbar-thumb,
+  .recovery-key-scrollbar::-webkit-scrollbar-thumb,
+  .device-verification-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid;
+    min-height: 30px;
+  }
+  
+  .invite-modal-scrollbar::-webkit-scrollbar,
+  .link-device-modal-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .invite-modal-scrollbar::-webkit-scrollbar-track,
+  .link-device-modal-scrollbar::-webkit-scrollbar-track {
+    margin: 4px;
+    border-radius: 6px;
+  }
+  
+  .invite-modal-scrollbar::-webkit-scrollbar-thumb,
+  .link-device-modal-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    border: 1px solid;
+    min-height: 25px;
+  }
+}
+
+@media (max-width: 640px) {
+  .universal-scrollbar::-webkit-scrollbar,
+  .home-page-scrollbar::-webkit-scrollbar,
+  .groups-page-scrollbar::-webkit-scrollbar,
+  .recovery-key-scrollbar::-webkit-scrollbar,
+  .device-verification-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .universal-scrollbar::-webkit-scrollbar-track,
+  .home-page-scrollbar::-webkit-scrollbar-track,
+  .groups-page-scrollbar::-webkit-scrollbar-track,
+  .recovery-key-scrollbar::-webkit-scrollbar-track,
+  .device-verification-scrollbar::-webkit-scrollbar-track {
+    margin: 4px;
+    border-radius: 6px;
+  }
+  
+  .universal-scrollbar::-webkit-scrollbar-thumb,
+  .home-page-scrollbar::-webkit-scrollbar-thumb,
+  .groups-page-scrollbar::-webkit-scrollbar-thumb,
+  .recovery-key-scrollbar::-webkit-scrollbar-thumb,
+  .device-verification-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    border: 1px solid;
+    min-height: 25px;
+  }
+  
+  .invite-modal-scrollbar::-webkit-scrollbar,
+  .link-device-modal-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .invite-modal-scrollbar::-webkit-scrollbar-track,
+  .link-device-modal-scrollbar::-webkit-scrollbar-track {
+    margin: 2px;
+    border-radius: 4px;
+  }
+  
+  .invite-modal-scrollbar::-webkit-scrollbar-thumb,
+  .link-device-modal-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    border: 1px solid;
+    min-height: 20px;
+  }
+}
+
+/* Firefox scrollbar support for all page types */
+.home-page-scrollbar,
+.groups-page-scrollbar,
+.recovery-key-scrollbar,
+.device-verification-scrollbar,
+.invite-modal-scrollbar,
+.link-device-modal-scrollbar {
+  scrollbar-width: auto;
+}
+
+.home-page-scrollbar {
+  scrollbar-color: #dc2626 #f8fafc;
+}
+
+.groups-page-scrollbar {
+  scrollbar-color: #3b82f6 #f0f9ff;
+}
+
+.recovery-key-scrollbar {
+  scrollbar-color: #f59e0b #fef3c7;
+}
+
+.device-verification-scrollbar {
+  scrollbar-color: #22c55e #f0fdf4;
+}
+
+.invite-modal-scrollbar {
+  scrollbar-color: #9333ea #faf5ff;
+}
+
+.link-device-modal-scrollbar {
+  scrollbar-color: #10b981 #ecfdf5;
+}
+
+/* Ensure smooth scrolling behavior for all containers */
+.page-container,
+.main-app-container,
+.chat-interface-container,
+.all-chats-container,
+.settings-panel-container,
+.groups-container,
+.recovery-key-container,
+.device-verification-container,
+.modal-content-scrollable,
+.invite-modal-container,
+.link-device-modal-container {
+  scroll-behavior: smooth;
+  scrollbar-width: auto;
+}
+
+/* Force scrollbar visibility on all containers */
+.page-container::-webkit-scrollbar,
+.main-app-container::-webkit-scrollbar,
+.chat-interface-container::-webkit-scrollbar,
+.all-chats-container::-webkit-scrollbar,
+.settings-panel-container::-webkit-scrollbar,
+.groups-container::-webkit-scrollbar {
+  width: 16px;
+  background: rgba(248, 250, 252, 0.8);
+}
+
+.page-container::-webkit-scrollbar-track,
+.main-app-container::-webkit-scrollbar-track,
+.chat-interface-container::-webkit-scrollbar-track,
+.all-chats-container::-webkit-scrollbar-track,
+.settings-panel-container::-webkit-scrollbar-track,
+.groups-container::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 10px;
+  margin: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.page-container::-webkit-scrollbar-thumb,
+.main-app-container::-webkit-scrollbar-thumb,
+.chat-interface-container::-webkit-scrollbar-thumb,
+.all-chats-container::-webkit-scrollbar-thumb,
+.settings-panel-container::-webkit-scrollbar-thumb,
+.groups-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 10px;
+  border: 3px solid #f8fafc;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.page-container::-webkit-scrollbar-thumb:hover,
+.main-app-container::-webkit-scrollbar-thumb:hover,
+.chat-interface-container::-webkit-scrollbar-thumb:hover,
+.all-chats-container::-webkit-scrollbar-thumb:hover,
+.settings-panel-container::-webkit-scrollbar-thumb:hover,
+.groups-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+  border: 2px solid #f8fafc;
+}
+
+.page-container::-webkit-scrollbar-corner,
+.main-app-container::-webkit-scrollbar-corner,
+.chat-interface-container::-webkit-scrollbar-corner,
+.all-chats-container::-webkit-scrollbar-corner,
+.settings-panel-container::-webkit-scrollbar-corner,
+.groups-container::-webkit-scrollbar-corner {
+  background: transparent;
 }
 /* Custom slider styles for Voice & Video settings */
 .slider {

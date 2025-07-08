@@ -64,7 +64,7 @@ const RecoveryKeyNotice: React.FC<RecoveryKeyNoticeProps> = ({
       />
       
       {/* Modal */}
-      <div className={`relative w-full max-w-md bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-hidden ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}>
+      <div className={`relative w-full max-w-md bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-hidden modal-content-scrollable universal-scrollbar ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}>
         {/* Header */}
         <div className="relative p-6 pb-4">
           <button
@@ -84,7 +84,7 @@ const RecoveryKeyNotice: React.FC<RecoveryKeyNoticeProps> = ({
         </div>
 
         {/* Content */}
-        <div className="px-6 pb-6 space-y-6 overflow-y-auto modal-scrollbar max-h-[calc(90vh-120px)]">
+        <div className="px-6 pb-6 space-y-6 overflow-y-auto modal-scrollbar universal-scrollbar max-h-[calc(90vh-120px)]">
           {/* Account Info */}
           <div className="element-card p-4 bg-blue-50 border-blue-200">
             <div className="flex items-center space-x-3">

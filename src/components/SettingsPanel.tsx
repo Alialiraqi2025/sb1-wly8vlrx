@@ -926,7 +926,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
   };
 
   return (
-    <div className={`h-full flex flex-col bg-white ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`h-full flex flex-col bg-white settings-panel-container universal-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         {currentSection !== 'main' ? (
           <button
@@ -953,7 +953,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
         <div />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 settings-scrollbar universal-scrollbar">
         {renderCurrentSection()}
       </div>
     </div>

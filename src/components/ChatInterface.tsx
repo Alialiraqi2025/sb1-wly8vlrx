@@ -384,7 +384,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   return (
-    <div className={`h-screen flex flex-col bg-white overflow-hidden ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`h-screen flex flex-col bg-white overflow-hidden chat-interface-container universal-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Camera Capture Overlay */}
       {isCapturingMedia && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
@@ -485,7 +485,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       </div>
 
       {/* Messages with Custom Scrollbar */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 messages-scrollbar">
+      <div className="flex-1 overflow-y-auto bg-gray-50 messages-scrollbar universal-scrollbar">
         <div className="messages-content">
           <div className="space-y-1">
             {messages.map((message, index) => {

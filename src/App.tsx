@@ -247,7 +247,7 @@ function App() {
   // Chat Interface View - Full Screen
   if (currentView === 'chat-interface' && selectedChat) {
     return (
-      <div className="app-container">
+      <div className="app-container chat-interface-container universal-scrollbar">
         <ChatInterface
           chat={selectedChat}
           messages={messages}
@@ -277,7 +277,7 @@ function App() {
 
   // Main App View - Full Page Views
   return (
-    <div className={`app-container app-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`app-container main-app-container universal-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Header - Element style */}
       <header className="app-header">
         <div className="px-4 lg:px-6">
@@ -348,10 +348,10 @@ function App() {
       </header>
 
       {/* Main Content - Full Page Views */}
-      <main className="app-main">
+      <main className="app-main page-content">
         <div className="h-full w-full">
           {currentView === 'all-chats' && (
-            <div className="h-full bg-white">
+            <div className="h-full bg-white all-chats-container universal-scrollbar">
               <AllChatsList
                 chats={chats}
                 onChatSelect={handleChatSelect}
@@ -361,7 +361,7 @@ function App() {
           )}
           
           {currentView === 'groups' && (
-            <div className="h-full bg-white p-6 flex items-center justify-center app-scrollbar overflow-y-auto">
+            <div className="h-full bg-white p-6 flex items-center justify-center groups-container groups-page-scrollbar overflow-y-auto">
               <div className="text-center">
                 <div className="element-card p-8">
                   <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -393,7 +393,7 @@ function App() {
           )}
           
           {currentView === 'settings' && (
-            <div className="h-full bg-white overflow-hidden">
+            <div className="h-full bg-white overflow-hidden settings-panel-container">
               <SettingsPanel user={currentUser} onSignOut={handleLogout} />
             </div>
           )}

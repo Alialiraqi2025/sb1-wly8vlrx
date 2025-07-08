@@ -344,7 +344,7 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl animate-scale-in max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl animate-scale-in max-h-[90vh] overflow-hidden link-device-modal-container">
         {/* Header */}
         <div className="relative p-6 pb-4">
           <button
@@ -356,7 +356,7 @@ const LinkDeviceModal: React.FC<LinkDeviceModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="px-6 pb-6 overflow-y-auto modal-scrollbar max-h-[calc(90vh-80px)]">
+        <div className="px-6 pb-6 overflow-y-auto link-device-modal-scrollbar universal-scrollbar max-h-[calc(90vh-80px)]">
           {step === 'method' && renderMethodSelection()}
           {step === 'qr' && renderQRCode()}
           {step === 'manual' && renderManualEntry()}

@@ -779,7 +779,7 @@ Download: ${qrCodeUrl}
       />
       
       {/* Enhanced Modal */}
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl animate-scale-in max-h-[95vh] overflow-hidden border border-gray-200">
+      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl animate-scale-in max-h-[95vh] overflow-hidden border border-gray-200 invite-modal-container">
         {/* Enhanced Header */}
         <div className="relative p-8 pb-6 bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200">
           <button
@@ -836,7 +836,7 @@ Download: ${qrCodeUrl}
         </div>
 
         {/* Enhanced Content */}
-        <div className="p-8 overflow-y-auto modal-scrollbar max-h-[calc(95vh-200px)]">
+        <div className="p-8 overflow-y-auto invite-modal-scrollbar universal-scrollbar max-h-[calc(95vh-200px)]">
           {activeTab === 'qr' && renderQRTab()}
           {activeTab === 'search' && renderSearchTab()}
           {activeTab === 'contacts' && renderContactsTab()}

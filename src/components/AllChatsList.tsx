@@ -43,7 +43,7 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
   }
 
   return (
-    <div className={`chat-list-wrapper overflow-hidden ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`chat-list-wrapper overflow-hidden universal-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <div className="chat-list-header">
         <div className="flex items-center justify-between mb-4">
@@ -76,7 +76,7 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
       </div>
 
       {/* Chat List with Custom Scrollbar */}
-      <div className="chat-list-content chat-scrollbar overflow-y-auto">
+      <div className="chat-list-content chat-scrollbar universal-scrollbar overflow-y-auto">
         <div className="scrollable-content">
           {filteredChats.map((chat) => {
             const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
