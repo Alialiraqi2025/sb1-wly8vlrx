@@ -2414,6 +2414,19 @@ body {
   color: var(--element-text-muted);
 }
 
+/* H3 elements - dark gray color */
+h3 {
+  color: #374151 !important;
+}
+
+h3.element-text {
+  color: #374151 !important;
+}
+
+h3.chat-name {
+  color: #374151 !important;
+}
+
 /* Improved text contrast for usernames and app name */
 .app-name {
   color: var(--element-text) !important;
