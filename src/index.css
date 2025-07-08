@@ -1160,6 +1160,26 @@ div[class*="bg-red-"][class*="rounded-full"] * {
   color: white !important;
 }
 /* Element-style badges */
+/* Profile section headings - make Personal Information white */
+.settings-container h4,
+.settings-container .font-semibold {
+  color: white !important;
+}
+
+/* Specific targeting for profile section headings */
+.element-card h4[class*="font-semibold"],
+.element-card .font-semibold.text-gray-900 {
+  color: white !important;
+}
+
+/* Profile section specific heading overrides */
+.settings-scrollbar h4,
+.settings-scrollbar .font-semibold,
+.profile-section h4,
+.profile-section .font-semibold {
+  color: white !important;
+}
+
 .element-badge {
   background: var(--element-accent);
   color: white;
