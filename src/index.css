@@ -1180,6 +1180,30 @@ div[class*="bg-red-"][class*="rounded-full"] * {
   color: white !important;
 }
 
+/* Profile section labels - make Display Name and other labels white */
+.settings-container label,
+.settings-container .text-gray-700,
+.element-card label,
+.element-card .text-gray-700 {
+  color: white !important;
+}
+
+/* Specific targeting for form labels in profile section */
+.settings-scrollbar label,
+.settings-scrollbar .text-gray-700,
+.profile-section label,
+.profile-section .text-gray-700 {
+  color: white !important;
+}
+
+/* Override label colors in settings panels */
+.settings-container label.block,
+.settings-container .block.text-sm,
+.element-card label.block,
+.element-card .block.text-sm {
+  color: white !important;
+}
+
 .element-badge {
   background: var(--element-accent);
   color: white;
