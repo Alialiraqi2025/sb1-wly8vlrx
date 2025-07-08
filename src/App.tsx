@@ -56,6 +56,19 @@ function App() {
     setCurrentUser(user);
   };
 
+  const handleLoginWithCredentials = (username: string, password: string) => {
+    // Create a complete User object from the login credentials
+    const user: User = {
+      id: username,
+      name: username,
+      email: `${username}@example.com`,
+      status: 'online',
+      lastSeen: new Date(),
+      recoveryKey: undefined
+    };
+    setCurrentUser(user);
+  };
+
   const handleLogout = () => {
     setCurrentUser(null);
     setSelectedChat(null);
@@ -221,7 +234,7 @@ function App() {
   }
 
   if (!currentUser) {
-    return <AuthScreen onLogin={handleLogin} />;
+    return <AuthScreen onLogin={handleLoginWithCredentials} />;
   }
 
   // Show recovery key setup screen
@@ -331,7 +344,7 @@ function App() {
                 </div>
               </div>
               <div className="element-avatar">
-                {currentUser.name.charAt(0).toUpperCase()}
+                {currentUser?.name?.charAt(0)?.toUpperCase() || 'U'}
               </div>
             </div>
           </div>
