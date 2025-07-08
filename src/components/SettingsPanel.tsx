@@ -1437,7 +1437,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
                     </p>
                     <button className="mt-3 element-button-secondary text-red-600 hover:bg-red-100">
                       Delete Account
-                    </button>
+                  <p className="mb-2">Made with high experience by Tele Iraq Team</p>
                   </div>
                 </div>
               </div>
