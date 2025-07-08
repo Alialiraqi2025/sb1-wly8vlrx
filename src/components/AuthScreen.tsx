@@ -503,7 +503,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {isLogin ? 'Username' : 'Display name'}
+                  {isLogin ? t('auth.username') : t('auth.displayName')}
                 </label>
                 <div className="relative">
                   <input
@@ -511,7 +511,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    placeholder={isLogin ? "Enter your username" : "Enter your display name"}
+                    placeholder={isLogin ? t('auth.enterUsername') : t('auth.enterDisplayName')}
                     className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     required
                   />
@@ -522,7 +522,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               {!isLogin && (
                 <div className="animate-slide-up">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
+                    {t('auth.email')}
                   </label>
                   <div className="relative">
                     <input
@@ -530,7 +530,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="Enter your email"
+                      placeholder={t('auth.enterEmail')}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       required={!isLogin}
                     />
@@ -542,7 +542,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               {isLogin && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
+                    {t('auth.email')}
                   </label>
                   <div className="relative">
                     <input
@@ -550,7 +550,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="Enter your email"
+                      placeholder={t('auth.enterEmail')}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       required
                     />
@@ -560,34 +560,9 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               )}
 
               {!isLogin && (
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="Enter your password"
-                    className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    required
-                  />
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              )}
-
-              {isLogin && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Password
+                    {t('auth.password')}
                   </label>
                   <div className="relative">
                     <input
@@ -595,7 +570,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      placeholder="Enter your password"
+                      placeholder={t('auth.enterPassword')}
                       className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       required
                     />
@@ -610,62 +585,45 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                   </div>
                 </div>
               )}
-            </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                {isLogin ? "Don't have an account?" : 'Already have an account?'}
-                <button
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="text-red-600 hover:text-red-700 font-medium ml-1"
-                >
-                  {isLogin ? 'Create one' : 'Sign in'}
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default AuthScreen;
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="Enter your password"
-                    className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    required
-                  />
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
+              {isLogin && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t('auth.password')}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder={t('auth.enterPassword')}
+                      className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      required
+                    />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed auth-button"
+                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed auth-button"
               >
                 {isLoading ? (
                   <div className="element-spinner"></div>
                 ) : (
                   <>
                     {isLogin ? <MessageSquare className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                    <span style={{ color: 'white !important' }}>{isLogin ? 'Sign in' : 'Create account'}</span>
+                    <span className="text-white">{isLogin ? t('auth.signin') : t('auth.signup')}</span>
                   </>
                 )}
               </button>
@@ -673,12 +631,12 @@ export default AuthScreen;
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                {isLogin ? "Don't have an account?" : 'Already have an account?'}
+                {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}
                 <button
                   onClick={() => setIsLogin(!isLogin)}
                   className="text-red-600 hover:text-red-700 font-medium ml-1"
                 >
-                  {isLogin ? 'Create one' : 'Sign in'}
+                  {isLogin ? t('auth.createOne') : t('auth.signIn')}
                 </button>
               </p>
             </div>
