@@ -107,10 +107,109 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     chatWallpaper: 'default',
     animations: true
   });
+  const [languageSettings, setLanguageSettings] = useState({
+    language: 'en',
+    region: 'IQ',
+    dateFormat: 'DD/MM/YYYY',
+    timeFormat: '24h',
+    timezone: 'Asia/Baghdad',
+    currency: 'IQD',
+    numberFormat: 'arabic',
+    rtlSupport: false,
+    transliteration: true,
+    autoTranslate: false,
+    preferredScript: 'latin'
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const languages = [
+    { code: 'ar', name: 'العربية', nativeName: 'Arabic', flag: '🇮🇶' },
+    { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
+    { code: 'ku', name: 'کوردی', nativeName: 'Kurdish', flag: '🏴' },
+    { code: 'tr', name: 'Türkçe', nativeName: 'Turkish', flag: '🇹🇷' },
+    { code: 'fa', name: 'فارسی', nativeName: 'Persian', flag: '🇮🇷' },
+    { code: 'fr', name: 'Français', nativeName: 'French', flag: '🇫🇷' },
+    { code: 'de', name: 'Deutsch', nativeName: 'German', flag: '🇩🇪' },
+    { code: 'es', name: 'Español', nativeName: 'Spanish', flag: '🇪🇸' },
+    { code: 'ru', name: 'Русский', nativeName: 'Russian', flag: '🇷🇺' }
+  ];
+
+  const regions = [
+    { code: 'IQ', name: 'Iraq', nativeName: 'العراق', flag: '🇮🇶' },
+    { code: 'US', name: 'United States', nativeName: 'United States', flag: '🇺🇸' },
+    { code: 'GB', name: 'United Kingdom', nativeName: 'United Kingdom', flag: '🇬🇧' },
+    { code: 'TR', name: 'Turkey', nativeName: 'Türkiye', flag: '🇹🇷' },
+    { code: 'IR', name: 'Iran', nativeName: 'ایران', flag: '🇮🇷' },
+    { code: 'SA', name: 'Saudi Arabia', nativeName: 'السعودية', flag: '🇸🇦' },
+    { code: 'AE', name: 'UAE', nativeName: 'الإمارات', flag: '🇦🇪' },
+    { code: 'JO', name: 'Jordan', nativeName: 'الأردن', flag: '🇯🇴' },
+    { code: 'LB', name: 'Lebanon', nativeName: 'لبنان', flag: '🇱🇧' },
+    { code: 'SY', name: 'Syria', nativeName: 'سوريا', flag: '🇸🇾' },
+    { code: 'KW', name: 'Kuwait', nativeName: 'الكويت', flag: '🇰🇼' },
+    { code: 'QA', name: 'Qatar', nativeName: 'قطر', flag: '🇶🇦' },
+    { code: 'BH', name: 'Bahrain', nativeName: 'البحرين', flag: '🇧🇭' },
+    { code: 'OM', name: 'Oman', nativeName: 'عُمان', flag: '🇴🇲' },
+    { code: 'YE', name: 'Yemen', nativeName: 'اليمن', flag: '🇾🇪' },
+    { code: 'EG', name: 'Egypt', nativeName: 'مصر', flag: '🇪🇬' },
+    { code: 'MA', name: 'Morocco', nativeName: 'المغرب', flag: '🇲🇦' },
+    { code: 'DZ', name: 'Algeria', nativeName: 'الجزائر', flag: '🇩🇿' },
+    { code: 'TN', name: 'Tunisia', nativeName: 'تونس', flag: '🇹🇳' },
+    { code: 'LY', name: 'Libya', nativeName: 'ليبيا', flag: '🇱🇾' }
+  ];
+
+  const timezones = [
+    { value: 'Asia/Baghdad', label: 'Baghdad (GMT+3)', region: 'Iraq' },
+    { value: 'Asia/Erbil', label: 'Erbil (GMT+3)', region: 'Iraq' },
+    { value: 'Asia/Kuwait', label: 'Kuwait (GMT+3)', region: 'Kuwait' },
+    { value: 'Asia/Riyadh', label: 'Riyadh (GMT+3)', region: 'Saudi Arabia' },
+    { value: 'Asia/Dubai', label: 'Dubai (GMT+4)', region: 'UAE' },
+    { value: 'Asia/Tehran', label: 'Tehran (GMT+3:30)', region: 'Iran' },
+    { value: 'Asia/Istanbul', label: 'Istanbul (GMT+3)', region: 'Turkey' },
+    { value: 'Europe/London', label: 'London (GMT+0)', region: 'UK' },
+    { value: 'America/New_York', label: 'New York (GMT-5)', region: 'USA' },
+    { value: 'Europe/Paris', label: 'Paris (GMT+1)', region: 'France' },
+    { value: 'Europe/Berlin', label: 'Berlin (GMT+1)', region: 'Germany' },
+    { value: 'Europe/Moscow', label: 'Moscow (GMT+3)', region: 'Russia' }
+  ];
+
+  const currencies = [
+    { code: 'IQD', name: 'Iraqi Dinar', symbol: 'د.ع', flag: '🇮🇶' },
+    { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸' },
+    { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
+    { code: 'GBP', name: 'British Pound', symbol: '£', flag: '🇬🇧' },
+    { code: 'TRY', name: 'Turkish Lira', symbol: '₺', flag: '🇹🇷' },
+    { code: 'IRR', name: 'Iranian Rial', symbol: '﷼', flag: '🇮🇷' },
+    { code: 'SAR', name: 'Saudi Riyal', symbol: 'ر.س', flag: '🇸🇦' },
+    { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ', flag: '🇦🇪' },
+    { code: 'KWD', name: 'Kuwaiti Dinar', symbol: 'د.ك', flag: '🇰🇼' },
+    { code: 'QAR', name: 'Qatari Riyal', symbol: 'ر.ق', flag: '🇶🇦' }
+  ];
+
+  const handleLanguageSettingsChange = (key: string, value: any) => {
+    setLanguageSettings(prev => ({ ...prev, [key]: value }));
+    setSuccessMessage(`${key.charAt(0).toUpperCase() + key.slice(1)} updated successfully!`);
+    setTimeout(() => setSuccessMessage(''), 2000);
+  };
+
+  const handleSaveLanguageSettings = async () => {
+    setIsLoading(true);
+    setErrorMessage('');
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setSuccessMessage('Language & Region settings saved successfully!');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      setErrorMessage('Failed to save language settings');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const [accountInfo, setAccountInfo] = useState({
     homeserver: 'matrix.teleiraq.com',
@@ -337,6 +436,383 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
       bgColor: 'bg-gray-100'
     }
   ];
+
+  const renderLanguageSection = () => (
+    <div className="h-full flex flex-col bg-white">
+      {renderHeader('Language & Region', 'Customize language, region, and localization settings')}
+      {renderSuccessError()}
+      
+      <div className="flex-1 overflow-y-auto settings-scrollbar">
+        <div className="p-6 space-y-6">
+          {/* Language Selection */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Languages className="w-5 h-5 mr-2 text-red-600" />
+              Display Language
+            </h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => handleLanguageSettingsChange('language', lang.code)}
+                  className={`p-4 border-2 rounded-lg text-left transition-all duration-200 ${
+                    languageSettings.language === lang.code
+                      ? 'border-red-500 bg-red-50'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-2xl">{lang.flag}</span>
+                    <div className="flex-1">
+                      <h5 className="font-medium text-gray-900">{lang.name}</h5>
+                      <p className="text-sm text-gray-600">{lang.nativeName}</p>
+                    </div>
+                    {languageSettings.language === lang.code && (
+                      <CheckCircle className="w-5 h-5 text-red-600" />
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Region Selection */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Globe className="w-5 h-5 mr-2 text-red-600" />
+              Region & Country
+            </h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-64 overflow-y-auto">
+              {regions.map((region) => (
+                <button
+                  key={region.code}
+                  onClick={() => handleLanguageSettingsChange('region', region.code)}
+                  className={`p-3 border-2 rounded-lg text-left transition-all duration-200 ${
+                    languageSettings.region === region.code
+                      ? 'border-red-500 bg-red-50'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-xl">{region.flag}</span>
+                    <div className="flex-1 min-w-0">
+                      <h5 className="font-medium text-gray-900 truncate">{region.name}</h5>
+                      <p className="text-xs text-gray-600 truncate">{region.nativeName}</p>
+                    </div>
+                    {languageSettings.region === region.code && (
+                      <CheckCircle className="w-4 h-4 text-red-600" />
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Date & Time Format */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Clock className="w-5 h-5 mr-2 text-red-600" />
+              Date & Time Format
+            </h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Date Format
+                </label>
+                <div className="space-y-2">
+                  {['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY'].map((format) => (
+                    <label key={format} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="dateFormat"
+                        value={format}
+                        checked={languageSettings.dateFormat === format}
+                        onChange={(e) => handleLanguageSettingsChange('dateFormat', e.target.value)}
+                        className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500"
+                      />
+                      <span className="text-sm text-gray-700">{format}</span>
+                      <span className="text-xs text-gray-500">
+                        ({new Date().toLocaleDateString('en-GB', { 
+                          day: '2-digit', 
+                          month: '2-digit', 
+                          year: 'numeric' 
+                        }).replace(/\//g, format.includes('-') ? '-' : '/')})
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Time Format
+                </label>
+                <div className="space-y-2">
+                  {[
+                    { value: '24h', label: '24-hour', example: '14:30' },
+                    { value: '12h', label: '12-hour', example: '2:30 PM' }
+                  ].map((format) => (
+                    <label key={format.value} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="timeFormat"
+                        value={format.value}
+                        checked={languageSettings.timeFormat === format.value}
+                        onChange={(e) => handleLanguageSettingsChange('timeFormat', e.target.value)}
+                        className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500"
+                      />
+                      <span className="text-sm text-gray-700">{format.label}</span>
+                      <span className="text-xs text-gray-500">({format.example})</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Timezone */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Globe className="w-5 h-5 mr-2 text-red-600" />
+              Timezone
+            </h4>
+            
+            <select
+              value={languageSettings.timezone}
+              onChange={(e) => handleLanguageSettingsChange('timezone', e.target.value)}
+              className="w-full element-input"
+            >
+              {timezones.map((tz) => (
+                <option key={tz.value} value={tz.value}>
+                  {tz.label} - {tz.region}
+                </option>
+              ))}
+            </select>
+            
+            <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-800">
+                <strong>Current time:</strong> {new Date().toLocaleString('en-US', { 
+                  timeZone: languageSettings.timezone,
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
+              </p>
+            </div>
+          </div>
+
+          {/* Currency */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <AtSign className="w-5 h-5 mr-2 text-red-600" />
+              Currency & Numbers
+            </h4>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Currency
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {currencies.slice(0, 6).map((currency) => (
+                    <button
+                      key={currency.code}
+                      onClick={() => handleLanguageSettingsChange('currency', currency.code)}
+                      className={`p-3 border-2 rounded-lg text-left transition-all duration-200 ${
+                        languageSettings.currency === currency.code
+                          ? 'border-red-500 bg-red-50'
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">{currency.flag}</span>
+                        <div className="flex-1">
+                          <h5 className="font-medium text-gray-900">{currency.code}</h5>
+                          <p className="text-sm text-gray-600">{currency.name}</p>
+                        </div>
+                        <span className="text-lg font-bold text-gray-700">{currency.symbol}</span>
+                        {languageSettings.currency === currency.code && (
+                          <CheckCircle className="w-4 h-4 text-red-600" />
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Number Format
+                </label>
+                <div className="space-y-2">
+                  {[
+                    { value: 'western', label: 'Western (1,234.56)', example: '1,234.56' },
+                    { value: 'arabic', label: 'Arabic (١٬٢٣٤٫٥٦)', example: '١٬٢٣٤٫٥٦' },
+                    { value: 'persian', label: 'Persian (۱٬۲۳۴٫۵۶)', example: '۱٬۲۳۴٫۵۶' }
+                  ].map((format) => (
+                    <label key={format.value} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="numberFormat"
+                        value={format.value}
+                        checked={languageSettings.numberFormat === format.value}
+                        onChange={(e) => handleLanguageSettingsChange('numberFormat', e.target.value)}
+                        className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500"
+                      />
+                      <span className="text-sm text-gray-700">{format.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Advanced Language Settings */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Settings className="w-5 h-5 mr-2 text-red-600" />
+              Advanced Language Settings
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="font-medium text-gray-900">Right-to-Left (RTL) Support</h5>
+                  <p className="text-sm text-gray-600">Enable RTL layout for Arabic, Persian, and Hebrew</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={languageSettings.rtlSupport}
+                    onChange={(e) => handleLanguageSettingsChange('rtlSupport', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                </label>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="font-medium text-gray-900">Transliteration</h5>
+                  <p className="text-sm text-gray-600">Show romanized text for non-Latin scripts</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={languageSettings.transliteration}
+                    onChange={(e) => handleLanguageSettingsChange('transliteration', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                </label>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="font-medium text-gray-900">Auto-Translate Messages</h5>
+                  <p className="text-sm text-gray-600">Automatically translate messages to your preferred language</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={languageSettings.autoTranslate}
+                    onChange={(e) => handleLanguageSettingsChange('autoTranslate', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                </label>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Preferred Script
+                </label>
+                <select
+                  value={languageSettings.preferredScript}
+                  onChange={(e) => handleLanguageSettingsChange('preferredScript', e.target.value)}
+                  className="w-full element-input"
+                >
+                  <option value="latin">Latin Script (ABC)</option>
+                  <option value="arabic">Arabic Script (أبج)</option>
+                  <option value="persian">Persian Script (الف)</option>
+                  <option value="kurdish">Kurdish Script (ئەلف)</option>
+                  <option value="cyrillic">Cyrillic Script (АБВ)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Language Pack Downloads */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Download className="w-5 h-5 mr-2 text-red-600" />
+              Language Packs
+            </h4>
+            
+            <div className="space-y-3">
+              {languages.slice(0, 5).map((lang) => (
+                <div key={lang.code} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-xl">{lang.flag}</span>
+                    <div>
+                      <h5 className="font-medium text-gray-900">{lang.name}</h5>
+                      <p className="text-sm text-gray-600">
+                        {lang.code === languageSettings.language ? 'Installed' : 'Available for download'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {lang.code === languageSettings.language ? (
+                      <span className="text-green-600 text-sm font-medium flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        Active
+                      </span>
+                    ) : (
+                      <button className="element-button-secondary text-sm">
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div className="element-card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-gray-900">Save Changes</h4>
+                <p className="text-sm text-gray-600">Apply all language and region settings</p>
+              </div>
+              <button
+                onClick={handleSaveLanguageSettings}
+                disabled={isLoading}
+                className="element-button"
+              >
+                {isLoading ? (
+                  <div className="element-spinner"></div>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Save Settings
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderHeader = (title: string, subtitle?: string) => (
     <div className="flex-shrink-0 p-6 border-b border-gray-200 bg-white">
@@ -1457,7 +1933,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     case 'privacy':
       return renderPlaceholderSection('Privacy', Lock, 'Advanced privacy controls and settings');
     case 'language':
-      return renderPlaceholderSection('Language & Region', Languages, 'Language, time zone, and regional settings');
+      return renderLanguageSection();
     case 'help':
       return renderPlaceholderSection('Help & Support', HelpCircle, 'Get help, report issues, and contact support');
     case 'about':
