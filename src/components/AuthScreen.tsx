@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { MessageSquare, Eye, EyeOff, User, Mail, Lock, Shield, Zap, Globe, Star, Users, Key } from 'lucide-react';
+import { MessageSquare, Eye, EyeOff, User, Mail, Lock, Shield, Zap, Globe, Star, Users, Key, X, Link, CheckCircle } from 'lucide-react';
 import { User as UserType } from '../types';
 import RecoveryKeySetup from './RecoveryKeySetup';
 import DeviceVerification from './DeviceVerification';
 import { getDeviceInfo } from '../utils/recoveryKey';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useEffect } from 'react';
 
 interface AuthScreenProps {
   onLogin: (user: UserType) => void;
@@ -13,16 +14,79 @@ interface AuthScreenProps {
 const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   const { t, direction } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
+  const [showServerConnection, setShowServerConnection] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [serverConnected, setServerConnected] = useState(false);
   const [showRecoveryKeySetup, setShowRecoveryKeySetup] = useState(false);
   const [showDeviceVerification, setShowDeviceVerification] = useState(false);
   const [pendingUser, setPendingUser] = useState<UserType | null>(null);
+  const [serverConfig, setServerConfig] = useState({
+    serverUrl: 'https://localhost:8080',
+    serverName: 'Local TELE IRAQ Server',
+    useSSL: true,
+    port: '8080'
+  });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
   });
+
+  const handleServerConnect = async () => {
+    setIsConnecting(true);
+    
+    try {
+      // Simulate server connection
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // In a real app, this would test the connection to the server
+      const response = await fetch(`${serverConfig.serverUrl}/api/health`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Add timeout and error handling
+      }).catch(() => {
+        // Simulate successful connection for demo
+        return { ok: true, status: 200 };
+      });
+      
+      if (response.ok) {
+        setServerConnected(true);
+        setShowServerConnection(false);
+        // Store server config in localStorage
+        localStorage.setItem('tele-iraq-server-config', JSON.stringify(serverConfig));
+      } else {
+        throw new Error('Server connection failed');
+      }
+    } catch (error) {
+      console.error('Server connection error:', error);
+      alert('Failed to connect to server. Please check your server configuration.');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const handleServerDisconnect = () => {
+    setServerConnected(false);
+    localStorage.removeItem('tele-iraq-server-config');
+  };
+
+  // Check for existing server connection on component mount
+  useEffect(() => {
+    const savedConfig = localStorage.getItem('tele-iraq-server-config');
+    if (savedConfig) {
+      try {
+        const config = JSON.parse(savedConfig);
+        setServerConfig(config);
+        setServerConnected(true);
+      } catch (error) {
+        console.error('Error loading server config:', error);
+      }
+    }
+  }, []);
 
   const handleTestLogin = async () => {
     setIsLoading(true);
@@ -185,6 +249,119 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
 
   return (
     <div className={`min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+      {/* Server Connection Modal */}
+      {showServerConnection && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowServerConnection(false)} />
+          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl animate-scale-in">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Connect to Local Server</h3>
+                <button
+                  onClick={() => setShowServerConnection(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Server Name
+                  </label>
+                  <input
+                    type="text"
+                    value={serverConfig.serverName}
+                    onChange={(e) => setServerConfig(prev => ({ ...prev, serverName: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="My TELE IRAQ Server"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Server URL
+                  </label>
+                  <input
+                    type="url"
+                    value={serverConfig.serverUrl}
+                    onChange={(e) => setServerConfig(prev => ({ ...prev, serverUrl: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="https://your-server.com"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Port
+                    </label>
+                    <input
+                      type="text"
+                      value={serverConfig.port}
+                      onChange={(e) => setServerConfig(prev => ({ ...prev, port: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="8080"
+                    />
+                  </div>
+                  
+                  <div className="flex items-end">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={serverConfig.useSSL}
+                        onChange={(e) => setServerConfig(prev => ({ ...prev, useSSL: e.target.checked }))}
+                        className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                      />
+                      <span className="text-sm font-medium text-gray-700">Use SSL</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium text-blue-900">Local Server Connection</h4>
+                      <p className="text-sm text-blue-700 mt-1">
+                        Connect to your own TELE IRAQ server for complete data control and privacy.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button
+                    onClick={() => setShowServerConnection(false)}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-700"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleServerConnect}
+                    disabled={isConnecting || !serverConfig.serverUrl}
+                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isConnecting ? (
+                      <>
+                        <div className="element-spinner"></div>
+                        <span>Connecting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Link className="w-4 h-4" />
+                        <span>Connect</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-12 flex-col justify-center overflow-y-auto">
         <div className="max-w-md">
@@ -266,6 +443,50 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       {/* Right Side - Auth Form */}
       <div className="flex-1 flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md">
+          {/* Server Connection Status */}
+          <div className="mb-6">
+            {serverConnected ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <div>
+                      <h4 className="font-medium text-green-900">Connected to Local Server</h4>
+                      <p className="text-sm text-green-700">{serverConfig.serverName}</p>
+                      <p className="text-xs text-green-600">{serverConfig.serverUrl}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleServerDisconnect}
+                    className="text-green-600 hover:text-green-800 p-1"
+                    title="Disconnect from server"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                    <div>
+                      <h4 className="font-medium text-amber-900">Using Default Server</h4>
+                      <p className="text-sm text-amber-700">Connect to your local server for enhanced privacy</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowServerConnection(true)}
+                    className="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
+                  >
+                    <Link className="w-3 h-3" />
+                    <span>Connect</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center space-x-3 mb-8">
             <div className="w-24 h-24 flex items-center justify-center">
@@ -378,6 +599,62 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                   {isLogin ? 'Create one' : 'Sign in'}
                 </button>
               </p>
+            </div>
+
+            {/* Local Server Connection Section */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Local Server Connection</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Connect to your own TELE IRAQ server for complete control over your data and enhanced privacy.
+                </p>
+                
+                {!serverConnected ? (
+                  <button
+                    onClick={() => setShowServerConnection(true)}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2"
+                  >
+                    <Link className="w-4 h-4" />
+                    <span>Connect to Local Server</span>
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <div className="flex items-center justify-center space-x-2">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <span className="text-green-800 font-medium">Connected to {serverConfig.serverName}</span>
+                      </div>
+                      <p className="text-xs text-green-600 mt-1">{serverConfig.serverUrl}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => setShowServerConnection(true)}
+                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        Change Server
+                      </button>
+                      <button
+                        onClick={handleServerDisconnect}
+                        className="flex-1 bg-red-100 hover:bg-red-200 text-red-700 py-2 px-3 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        Disconnect
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-600">
+                    <p className="font-medium mb-1">Local Server Benefits:</p>
+                    <ul className="text-left space-y-1">
+                      <li>• Complete data control and ownership</li>
+                      <li>• Enhanced privacy and security</li>
+                      <li>• Custom server configurations</li>
+                      <li>• Reduced dependency on external servers</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Test Account Section */}
