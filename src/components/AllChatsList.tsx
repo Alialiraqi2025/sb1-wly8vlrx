@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Search, Plus, MessageSquare, Hash } from 'lucide-react';
+import { Search, Plus, MessageSquare, Hash, UserPlus } from 'lucide-react';
 import { Chat } from '../types';
 import { formatTime } from '../utils/dateUtils';
 import { useLanguage } from '../contexts/LanguageContext';
+import InviteFriendModal from './InviteFriendModal';
 
 interface AllChatsListProps {
   chats: Chat[];
@@ -13,6 +14,7 @@ interface AllChatsListProps {
 const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, currentUserId }) => {
   const { t, direction } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   const filteredChats = chats.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -46,9 +48,18 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
       <div className="chat-list-header">
         <div className="flex items-center justify-between mb-4">
           <h2 className="element-title">{t('nav.chats')}</h2>
-          <button className="element-button-secondary p-2">
-            <Plus className="w-4 h-4" />
-          </button>
+          <div className="flex space-x-2">
+            <button 
+              onClick={() => setShowInviteModal(true)}
+              className="element-button-secondary p-2"
+              title={t('invite.title')}
+            >
+              <UserPlus className="w-4 h-4" />
+            </button>
+            <button className="element-button-secondary p-2">
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
         </div>
         
         {/* Search */}
@@ -118,6 +129,14 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
           })}
         </div>
       </div>
+      
+      {/* Invite Friend Modal */}
+      <InviteFriendModal
+        isOpen={showInviteModal}
+        onClose={() => setShowInviteModal(false)}
+        userEmail="user@teleiraq.com"
+        userName="Current User"
+      />
     </div>
   );
 };
