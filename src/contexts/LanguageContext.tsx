@@ -220,7 +220,9 @@ const translations = {
     'about.lastUpdated': 'Last Updated',
     'about.web': 'Web',
     'about.copyright': '© 2024 TELE IRAQ. All rights reserved.',
+    'about.copyright': '© 2025 TeleIraq, All rights reserved.',
     'about.tagline': 'Made with high experience by Tele Iraq Team',
+    'about.tagline': 'End-to-end encrypted messaging',
     
     // Common
     'common.loading': 'Loading...',
@@ -507,7 +509,9 @@ const translations = {
     'about.lastUpdated': 'آخر تحديث',
     'about.web': 'ويب',
     'about.copyright': '© 2024 تيلي عراق. جميع الحقوق محفوظة.',
+    'about.copyright': '© 2025 تيلي عراق، جميع الحقوق محفوظة.',
     'about.tagline': 'صُنع بخبرة عالية من قبل فريق تيلي عراق',
+    'about.tagline': 'مراسلة مشفرة من طرف إلى طرف',
     
     // Common
     'common.loading': 'جاري التحميل...',
