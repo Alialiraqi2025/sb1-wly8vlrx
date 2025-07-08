@@ -248,7 +248,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto ${direction === 'rtl' ? 'rtl' : 'ltr'}`} style={{ height: '100vh' }}>
       {/* Server Connection Modal */}
       {showServerConnection && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
@@ -441,10 +441,10 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       </div>
 
       {/* Right Side - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-8 overflow-y-auto">
+      <div className="flex-1 flex items-start justify-center p-8 overflow-y-auto auth-scrollbar" style={{ minHeight: '100vh' }}>
         <div className="w-full max-w-md">
           {/* Server Connection Status */}
-          <div className="mb-6">
+          <div className="mb-6 mt-8">
             {serverConnected ? (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center justify-between">
@@ -488,7 +488,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
           </div>
 
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center justify-center space-x-3 mb-8">
+          <div className="lg:hidden flex items-center justify-center space-x-3 mb-8 mt-4">
             <div className="w-24 h-24 flex items-center justify-center">
               <img 
                 src="/new TI logo.png" 
@@ -499,7 +499,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             <h1 className="text-4xl font-bold text-gray-900">TELE IRAQ</h1>
           </div>
 
-          <div className="element-card p-8">
+          <div className="element-card p-8 mb-8">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 {isLogin ? t('auth.signin') : t('auth.signup')}
@@ -728,6 +728,9 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               </div>
             )}
           </div>
+          
+          {/* Bottom spacing for better scrolling */}
+          <div className="h-16"></div>
         </div>
       </div>
     </div>
