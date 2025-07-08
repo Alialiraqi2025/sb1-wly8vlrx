@@ -396,7 +396,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                   <input
                     type={isLogin ? "text" : "email"}
                     name={isLogin ? "username" : "email"}
-                    value={isLogin ? formData.name : formData.email}
+                    value={isLogin ? formData.username : formData.email}
                     onChange={handleInputChange}
                     placeholder={isLogin ? t('auth.enterUsername') : t('auth.enterEmail')}
                     className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
