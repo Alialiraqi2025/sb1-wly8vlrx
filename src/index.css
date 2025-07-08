@@ -75,6 +75,465 @@ body {
 }
 
 /* ========================================
+   RTL (Right-to-Left) SUPPORT
+   ======================================== */
+
+/* RTL Layout Support */
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
+}
+
+/* RTL-specific adjustments */
+.rtl .flex {
+  flex-direction: row-reverse;
+}
+
+.rtl .space-x-1 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.rtl .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.rtl .space-x-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.rtl .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.rtl .space-x-6 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-right: calc(1.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+/* RTL Text alignment */
+.rtl .text-left {
+  text-align: right;
+}
+
+.rtl .text-right {
+  text-align: left;
+}
+
+/* RTL Positioning */
+.rtl .left-0 {
+  right: 0;
+  left: auto;
+}
+
+.rtl .right-0 {
+  left: 0;
+  right: auto;
+}
+
+.rtl .left-3 {
+  right: 0.75rem;
+  left: auto;
+}
+
+.rtl .right-3 {
+  left: 0.75rem;
+  right: auto;
+}
+
+.rtl .left-4 {
+  right: 1rem;
+  left: auto;
+}
+
+.rtl .right-4 {
+  left: 1rem;
+  right: auto;
+}
+
+.rtl .left-1\/2 {
+  right: 50%;
+  left: auto;
+}
+
+.rtl .right-1\/2 {
+  left: 50%;
+  right: auto;
+}
+
+/* RTL Margins and Padding */
+.rtl .ml-1 {
+  margin-right: 0.25rem;
+  margin-left: 0;
+}
+
+.rtl .mr-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .ml-2 {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+.rtl .mr-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .ml-3 {
+  margin-right: 0.75rem;
+  margin-left: 0;
+}
+
+.rtl .mr-3 {
+  margin-left: 0.75rem;
+  margin-right: 0;
+}
+
+.rtl .ml-4 {
+  margin-right: 1rem;
+  margin-left: 0;
+}
+
+.rtl .mr-4 {
+  margin-left: 1rem;
+  margin-right: 0;
+}
+
+.rtl .ml-auto {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.rtl .mr-auto {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.rtl .pl-3 {
+  padding-right: 0.75rem;
+  padding-left: 0;
+}
+
+.rtl .pr-3 {
+  padding-left: 0.75rem;
+  padding-right: 0;
+}
+
+.rtl .pl-4 {
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+.rtl .pr-4 {
+  padding-left: 1rem;
+  padding-right: 0;
+}
+
+.rtl .pl-12 {
+  padding-right: 3rem;
+  padding-left: 0;
+}
+
+.rtl .pr-12 {
+  padding-left: 3rem;
+  padding-right: 0;
+}
+
+/* RTL Border radius */
+.rtl .rounded-l-lg {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.rtl .rounded-r-lg {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* RTL Message bubbles */
+.rtl .message-bubble.sent {
+  margin-right: auto;
+  margin-left: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 12px;
+}
+
+.rtl .message-bubble.received {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 12px;
+}
+
+.rtl .message-bubble.continuation.sent {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.rtl .message-bubble.continuation.received {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* RTL Justify content */
+.rtl .justify-start {
+  justify-content: flex-end;
+}
+
+.rtl .justify-end {
+  justify-content: flex-start;
+}
+
+.rtl .justify-between {
+  justify-content: space-between;
+}
+
+/* RTL Transform */
+.rtl .transform {
+  transform: scaleX(-1);
+}
+
+.rtl .transform .transform {
+  transform: scaleX(1);
+}
+
+/* RTL specific icons that should not be flipped */
+.rtl .no-flip {
+  transform: scaleX(1) !important;
+}
+
+/* RTL Chat interface adjustments */
+.rtl .chat-item {
+  text-align: right;
+}
+
+.rtl .chat-name {
+  text-align: right;
+}
+
+.rtl .element-text {
+  text-align: right;
+}
+
+.rtl .element-text-small {
+  text-align: right;
+}
+
+/* RTL Search input */
+.rtl .search-input {
+  padding-left: 1rem;
+  padding-right: 2.5rem;
+  text-align: right;
+}
+
+.rtl .search-icon {
+  left: auto;
+  right: 12px;
+}
+
+/* RTL Composer input */
+.rtl .composer-input {
+  text-align: right;
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+}
+
+/* RTL Attachment menu */
+.rtl .attachment-menu {
+  transform-origin: bottom right;
+}
+
+/* RTL Settings panel */
+.rtl .settings-container {
+  text-align: right;
+}
+
+/* RTL Profile section */
+.rtl .profile-section {
+  text-align: right;
+}
+
+.rtl .profile-section input,
+.rtl .profile-section textarea {
+  text-align: right;
+}
+
+/* RTL Scrollbar adjustments */
+.rtl::-webkit-scrollbar {
+  left: 0;
+  right: auto;
+}
+
+/* RTL Animation adjustments */
+.rtl .animate-slide-in-left {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.rtl .animate-slide-in-right {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+/* RTL Font adjustments for Arabic */
+.rtl {
+  font-family: 'Segoe UI', 'Tahoma', 'Arial', 'Helvetica Neue', sans-serif;
+}
+
+/* Arabic text improvements */
+.rtl h1, .rtl h2, .rtl h3, .rtl h4, .rtl h5, .rtl h6 {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.rtl p, .rtl span, .rtl div {
+  line-height: 1.6;
+}
+
+/* RTL Input placeholders */
+.rtl input::placeholder,
+.rtl textarea::placeholder {
+  text-align: right;
+}
+
+/* RTL Button content */
+.rtl button {
+  text-align: center;
+}
+
+/* RTL Dropdown menus */
+.rtl .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* RTL Modal positioning */
+.rtl .modal {
+  text-align: right;
+}
+
+/* RTL Notification positioning */
+.rtl .notification {
+  left: auto;
+  right: 1rem;
+}
+
+/* RTL Tooltip positioning */
+.rtl .tooltip {
+  left: auto;
+  right: 0;
+}
+
+/* RTL Flex direction for specific components */
+.rtl .chat-list-header .flex {
+  flex-direction: row;
+}
+
+.rtl .message-composer .flex {
+  flex-direction: row;
+}
+
+.rtl .app-header .flex {
+  flex-direction: row;
+}
+
+/* RTL specific element adjustments */
+.rtl .element-card {
+  text-align: right;
+}
+
+.rtl .element-button {
+  text-align: center;
+}
+
+.rtl .element-input {
+  text-align: right;
+}
+
+/* RTL Navigation adjustments */
+.rtl nav {
+  flex-direction: row;
+}
+
+.rtl .nav-item {
+  text-align: center;
+}
+
+/* RTL specific utility classes */
+.rtl-text-right {
+  text-align: right !important;
+}
+
+.rtl-text-left {
+  text-align: left !important;
+}
+
+.rtl-text-center {
+  text-align: center !important;
+}
+
+/* RTL responsive adjustments */
+@media (max-width: 768px) {
+  .rtl .mobile-nav {
+    flex-direction: row;
+  }
+  
+  .rtl .mobile-menu {
+    left: auto;
+    right: 0;
+  }
+}
+
+/* RTL Animation keyframes */
+@keyframes slideInRightRTL {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeftRTL {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.rtl .animate-slide-in-right {
+  animation: slideInRightRTL 0.3s ease-out;
+}
+
+.rtl .animate-slide-in-left {
+  animation: slideInLeftRTL 0.3s ease-out;
+}
+
+/* ========================================
    COMPREHENSIVE SCROLLBAR SYSTEM
    ======================================== */
 
