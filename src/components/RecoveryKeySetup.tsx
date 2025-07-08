@@ -451,10 +451,12 @@ TELE IRAQ - Secure Communication for Iraq`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 overflow-y-auto recovery-key-container recovery-key-scrollbar universal-scrollbar">
+    <div className="recovery-key-container recovery-key-scrollbar">
       <div className="w-full max-w-md">
-        <div className="element-card p-8 my-4">
+        <div className="element-card p-8 my-4 recovery-key-content">
+          <div className="recovery-key-step">
           {renderCurrentStep()}
+          </div>
         </div>
       </div>
     </div>
