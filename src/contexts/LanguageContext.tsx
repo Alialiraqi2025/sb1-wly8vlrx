@@ -51,8 +51,8 @@ const translations = {
     'auth.secureLoginDescription': 'If you don\'t have a recovery key yet, you\'ll be prompted to set one up after logging in for enhanced security.',
     'auth.testAccount': 'Login with Test Account',
     'auth.testAccountDetails': 'Test Account Details:',
-    'auth.testAccountName': 'Name: Ahmed Al-Iraqi',
-    'auth.testAccountEmail': 'Email: ahmed@teleiraq.com',
+    'auth.testAccountUsername': 'Username: Ahmed-Al-Iraqi',
+    'auth.testAccountName': 'Display Name: Ahmed Al-Iraqi',
     'auth.testAccountFeatures': 'Features: Recovery key enabled, trusted device',
     'auth.forTesting': 'For testing purposes:',
     
@@ -373,8 +373,8 @@ const translations = {
     'auth.secureLoginDescription': 'إذا لم يكن لديك مفتاح استرداد بعد، ستتم مطالبتك بإعداد واحد بعد تسجيل الدخول لتعزيز الأمان.',
     'auth.testAccount': 'تسجيل الدخول بحساب تجريبي',
     'auth.testAccountDetails': 'تفاصيل الحساب التجريبي:',
-    'auth.testAccountName': 'الاسم: أحمد العراقي',
-    'auth.testAccountEmail': 'البريد الإلكتروني: ahmed@teleiraq.com',
+    'auth.testAccountUsername': 'اسم المستخدم: Ahmed-Al-Iraqi',
+    'auth.testAccountName': 'الاسم المعروض: أحمد العراقي',
     'auth.testAccountFeatures': 'الميزات: مفتاح الاسترداد مفعل، جهاز موثوق',
     'auth.forTesting': 'لأغراض الاختبار:',
     

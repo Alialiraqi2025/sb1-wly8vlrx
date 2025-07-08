@@ -30,7 +30,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    username: ''
   });
 
   const handleServerConnect = async () => {
@@ -95,7 +96,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
     
     setIsLoading(false);
     onLogin({
-      id: 'ahmed-al-iraqi',
+      id: 'Ahmed-Al-Iraqi',
       name: 'Ahmed Al-Iraqi',
       email: 'ahmed@teleiraq.com',
       status: 'online',
@@ -112,9 +113,9 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     const user: UserType = {
-      id: isLogin ? formData.email.split('@')[0] : formData.name,
-      name: isLogin ? formData.email.split('@')[0] : formData.name,
-      email: formData.email,
+      id: isLogin ? formData.username : formData.name,
+      name: isLogin ? formData.username : formData.name,
+      email: isLogin ? `${formData.username}@teleiraq.com` : formData.email,
       status: 'online',
       lastSeen: new Date(),
       recoveryKey: undefined
@@ -389,19 +390,23 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+                  {isLogin ? t('auth.username') : t('auth.email')}
                 </label>
                 <div className="relative">
                   <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type={isLogin ? "text" : "email"}
+                    name={isLogin ? "username" : "email"}
+                    value={isLogin ? formData.name : formData.email}
                     onChange={handleInputChange}
-                    placeholder="Enter your email"
+                    placeholder={isLogin ? t('auth.enterUsername') : t('auth.enterEmail')}
                     className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     required
                   />
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  {isLogin ? (
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  ) : (
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  )}
                 </div>
               </div>
 
@@ -535,8 +540,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="text-xs text-blue-800">
                     <p className="font-medium mb-1">Test Account Details:</p>
-                    <p>Name: Ahmed Al-Iraqi</p>
-                    <p>Email: ahmed@teleiraq.com</p>
+                    <p>Username: Ahmed-Al-Iraqi</p>
+                    <p>Display Name: Ahmed Al-Iraqi</p>
                     <p>Features: Recovery key enabled, trusted device</p>
                   </div>
                 </div>
