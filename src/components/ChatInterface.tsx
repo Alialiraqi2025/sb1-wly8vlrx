@@ -119,7 +119,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      alert('Unable to access microphone. Please check your permissions.');
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes('Requested device not found') || errorMessage.includes('device not found')) {
+        alert('Microphone not found. Please ensure your microphone is connected and not being used by another application, then try again.');
+      } else if (errorMessage.includes('Permission denied') || errorMessage.includes('NotAllowedError')) {
+        alert('Microphone access was denied. Please enable microphone permissions for this site in your browser settings and try again.');
+      } else if (errorMessage.includes('NotFoundError')) {
+        alert('No microphone found. Please connect a microphone to your device and try again.');
+      } else if (errorMessage.includes('NotReadableError')) {
+        alert('Microphone is already in use by another application. Please close other applications and try again.');
+      } else {
+        alert('Unable to access microphone. Please check your device connection and permissions, then try again.');
+      }
     }
   };
 
@@ -194,7 +205,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         },
         (error) => {
           console.error('Error getting location:', error);
-          alert('Unable to get your location. Please check your permissions.');
+          if (error.code === error.PERMISSION_DENIED) {
+            alert('Location access was denied. Please enable location permissions for this site in your browser settings and try again.');
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            alert('Location information is unavailable. Please check your device settings and try again.');
+          } else if (error.code === error.TIMEOUT) {
+            alert('Location request timed out. Please try again.');
+          } else {
+            alert('Unable to get your location. Please check your permissions and try again.');
+          }
         }
       );
     } else {
@@ -211,7 +230,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         },
         (error) => {
           console.error('Error getting live location:', error);
-          alert('Unable to get your live location. Please check your permissions.');
+          if (error.code === error.PERMISSION_DENIED) {
+            alert('Live location access was denied. Please enable location permissions for this site in your browser settings and try again.');
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            alert('Live location information is unavailable. Please check your device settings and try again.');
+          } else if (error.code === error.TIMEOUT) {
+            alert('Live location request timed out. Please try again.');
+          } else {
+            alert('Unable to get your live location. Please check your permissions and try again.');
+          }
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
@@ -242,7 +269,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
-      alert('Unable to access camera. Please check your permissions.');
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes('Requested device not found') || errorMessage.includes('device not found')) {
+        alert('Camera not found. Please ensure your camera is connected and not being used by another application, then try again.');
+      } else if (errorMessage.includes('Permission denied') || errorMessage.includes('NotAllowedError')) {
+        alert('Camera access was denied. Please enable camera permissions for this site in your browser settings and try again.');
+      } else if (errorMessage.includes('NotFoundError')) {
+        alert('No camera found. Please connect a camera to your device and try again.');
+      } else if (errorMessage.includes('NotReadableError')) {
+        alert('Camera is already in use by another application. Please close other applications and try again.');
+      } else {
+        alert('Unable to access camera. Please check your device connection and permissions, then try again.');
+      }
     }
   };
 
@@ -308,7 +346,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       
     } catch (error) {
       console.error('Error accessing camera/microphone:', error);
-      alert('Unable to access camera and microphone. Please check your permissions.');
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes('Requested device not found') || errorMessage.includes('device not found')) {
+        alert('Camera or microphone not found. Please ensure your devices are connected and not being used by another application, then try again.');
+      } else if (errorMessage.includes('Permission denied') || errorMessage.includes('NotAllowedError')) {
+        alert('Camera and microphone access was denied. Please enable permissions for this site in your browser settings and try again.');
+      } else if (errorMessage.includes('NotFoundError')) {
+        alert('No camera or microphone found. Please connect a camera and microphone to your device and try again.');
+      } else if (errorMessage.includes('NotReadableError')) {
+        alert('Camera or microphone is already in use by another application. Please close other applications and try again.');
+      } else {
+        alert('Unable to access camera and microphone. Please check your device connections and permissions, then try again.');
+      }
     }
   };
 
