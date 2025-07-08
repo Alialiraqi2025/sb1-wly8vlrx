@@ -1159,7 +1159,47 @@ div[class*="bg-gradient-to-br"][class*="from-red"] *,
 div[class*="bg-red-"][class*="rounded-full"] * {
   color: white !important;
 }
-/* Element-style badges */
+
+/* Profile name text - make light gray */
+.settings-container h3.text-xl,
+.settings-container .text-xl.font-semibold,
+.element-card h3.text-xl,
+.element-card .text-xl.font-semibold {
+  color: #d1d5db !important; /* light gray */
+}
+
+/* User info card profile name */
+.settings-container .text-xl.font-semibold.text-gray-900,
+.element-card .text-xl.font-semibold.text-gray-900 {
+  color: #d1d5db !important; /* light gray */
+}
+
+/* Main header profile name */
+.app-header .text-sm.font-medium,
+.app-header .font-medium.text-gray-900 {
+  color: #d1d5db !important; /* light gray */
+}
+
+/* Profile section name display */
+.profile-section h3,
+.profile-section .text-xl,
+.settings-scrollbar h3.text-xl,
+.settings-scrollbar .text-xl.font-semibold {
+  color: #d1d5db !important; /* light gray */
+}
+
+/* User name in profile cards */
+.element-card h3[class*="text-xl"][class*="font-semibold"],
+.settings-container h3[class*="text-xl"][class*="font-semibold"] {
+  color: #d1d5db !important; /* light gray */
+}
+
+/* Override any conflicting name text colors */
+.username,
+.app-name {
+  color: #d1d5db !important; /* light gray */
+}
+
 /* Profile section headings - make Personal Information white */
 .settings-container h4,
 .settings-container .font-semibold {
