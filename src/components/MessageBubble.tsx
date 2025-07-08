@@ -2,6 +2,7 @@ import React from 'react';
 import { Play, Mic, MapPin, Navigation, Users, VideoIcon } from 'lucide-react';
 import { Message } from '../types';
 import { formatTime } from '../utils/dateUtils';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface MessageBubbleProps {
   message: Message;
@@ -11,6 +12,8 @@ interface MessageBubbleProps {
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderName, isContinuation = false }) => {
+  const { t } = useLanguage();
+
   const renderMessageContent = () => {
     switch (message.type) {
       case 'image':
@@ -64,10 +67,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
                 <MapPin className="w-5 h-5 text-red-600" />
               </div>
               <div className="flex-1">
-                <h4 className="font-medium text-gray-900 mb-1">Location</h4>
+                <h4 className="font-medium text-gray-900 mb-1">{t('chat.location')}</h4>
                 <p className="text-sm text-gray-600 mb-2">{message.content}</p>
                 <button className="text-blue-500 hover:text-blue-600 text-sm font-medium">
-                  View on Map
+                  {t('chat.viewOnMap')}
                 </button>
               </div>
             </div>
@@ -83,9 +86,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
               </div>
               <div className="flex-1">
                 <h4 className="font-medium text-gray-900">{message.content.replace('👤 Contact: ', '')}</h4>
-                <p className="text-sm text-gray-500">Contact</p>
+                <p className="text-sm text-gray-500">{t('chat.contact')}</p>
                 <button className="text-blue-500 hover:text-blue-600 text-sm font-medium mt-1">
-                  Add to Contacts
+                  {t('chat.addToContacts')}
                 </button>
               </div>
             </div>
@@ -101,7 +104,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-2 mb-1">
                 <Mic className="w-3 h-3 text-gray-500" />
-                <span className="text-xs text-gray-600 font-medium">Voice Message</span>
+                <span className="text-xs text-gray-600 font-medium">{t('chat.voiceMessage')}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -121,11 +124,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
             <div className="bg-gray-50 rounded-lg p-3 max-w-xs">
               <div className="flex items-center space-x-2 mb-2">
                 <MapPin className="w-4 h-4 text-red-600" />
-                <span className="text-sm font-medium text-gray-900">Shared Location</span>
+                <span className="text-sm font-medium text-gray-900">{t('chat.sharedLocation')}</span>
               </div>
               <p className="text-xs text-gray-600 mb-2">{coordinates}</p>
               <button className="text-blue-500 hover:text-blue-600 text-sm font-medium">
-                Open in Maps
+                {t('chat.openInMaps')}
               </button>
             </div>
           );

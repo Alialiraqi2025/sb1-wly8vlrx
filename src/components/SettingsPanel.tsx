@@ -44,6 +44,7 @@ import {
 } from 'lucide-react';
 import { User as UserType } from '../types';
 import RecoveryKeySetup from './RecoveryKeySetup';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsPanelProps {
   user: UserType;
@@ -64,6 +65,7 @@ type SettingsSection =
   | 'about';
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
+  const { language, setLanguage, t, direction } = useLanguage();
   const [currentSection, setCurrentSection] = useState<SettingsSection>('main');
   const [showPasswordChange, setShowPasswordChange] = useState(false);
   const [showRecoveryKeySetup, setShowRecoveryKeySetup] = useState(false);
@@ -759,7 +761,35 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
   const renderLanguageSettings = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="font-medium text-gray-900 mb-4">Language</h3>
+        <h3 className="font-medium text-gray-900 mb-4">{t('appearance.interfaceLanguage')}</h3>
+        <div className="space-y-2">
+          <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+            <input
+              type="radio"
+              name="language"
+              value="en"
+              checked={language === 'en'}
+              onChange={(e) => setLanguage(e.target.value as 'en' | 'ar')}
+              className="text-blue-600 focus:ring-blue-500"
+            />
+            <span className="text-gray-900">{t('appearance.english')}</span>
+          </label>
+          <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+            <input
+              type="radio"
+              name="language"
+              value="ar"
+              checked={language === 'ar'}
+              onChange={(e) => setLanguage(e.target.value as 'en' | 'ar')}
+              className="text-blue-600 focus:ring-blue-500"
+            />
+            <span className="text-gray-900">{t('appearance.arabic')}</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="font-medium text-gray-900 mb-4">{t('languageRegion.language')}</h3>
         <select
           value={appearance.language}
           onChange={(e) => setAppearance({ ...appearance, language: e.target.value })}
@@ -779,7 +809,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
       </div>
 
       <div>
-        <h3 className="font-medium text-gray-900 mb-4">Time Zone</h3>
+        <h3 className="font-medium text-gray-900 mb-4">{t('languageRegion.timeZone')}</h3>
         <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
           <Clock className="w-5 h-5 text-gray-600" />
           <div>
@@ -790,12 +820,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
       </div>
 
       <div>
-        <h3 className="font-medium text-gray-900 mb-4">Region</h3>
+        <h3 className="font-medium text-gray-900 mb-4">{t('languageRegion.region')}</h3>
         <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
           <MapPin className="w-5 h-5 text-gray-600" />
           <div>
             <p className="font-medium text-gray-900">United States</p>
-            <p className="text-sm text-gray-500">Date format: MM/DD/YYYY</p>
+            <p className="text-sm text-gray-500">{t('languageRegion.dateFormat')}: MM/DD/YYYY</p>
           </div>
         </div>
       </div>
@@ -896,7 +926,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className={`h-full flex flex-col bg-white ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         {currentSection !== 'main' ? (
           <button
@@ -910,15 +940,15 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
           <div />
         )}
         <h2 className="text-lg font-semibold text-gray-900">
-          {currentSection === 'main' ? 'Settings' : 
-           currentSection === 'profile' ? 'Profile' :
-           currentSection === 'security' ? 'Security & Privacy' :
-           currentSection === 'notifications' ? 'Notifications' :
-           currentSection === 'appearance' ? 'Appearance' :
-           currentSection === 'devices' ? 'Devices' :
-           currentSection === 'language' ? 'Language & Region' :
-           currentSection === 'help' ? 'Help & Support' :
-           currentSection === 'about' ? 'About' : 'Settings'}
+          {currentSection === 'main' ? t('settings.title') : 
+           currentSection === 'profile' ? t('settings.profile') :
+           currentSection === 'security' ? t('settings.security') :
+           currentSection === 'notifications' ? t('settings.notifications') :
+           currentSection === 'appearance' ? t('settings.appearance') :
+           currentSection === 'devices' ? t('settings.devices') :
+           currentSection === 'language' ? t('settings.language') :
+           currentSection === 'help' ? t('settings.help') :
+           currentSection === 'about' ? t('settings.about') : t('settings.title')}
         </h2>
         <div />
       </div>

@@ -9,10 +9,12 @@ import RecoveryKeyNotice from './components/RecoveryKeyNotice';
 import RecoveryKeySetup from './components/RecoveryKeySetup';
 import { User, Chat, Message } from './types';
 import { generateDemoData } from './utils/demoData';
+import { useLanguage } from './contexts/LanguageContext';
 
 type ViewType = 'all-chats' | 'groups' | 'settings' | 'chat-interface';
 
 function App() {
+  const { t, direction } = useLanguage();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentView, setCurrentView] = useState<ViewType>('all-chats');
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
@@ -194,7 +196,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="h-screen bg-white flex items-center justify-center">
+      <div className={`h-screen bg-white flex items-center justify-center ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
         <div className="text-center animate-fade-in">
           <div className="element-card p-12 mb-8 inline-block">
             <div className="w-48 h-48 mx-auto mb-8 flex items-center justify-center">
@@ -205,7 +207,8 @@ function App() {
               />
             </div>
             <h1 className="text-5xl font-bold text-gray-900 mb-4 app-name">TELE IRAQ</h1>
-            <p className="text-xl text-gray-600">Secure Communication</p>
+            <h1 className="text-5xl font-bold text-gray-900 mb-4 app-name">{t('app.name')}</h1>
+            <p className="text-xl text-gray-600">{t('app.tagline')}</p>
           </div>
           <div className="flex items-center justify-center space-x-2">
             <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
@@ -265,7 +268,7 @@ function App() {
 
   // Main App View - Full Page Views
   return (
-    <div className="app-container app-scrollbar">
+    <div className={`app-container app-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Header - Element style */}
       <header className="app-header">
         <div className="px-4 lg:px-6">
@@ -280,7 +283,7 @@ function App() {
                 />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-3xl font-bold app-name">TELE IRAQ</h1>
+                <h1 className="text-3xl font-bold app-name">{t('app.name')}</h1>
               </div>
             </div>
 
@@ -353,11 +356,11 @@ function App() {
               <div className="text-center">
                 <div className="element-card p-8">
                   <Hash className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Rooms</h3>
-                  <p className="text-gray-600 mb-6">Join or create rooms to chat with groups</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('groups.title')}</h3>
+                  <p className="text-gray-600 mb-6">{t('groups.description')}</p>
                   <button className="element-button">
                     <Hash className="w-4 h-4" />
-                    Create Room
+                    {t('groups.createRoom')}
                   </button>
                 </div>
               </div>
@@ -372,7 +375,7 @@ function App() {
                       <div className="element-avatar-small">
                         <Hash className="w-3 h-3" />
                       </div>
-                      <span className="text-sm text-gray-500">{Math.floor(Math.random() * 50) + 1} members</span>
+                      <span className="text-sm text-gray-500">{Math.floor(Math.random() * 50) + 1} {t('groups.members')}</span>
                     </div>
                   </div>
                 ))}

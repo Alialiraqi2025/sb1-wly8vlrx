@@ -3,6 +3,7 @@ import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shi
 import { Chat, Message } from '../types';
 import MessageBubble from './MessageBubble';
 import EmojiPicker from './EmojiPicker';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ChatInterfaceProps {
   chat: Chat;
@@ -19,6 +20,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onSendMessage, 
   onBack 
 }) => {
+  const { t, direction } = useLanguage();
   const [messageInput, setMessageInput] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
@@ -333,7 +335,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden">
+    <div className={`h-screen flex flex-col bg-white overflow-hidden ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Camera Capture Overlay */}
       {isCapturingMedia && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
@@ -383,8 +385,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           
           <div className="p-4 bg-black bg-opacity-50">
             <div className="text-center">
-              <p className="text-white text-lg font-medium">Take a photo</p>
-              <p className="text-gray-300 text-sm">Tap the capture button to take a photo</p>
+              <p className="text-white text-lg font-medium">{t('chat.takePhoto')}</p>
+              <p className="text-gray-300 text-sm">{t('chat.tapCapture')}</p>
             </div>
           </div>
         </div>
@@ -414,7 +416,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             <div>
               <h3 className="element-text font-semibold text-lg chat-name">{chat.name}</h3>
               <p className="element-text-small text-gray-500">
-                {chat.isOnline ? 'Active now' : 'Last seen recently'}
+                {chat.isOnline ? t('chat.activeNow') : t('chat.lastSeenRecently')}
               </p>
             </div>
           </div>
@@ -482,7 +484,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       <div className="flex justify-center px-4 pb-2 flex-shrink-0">
         <div className="encryption-indicator">
           <Shield className="w-3 h-3" />
-          <span>Messages are end-to-end encrypted</span>
+          <span>{t('chat.encrypted')}</span>
         </div>
       </div>
 
@@ -509,7 +511,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
                       <Paperclip className="w-6 h-6 text-blue-600" />
                     </div>
-                    <span className="text-sm font-medium text-gray-900">File</span>
+                    <span className="text-sm font-medium text-gray-900">{t('chat.file')}</span>
                   </button>
                   
                   <button
@@ -519,7 +521,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
                       <Camera className="w-6 h-6 text-green-600" />
                     </div>
-                    <span className="text-sm font-medium text-gray-900">Camera</span>
+                    <span className="text-sm font-medium text-gray-900">{t('chat.camera')}</span>
                   </button>
                   
                   <button
@@ -539,7 +541,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
                       <MapPin className="w-6 h-6 text-red-600" />
                     </div>
-                    <span className="text-sm font-medium text-gray-900">Location</span>
+                    <span className="text-sm font-medium text-gray-900">{t('chat.location')}</span>
                   </button>
                   
                   <button
@@ -549,7 +551,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-2">
                       <Navigation className="w-6 h-6 text-orange-600" />
                     </div>
-                    <span className="text-sm font-medium text-gray-900">Live Location</span>
+                    <span className="text-sm font-medium text-gray-900">{t('chat.liveLocation')}</span>
                   </button>
                   
                   <button
@@ -559,12 +561,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-2">
                       <Users className="w-6 h-6 text-indigo-600" />
                     </div>
-                    <span className="text-sm font-medium text-gray-900">Contact</span>
+                    <span className="text-sm font-medium text-gray-900">{t('chat.contact')}</span>
                   </button>
                 </div>
                 
                 <div className="mt-2 pt-2 border-t border-gray-100">
-                  <p className="text-xs text-gray-500 text-center">Choose what to share</p>
+                  <p className="text-xs text-gray-500 text-center">{t('chat.chooseShare')}</p>
                 </div>
               </div>
             )}
@@ -577,7 +579,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Write a message..."
+              placeholder={t('chat.writeMessage')}
               className="composer-input w-full auto-resize"
               rows={1}
             />
@@ -662,13 +664,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   onClick={cancelRecording}
                   className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
                 >
-                  Cancel
+                  {t('chat.cancel')}
                 </button>
                 <button
                   onClick={sendVoiceMessage}
                   className="px-4 py-1 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors"
                 >
-                  Send
+                  {t('chat.send')}
                 </button>
               </div>
             </div>

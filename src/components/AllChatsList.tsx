@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Plus, MessageSquare, Hash } from 'lucide-react';
 import { Chat } from '../types';
 import { formatTime } from '../utils/dateUtils';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AllChatsListProps {
   chats: Chat[];
@@ -10,6 +11,7 @@ interface AllChatsListProps {
 }
 
 const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, currentUserId }) => {
+  const { t, direction } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredChats = chats.filter(chat =>
@@ -19,18 +21,18 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
 
   if (chats.length === 0) {
     return (
-      <div className="chat-list-wrapper">
+      <div className={`chat-list-wrapper ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
         <div className="chat-list-header">
-          <h2 className="element-title">All Chats</h2>
+          <h2 className="element-title">{t('nav.chats')}</h2>
         </div>
         <div className="flex flex-col items-center justify-center h-full p-6 text-center">
           <div className="element-card p-8 mb-6">
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No conversations yet</h3>
-            <p className="text-gray-600 mb-6">Start a conversation to begin messaging securely</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('chatList.noConversations')}</h3>
+            <p className="text-gray-600 mb-6">{t('chatList.startConversation')}</p>
             <button className="element-button">
               <Plus className="w-4 h-4" />
-              Start chat
+              {t('chatList.startChat')}
             </button>
           </div>
         </div>
@@ -39,11 +41,11 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
   }
 
   return (
-    <div className="chat-list-wrapper overflow-hidden">
+    <div className={`chat-list-wrapper overflow-hidden ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <div className="chat-list-header">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="element-title">All Chats</h2>
+          <h2 className="element-title">{t('nav.chats')}</h2>
           <button className="element-button-secondary p-2">
             <Plus className="w-4 h-4" />
           </button>
@@ -55,7 +57,7 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search conversations..."
+            placeholder={t('chatList.searchConversations')}
             className="search-input"
           />
           <Search className="search-icon" />
@@ -107,7 +109,7 @@ const AllChatsList: React.FC<AllChatsListProps> = ({ chats, onChatSelect, curren
                       </div>
                     </div>
                     <p className="element-text-small text-gray-500 truncate">
-                      {chat.lastMessage || 'No messages yet'}
+                      {chat.lastMessage || t('chatList.noMessages')}
                     </p>
                   </div>
                 </div>

@@ -4,12 +4,14 @@ import { User as UserType } from '../types';
 import RecoveryKeySetup from './RecoveryKeySetup';
 import DeviceVerification from './DeviceVerification';
 import { getDeviceInfo } from '../utils/recoveryKey';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AuthScreenProps {
   onLogin: (user: UserType) => void;
 }
 
 const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
+  const { t, direction } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -182,7 +184,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto">
+    <div className={`min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-12 flex-col justify-center overflow-y-auto">
         <div className="max-w-md">
@@ -194,15 +196,15 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 className="w-full h-full object-contain drop-shadow-md"
               />
             </div>
-            <h1 className="text-5xl font-bold text-white">TELE IRAQ</h1>
+            <h1 className="text-5xl font-bold text-white">{t('app.name')}</h1>
           </div>
           
           <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
-            Secure Communication for Iraq
+            {t('brand.title')}
           </h2>
           
           <p className="text-xl text-white/90 mb-12 leading-relaxed">
-            Connect with confidence. Built for Iraq, secured for everyone. Experience messaging without compromise.
+            {t('brand.description')}
           </p>
 
           {/* Features */}
@@ -212,8 +214,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">End-to-end encrypted</h3>
-                <p className="text-white/80">Your messages are secured with military-grade encryption that only you and the recipient can access.</p>
+                <h3 className="text-lg font-semibold text-white">{t('brand.features.encrypted')}</h3>
+                <p className="text-white/80">{t('brand.features.encryptedDesc')}</p>
               </div>
             </div>
             
@@ -222,8 +224,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <Key className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Recovery Key Protection</h3>
-                <p className="text-white/80">Secure device verification system protects your account from unauthorized access.</p>
+                <h3 className="text-lg font-semibold text-white">{t('brand.features.recovery')}</h3>
+                <p className="text-white/80">{t('brand.features.recoveryDesc')}</p>
               </div>
             </div>
             
@@ -232,8 +234,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <Globe className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Made for Iraq</h3>
-                <p className="text-white/80">Designed with Iraqi users in mind, supporting local needs and cultural preferences.</p>
+                <h3 className="text-lg font-semibold text-white">{t('brand.features.iraq')}</h3>
+                <p className="text-white/80">{t('brand.features.iraqDesc')}</p>
               </div>
             </div>
             
@@ -242,8 +244,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <Zap className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Fast & reliable</h3>
-                <p className="text-white/80">Lightning-fast messaging, crystal-clear voice calls, and seamless file sharing.</p>
+                <h3 className="text-lg font-semibold text-white">{t('brand.features.fast')}</h3>
+                <p className="text-white/80">{t('brand.features.fastDesc')}</p>
               </div>
             </div>
           </div>
@@ -251,11 +253,11 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
           <div className="mt-12 flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               <Star className="w-5 h-5 text-yellow-300" />
-              <span className="text-white/90">Trusted by thousands</span>
+              <span className="text-white/90">{t('brand.trusted')}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Users className="w-5 h-5 text-white" />
-              <span className="text-white/90">Growing community</span>
+              <span className="text-white/90">{t('brand.community')}</span>
             </div>
           </div>
         </div>
@@ -279,10 +281,10 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
           <div className="element-card p-8">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {isLogin ? 'Sign in' : 'Create account'}
+                {isLogin ? t('auth.signin') : t('auth.signup')}
               </h2>
               <p className="text-gray-600">
-                {isLogin ? 'Welcome back to TELE IRAQ' : 'Join the secure messaging network'}
+                {isLogin ? t('auth.welcome') : t('auth.join')}
               </p>
             </div>
 

@@ -1,0 +1,638 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+export type Language = 'en' | 'ar';
+export type Direction = 'ltr' | 'rtl';
+
+interface LanguageContextType {
+  language: Language;
+  direction: Direction;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Translation keys
+const translations = {
+  en: {
+    // App General
+    'app.name': 'TELE IRAQ',
+    'app.tagline': 'Secure Communication',
+    'app.description': 'Secure messaging app with end-to-end encryption, voice calls, video calls, and group chats.',
+    
+    // Navigation
+    'nav.chats': 'All Chats',
+    'nav.groups': 'Rooms',
+    'nav.settings': 'Settings',
+    'nav.back': 'Back',
+    
+    // Authentication
+    'auth.signin': 'Sign in',
+    'auth.signup': 'Create account',
+    'auth.welcome': 'Welcome back to TELE IRAQ',
+    'auth.join': 'Join the secure messaging network',
+    'auth.displayName': 'Display name',
+    'auth.email': 'Email',
+    'auth.password': 'Password',
+    'auth.enterDisplayName': 'Enter your display name',
+    'auth.enterEmail': 'Enter your email',
+    'auth.enterPassword': 'Enter your password',
+    'auth.noAccount': "Don't have an account?",
+    'auth.hasAccount': 'Already have an account?',
+    'auth.createOne': 'Create one',
+    'auth.signIn': 'Sign in',
+    'auth.endToEndEncrypted': 'End-to-end encrypted',
+    'auth.encryptionDescription': 'Your messages are secured with encryption and recovery key protection that ensures only you and the recipient can read them.',
+    'auth.recoveryKeySetup': 'Recovery Key Setup',
+    'auth.recoveryKeyDescription': 'After creating your account, you\'ll set up a recovery key to secure your device access and protect your encrypted messages.',
+    'auth.secureLogin': 'Secure Login',
+    'auth.secureLoginDescription': 'If you don\'t have a recovery key yet, you\'ll be prompted to set one up after logging in for enhanced security.',
+    'auth.testAccount': 'Login with Test Account',
+    'auth.testAccountDetails': 'Test Account Details:',
+    'auth.testAccountName': 'Name: Ahmed Al-Iraqi',
+    'auth.testAccountEmail': 'Email: ahmed@teleiraq.com',
+    'auth.testAccountFeatures': 'Features: Recovery key enabled, trusted device',
+    'auth.forTesting': 'For testing purposes:',
+    
+    // Branding
+    'brand.title': 'Secure Communication for Iraq',
+    'brand.description': 'Connect with confidence. Built for Iraq, secured for everyone. Experience messaging without compromise.',
+    'brand.features.encrypted': 'End-to-end encrypted',
+    'brand.features.encryptedDesc': 'Your messages are secured with military-grade encryption that only you and the recipient can access.',
+    'brand.features.recovery': 'Recovery Key Protection',
+    'brand.features.recoveryDesc': 'Secure device verification system protects your account from unauthorized access.',
+    'brand.features.iraq': 'Made for Iraq',
+    'brand.features.iraqDesc': 'Designed with Iraqi users in mind, supporting local needs and cultural preferences.',
+    'brand.features.fast': 'Fast & reliable',
+    'brand.features.fastDesc': 'Lightning-fast messaging, crystal-clear voice calls, and seamless file sharing.',
+    'brand.trusted': 'Trusted by thousands',
+    'brand.community': 'Growing community',
+    
+    // Chat Interface
+    'chat.writeMessage': 'Write a message...',
+    'chat.activeNow': 'Active now',
+    'chat.lastSeenRecently': 'Last seen recently',
+    'chat.encrypted': 'Messages are end-to-end encrypted',
+    'chat.voiceMessage': 'Voice message',
+    'chat.photo': 'Photo captured',
+    'chat.video': 'Video recorded',
+    'chat.location': 'Location',
+    'chat.liveLocation': 'Live Location',
+    'chat.contact': 'Contact',
+    'chat.file': 'File',
+    'chat.camera': 'Camera',
+    'chat.takePhoto': 'Take a photo',
+    'chat.tapCapture': 'Tap the capture button to take a photo',
+    'chat.chooseShare': 'Choose what to share',
+    'chat.cancel': 'Cancel',
+    'chat.send': 'Send',
+    'chat.viewOnMap': 'View on Map',
+    'chat.openInMaps': 'Open in Maps',
+    'chat.addToContacts': 'Add to Contacts',
+    'chat.sharedLocation': 'Shared Location',
+    
+    // Chat List
+    'chatList.noConversations': 'No conversations yet',
+    'chatList.startConversation': 'Start a conversation to begin messaging securely',
+    'chatList.startChat': 'Start chat',
+    'chatList.searchConversations': 'Search conversations...',
+    'chatList.noMessages': 'No messages yet',
+    
+    // Groups
+    'groups.title': 'Rooms',
+    'groups.description': 'Join or create rooms to chat with groups',
+    'groups.createRoom': 'Create Room',
+    'groups.members': 'members',
+    
+    // Settings
+    'settings.title': 'Settings',
+    'settings.subtitle': 'Manage your account and preferences',
+    'settings.profile': 'Profile',
+    'settings.profileDesc': 'Edit your profile information and photo',
+    'settings.account': 'Account',
+    'settings.accountDesc': 'Manage your account settings and preferences',
+    'settings.security': 'Security & Privacy',
+    'settings.securityDesc': 'Password, recovery key, and privacy controls',
+    'settings.notifications': 'Notifications',
+    'settings.notificationsDesc': 'Manage notification preferences and sounds',
+    'settings.appearance': 'Appearance',
+    'settings.appearanceDesc': 'Theme, font size, and visual preferences',
+    'settings.devices': 'Devices',
+    'settings.devicesDesc': 'Manage linked devices and sessions',
+    'settings.language': 'Language & Region',
+    'settings.languageDesc': 'Language, time zone, and regional settings',
+    'settings.help': 'Help & Support',
+    'settings.helpDesc': 'Get help, report issues, and contact support',
+    'settings.about': 'About',
+    'settings.aboutDesc': 'App version, terms, and privacy policy',
+    'settings.signOut': 'Sign Out',
+    'settings.edit': 'Edit',
+    'settings.save': 'Save',
+    'settings.saveChanges': 'Save Changes',
+    'settings.online': 'Online',
+    
+    // Profile Settings
+    'profile.displayName': 'Display Name',
+    'profile.email': 'Email',
+    'profile.bio': 'Bio',
+    'profile.location': 'Location',
+    'profile.website': 'Website',
+    'profile.tellAboutYourself': 'Tell us about yourself...',
+    'profile.yourLocation': 'Your location',
+    'profile.yourWebsite': 'https://your-website.com',
+    'profile.profilePhoto': 'Profile Photo',
+    'profile.uploadPhoto': 'Upload Photo',
+    'profile.removePhoto': 'Remove',
+    'profile.photoRecommendation': 'Recommended: Square image, at least 200x200px, max 5MB',
+    
+    // Security Settings
+    'security.status': 'Security Status',
+    'security.statusDesc': 'Your account is secured with end-to-end encryption',
+    'security.changePassword': 'Change Password',
+    'security.changePasswordDesc': 'Update your account password',
+    'security.currentPassword': 'Current Password',
+    'security.newPassword': 'New Password',
+    'security.confirmPassword': 'Confirm New Password',
+    'security.updatePassword': 'Update Password',
+    'security.recoveryKey': 'Recovery Key',
+    'security.recoveryKeyDesc': 'Backup key for account recovery',
+    'security.setup': 'Setup',
+    'security.change': 'Change',
+    
+    // Notifications
+    'notifications.messageNotifications': 'Message Notifications',
+    'notifications.messages': 'Messages',
+    'notifications.calls': 'Calls',
+    'notifications.groups': 'Groups',
+    'notifications.mentions': 'Mentions',
+    'notifications.soundVibration': 'Sound & Vibration',
+    'notifications.sounds': 'Sounds',
+    'notifications.vibration': 'Vibration',
+    'notifications.desktopNotifications': 'Desktop Notifications',
+    'notifications.desktopAlerts': 'Desktop Alerts',
+    'notifications.messagePreview': 'Message Preview',
+    
+    // Appearance
+    'appearance.theme': 'Theme',
+    'appearance.light': 'Light',
+    'appearance.dark': 'Dark',
+    'appearance.system': 'System',
+    'appearance.fontSize': 'Font Size',
+    'appearance.small': 'Small',
+    'appearance.medium': 'Medium',
+    'appearance.large': 'Large',
+    'appearance.language': 'Language',
+    'appearance.interfaceLanguage': 'Interface Language',
+    'appearance.english': 'English',
+    'appearance.arabic': 'العربية',
+    
+    // Devices
+    'devices.currentDevice': 'Current Device',
+    'devices.currentDeviceDesc': 'This device is currently active and verified',
+    'devices.linkedDevices': 'Linked Devices',
+    'devices.lastActive': 'Last active',
+    'devices.current': 'Current',
+    'devices.remove': 'Remove',
+    'devices.desktop': 'Desktop',
+    'devices.chrome': 'Chrome',
+    'devices.iphone': 'iPhone 14',
+    'devices.ipad': 'iPad Pro',
+    'devices.minutesAgo': 'minutes ago',
+    'devices.hourAgo': 'hour ago',
+    'devices.daysAgo': 'days ago',
+    
+    // Language & Region
+    'languageRegion.language': 'Language',
+    'languageRegion.timeZone': 'Time Zone',
+    'languageRegion.region': 'Region',
+    'languageRegion.dateFormat': 'Date format',
+    
+    // Help & Support
+    'help.helpCenter': 'Help Center',
+    'help.contactSupport': 'Contact Support',
+    'help.termsOfService': 'Terms of Service',
+    'help.privacyPolicy': 'Privacy Policy',
+    
+    // About
+    'about.version': 'Version',
+    'about.build': 'Build',
+    'about.platform': 'Platform',
+    'about.lastUpdated': 'Last Updated',
+    'about.web': 'Web',
+    'about.copyright': '© 2024 TELE IRAQ. All rights reserved.',
+    'about.tagline': 'Made with high experience by Tele Iraq Team',
+    
+    // Common
+    'common.loading': 'Loading...',
+    'common.error': 'Error',
+    'common.success': 'Success',
+    'common.warning': 'Warning',
+    'common.info': 'Info',
+    'common.ok': 'OK',
+    'common.cancel': 'Cancel',
+    'common.save': 'Save',
+    'common.delete': 'Delete',
+    'common.edit': 'Edit',
+    'common.add': 'Add',
+    'common.remove': 'Remove',
+    'common.close': 'Close',
+    'common.open': 'Open',
+    'common.yes': 'Yes',
+    'common.no': 'No',
+    'common.continue': 'Continue',
+    'common.back': 'Back',
+    'common.next': 'Next',
+    'common.previous': 'Previous',
+    'common.done': 'Done',
+    'common.finish': 'Finish',
+    'common.skip': 'Skip',
+    'common.retry': 'Retry',
+    'common.refresh': 'Refresh',
+    'common.update': 'Update',
+    'common.download': 'Download',
+    'common.upload': 'Upload',
+    'common.share': 'Share',
+    'common.copy': 'Copy',
+    'common.paste': 'Paste',
+    'common.cut': 'Cut',
+    'common.select': 'Select',
+    'common.selectAll': 'Select All',
+    'common.clear': 'Clear',
+    'common.reset': 'Reset',
+    'common.search': 'Search',
+    'common.filter': 'Filter',
+    'common.sort': 'Sort',
+    'common.view': 'View',
+    'common.hide': 'Hide',
+    'common.show': 'Show',
+    'common.enable': 'Enable',
+    'common.disable': 'Disable',
+    'common.on': 'On',
+    'common.off': 'Off',
+    'common.active': 'Active',
+    'common.inactive': 'Inactive',
+    'common.online': 'Online',
+    'common.offline': 'Offline',
+    'common.available': 'Available',
+    'common.unavailable': 'Unavailable',
+    'common.connected': 'Connected',
+    'common.disconnected': 'Disconnected',
+    'common.syncing': 'Syncing',
+    'common.synced': 'Synced',
+    'common.pending': 'Pending',
+    'common.completed': 'Completed',
+    'common.failed': 'Failed',
+    'common.expired': 'Expired',
+    'common.valid': 'Valid',
+    'common.invalid': 'Invalid',
+    'common.required': 'Required',
+    'common.optional': 'Optional',
+    'common.recommended': 'Recommended',
+    'common.advanced': 'Advanced',
+    'common.basic': 'Basic',
+    'common.custom': 'Custom',
+    'common.default': 'Default',
+    'common.auto': 'Auto',
+    'common.manual': 'Manual',
+    'common.public': 'Public',
+    'common.private': 'Private',
+    'common.secure': 'Secure',
+    'common.unsecure': 'Unsecure',
+    'common.encrypted': 'Encrypted',
+    'common.unencrypted': 'Unencrypted'
+  },
+  ar: {
+    // App General
+    'app.name': 'تيلي عراق',
+    'app.tagline': 'تواصل آمن',
+    'app.description': 'تطبيق مراسلة آمن مع تشفير من طرف إلى طرف، مكالمات صوتية، مكالمات فيديو، ومحادثات جماعية.',
+    
+    // Navigation
+    'nav.chats': 'جميع المحادثات',
+    'nav.groups': 'الغرف',
+    'nav.settings': 'الإعدادات',
+    'nav.back': 'رجوع',
+    
+    // Authentication
+    'auth.signin': 'تسجيل الدخول',
+    'auth.signup': 'إنشاء حساب',
+    'auth.welcome': 'مرحباً بعودتك إلى تيلي عراق',
+    'auth.join': 'انضم إلى شبكة المراسلة الآمنة',
+    'auth.displayName': 'الاسم المعروض',
+    'auth.email': 'البريد الإلكتروني',
+    'auth.password': 'كلمة المرور',
+    'auth.enterDisplayName': 'أدخل اسمك المعروض',
+    'auth.enterEmail': 'أدخل بريدك الإلكتروني',
+    'auth.enterPassword': 'أدخل كلمة المرور',
+    'auth.noAccount': 'ليس لديك حساب؟',
+    'auth.hasAccount': 'لديك حساب بالفعل؟',
+    'auth.createOne': 'إنشاء حساب',
+    'auth.signIn': 'تسجيل الدخول',
+    'auth.endToEndEncrypted': 'مشفر من طرف إلى طرف',
+    'auth.encryptionDescription': 'رسائلك محمية بالتشفير وحماية مفتاح الاسترداد التي تضمن أن تكون قابلة للقراءة من قبلك والمستقبل فقط.',
+    'auth.recoveryKeySetup': 'إعداد مفتاح الاسترداد',
+    'auth.recoveryKeyDescription': 'بعد إنشاء حسابك، ستقوم بإعداد مفتاح استرداد لتأمين وصول جهازك وحماية رسائلك المشفرة.',
+    'auth.secureLogin': 'تسجيل دخول آمن',
+    'auth.secureLoginDescription': 'إذا لم يكن لديك مفتاح استرداد بعد، ستتم مطالبتك بإعداد واحد بعد تسجيل الدخول لتعزيز الأمان.',
+    'auth.testAccount': 'تسجيل الدخول بحساب تجريبي',
+    'auth.testAccountDetails': 'تفاصيل الحساب التجريبي:',
+    'auth.testAccountName': 'الاسم: أحمد العراقي',
+    'auth.testAccountEmail': 'البريد الإلكتروني: ahmed@teleiraq.com',
+    'auth.testAccountFeatures': 'الميزات: مفتاح الاسترداد مفعل، جهاز موثوق',
+    'auth.forTesting': 'لأغراض الاختبار:',
+    
+    // Branding
+    'brand.title': 'تواصل آمن للعراق',
+    'brand.description': 'تواصل بثقة. مصمم للعراق، آمن للجميع. اختبر المراسلة بدون تنازلات.',
+    'brand.features.encrypted': 'مشفر من طرف إلى طرف',
+    'brand.features.encryptedDesc': 'رسائلك محمية بتشفير عسكري الدرجة يمكن لك والمستقبل فقط الوصول إليه.',
+    'brand.features.recovery': 'حماية مفتاح الاسترداد',
+    'brand.features.recoveryDesc': 'نظام التحقق الآمن من الجهاز يحمي حسابك من الوصول غير المصرح به.',
+    'brand.features.iraq': 'مصنوع للعراق',
+    'brand.features.iraqDesc': 'مصمم مع وضع المستخدمين العراقيين في الاعتبار، يدعم الاحتياجات المحلية والتفضيلات الثقافية.',
+    'brand.features.fast': 'سريع وموثوق',
+    'brand.features.fastDesc': 'مراسلة سريعة البرق، مكالمات صوتية واضحة، ومشاركة ملفات سلسة.',
+    'brand.trusted': 'موثوق من قبل الآلاف',
+    'brand.community': 'مجتمع متنامي',
+    
+    // Chat Interface
+    'chat.writeMessage': 'اكتب رسالة...',
+    'chat.activeNow': 'نشط الآن',
+    'chat.lastSeenRecently': 'آخر ظهور مؤخراً',
+    'chat.encrypted': 'الرسائل مشفرة من طرف إلى طرف',
+    'chat.voiceMessage': 'رسالة صوتية',
+    'chat.photo': 'تم التقاط صورة',
+    'chat.video': 'تم تسجيل فيديو',
+    'chat.location': 'الموقع',
+    'chat.liveLocation': 'الموقع المباشر',
+    'chat.contact': 'جهة اتصال',
+    'chat.file': 'ملف',
+    'chat.camera': 'الكاميرا',
+    'chat.takePhoto': 'التقط صورة',
+    'chat.tapCapture': 'اضغط على زر الالتقاط لأخذ صورة',
+    'chat.chooseShare': 'اختر ما تريد مشاركته',
+    'chat.cancel': 'إلغاء',
+    'chat.send': 'إرسال',
+    'chat.viewOnMap': 'عرض على الخريطة',
+    'chat.openInMaps': 'فتح في الخرائط',
+    'chat.addToContacts': 'إضافة إلى جهات الاتصال',
+    'chat.sharedLocation': 'موقع مشارك',
+    
+    // Chat List
+    'chatList.noConversations': 'لا توجد محادثات بعد',
+    'chatList.startConversation': 'ابدأ محادثة لبدء المراسلة الآمنة',
+    'chatList.startChat': 'بدء محادثة',
+    'chatList.searchConversations': 'البحث في المحادثات...',
+    'chatList.noMessages': 'لا توجد رسائل بعد',
+    
+    // Groups
+    'groups.title': 'الغرف',
+    'groups.description': 'انضم أو أنشئ غرف للدردشة مع المجموعات',
+    'groups.createRoom': 'إنشاء غرفة',
+    'groups.members': 'أعضاء',
+    
+    // Settings
+    'settings.title': 'الإعدادات',
+    'settings.subtitle': 'إدارة حسابك وتفضيلاتك',
+    'settings.profile': 'الملف الشخصي',
+    'settings.profileDesc': 'تحرير معلومات ملفك الشخصي وصورتك',
+    'settings.account': 'الحساب',
+    'settings.accountDesc': 'إدارة إعدادات حسابك وتفضيلاتك',
+    'settings.security': 'الأمان والخصوصية',
+    'settings.securityDesc': 'كلمة المرور، مفتاح الاسترداد، وضوابط الخصوصية',
+    'settings.notifications': 'الإشعارات',
+    'settings.notificationsDesc': 'إدارة تفضيلات الإشعارات والأصوات',
+    'settings.appearance': 'المظهر',
+    'settings.appearanceDesc': 'السمة، حجم الخط، والتفضيلات البصرية',
+    'settings.devices': 'الأجهزة',
+    'settings.devicesDesc': 'إدارة الأجهزة المرتبطة والجلسات',
+    'settings.language': 'اللغة والمنطقة',
+    'settings.languageDesc': 'اللغة، المنطقة الزمنية، والإعدادات الإقليمية',
+    'settings.help': 'المساعدة والدعم',
+    'settings.helpDesc': 'احصل على المساعدة، أبلغ عن المشاكل، واتصل بالدعم',
+    'settings.about': 'حول',
+    'settings.aboutDesc': 'إصدار التطبيق، الشروط، وسياسة الخصوصية',
+    'settings.signOut': 'تسجيل الخروج',
+    'settings.edit': 'تحرير',
+    'settings.save': 'حفظ',
+    'settings.saveChanges': 'حفظ التغييرات',
+    'settings.online': 'متصل',
+    
+    // Profile Settings
+    'profile.displayName': 'الاسم المعروض',
+    'profile.email': 'البريد الإلكتروني',
+    'profile.bio': 'النبذة الشخصية',
+    'profile.location': 'الموقع',
+    'profile.website': 'الموقع الإلكتروني',
+    'profile.tellAboutYourself': 'أخبرنا عن نفسك...',
+    'profile.yourLocation': 'موقعك',
+    'profile.yourWebsite': 'https://موقعك-الإلكتروني.com',
+    'profile.profilePhoto': 'صورة الملف الشخصي',
+    'profile.uploadPhoto': 'رفع صورة',
+    'profile.removePhoto': 'إزالة',
+    'profile.photoRecommendation': 'مُوصى به: صورة مربعة، على الأقل 200x200 بكسل، حد أقصى 5 ميجابايت',
+    
+    // Security Settings
+    'security.status': 'حالة الأمان',
+    'security.statusDesc': 'حسابك محمي بالتشفير من طرف إلى طرف',
+    'security.changePassword': 'تغيير كلمة المرور',
+    'security.changePasswordDesc': 'تحديث كلمة مرور حسابك',
+    'security.currentPassword': 'كلمة المرور الحالية',
+    'security.newPassword': 'كلمة المرور الجديدة',
+    'security.confirmPassword': 'تأكيد كلمة المرور الجديدة',
+    'security.updatePassword': 'تحديث كلمة المرور',
+    'security.recoveryKey': 'مفتاح الاسترداد',
+    'security.recoveryKeyDesc': 'مفتاح احتياطي لاسترداد الحساب',
+    'security.setup': 'إعداد',
+    'security.change': 'تغيير',
+    
+    // Notifications
+    'notifications.messageNotifications': 'إشعارات الرسائل',
+    'notifications.messages': 'الرسائل',
+    'notifications.calls': 'المكالمات',
+    'notifications.groups': 'المجموعات',
+    'notifications.mentions': 'الإشارات',
+    'notifications.soundVibration': 'الصوت والاهتزاز',
+    'notifications.sounds': 'الأصوات',
+    'notifications.vibration': 'الاهتزاز',
+    'notifications.desktopNotifications': 'إشعارات سطح المكتب',
+    'notifications.desktopAlerts': 'تنبيهات سطح المكتب',
+    'notifications.messagePreview': 'معاينة الرسالة',
+    
+    // Appearance
+    'appearance.theme': 'السمة',
+    'appearance.light': 'فاتح',
+    'appearance.dark': 'داكن',
+    'appearance.system': 'النظام',
+    'appearance.fontSize': 'حجم الخط',
+    'appearance.small': 'صغير',
+    'appearance.medium': 'متوسط',
+    'appearance.large': 'كبير',
+    'appearance.language': 'اللغة',
+    'appearance.interfaceLanguage': 'لغة الواجهة',
+    'appearance.english': 'English',
+    'appearance.arabic': 'العربية',
+    
+    // Devices
+    'devices.currentDevice': 'الجهاز الحالي',
+    'devices.currentDeviceDesc': 'هذا الجهاز نشط حالياً ومُتحقق منه',
+    'devices.linkedDevices': 'الأجهزة المرتبطة',
+    'devices.lastActive': 'آخر نشاط',
+    'devices.current': 'الحالي',
+    'devices.remove': 'إزالة',
+    'devices.desktop': 'سطح المكتب',
+    'devices.chrome': 'كروم',
+    'devices.iphone': 'آيفون 14',
+    'devices.ipad': 'آيباد برو',
+    'devices.minutesAgo': 'دقائق مضت',
+    'devices.hourAgo': 'ساعة مضت',
+    'devices.daysAgo': 'أيام مضت',
+    
+    // Language & Region
+    'languageRegion.language': 'اللغة',
+    'languageRegion.timeZone': 'المنطقة الزمنية',
+    'languageRegion.region': 'المنطقة',
+    'languageRegion.dateFormat': 'تنسيق التاريخ',
+    
+    // Help & Support
+    'help.helpCenter': 'مركز المساعدة',
+    'help.contactSupport': 'اتصل بالدعم',
+    'help.termsOfService': 'شروط الخدمة',
+    'help.privacyPolicy': 'سياسة الخصوصية',
+    
+    // About
+    'about.version': 'الإصدار',
+    'about.build': 'البناء',
+    'about.platform': 'المنصة',
+    'about.lastUpdated': 'آخر تحديث',
+    'about.web': 'ويب',
+    'about.copyright': '© 2024 تيلي عراق. جميع الحقوق محفوظة.',
+    'about.tagline': 'صُنع بخبرة عالية من قبل فريق تيلي عراق',
+    
+    // Common
+    'common.loading': 'جاري التحميل...',
+    'common.error': 'خطأ',
+    'common.success': 'نجح',
+    'common.warning': 'تحذير',
+    'common.info': 'معلومات',
+    'common.ok': 'موافق',
+    'common.cancel': 'إلغاء',
+    'common.save': 'حفظ',
+    'common.delete': 'حذف',
+    'common.edit': 'تحرير',
+    'common.add': 'إضافة',
+    'common.remove': 'إزالة',
+    'common.close': 'إغلاق',
+    'common.open': 'فتح',
+    'common.yes': 'نعم',
+    'common.no': 'لا',
+    'common.continue': 'متابعة',
+    'common.back': 'رجوع',
+    'common.next': 'التالي',
+    'common.previous': 'السابق',
+    'common.done': 'تم',
+    'common.finish': 'إنهاء',
+    'common.skip': 'تخطي',
+    'common.retry': 'إعادة المحاولة',
+    'common.refresh': 'تحديث',
+    'common.update': 'تحديث',
+    'common.download': 'تحميل',
+    'common.upload': 'رفع',
+    'common.share': 'مشاركة',
+    'common.copy': 'نسخ',
+    'common.paste': 'لصق',
+    'common.cut': 'قص',
+    'common.select': 'تحديد',
+    'common.selectAll': 'تحديد الكل',
+    'common.clear': 'مسح',
+    'common.reset': 'إعادة تعيين',
+    'common.search': 'بحث',
+    'common.filter': 'تصفية',
+    'common.sort': 'ترتيب',
+    'common.view': 'عرض',
+    'common.hide': 'إخفاء',
+    'common.show': 'إظهار',
+    'common.enable': 'تفعيل',
+    'common.disable': 'تعطيل',
+    'common.on': 'تشغيل',
+    'common.off': 'إيقاف',
+    'common.active': 'نشط',
+    'common.inactive': 'غير نشط',
+    'common.online': 'متصل',
+    'common.offline': 'غير متصل',
+    'common.available': 'متاح',
+    'common.unavailable': 'غير متاح',
+    'common.connected': 'متصل',
+    'common.disconnected': 'منقطع',
+    'common.syncing': 'مزامنة',
+    'common.synced': 'مُزامن',
+    'common.pending': 'في الانتظار',
+    'common.completed': 'مكتمل',
+    'common.failed': 'فشل',
+    'common.expired': 'منتهي الصلاحية',
+    'common.valid': 'صالح',
+    'common.invalid': 'غير صالح',
+    'common.required': 'مطلوب',
+    'common.optional': 'اختياري',
+    'common.recommended': 'مُوصى به',
+    'common.advanced': 'متقدم',
+    'common.basic': 'أساسي',
+    'common.custom': 'مخصص',
+    'common.default': 'افتراضي',
+    'common.auto': 'تلقائي',
+    'common.manual': 'يدوي',
+    'common.public': 'عام',
+    'common.private': 'خاص',
+    'common.secure': 'آمن',
+    'common.unsecure': 'غير آمن',
+    'common.encrypted': 'مشفر',
+    'common.unencrypted': 'غير مشفر'
+  }
+};
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem('tele-iraq-language');
+    return (saved as Language) || 'en';
+  });
+
+  const direction: Direction = language === 'ar' ? 'rtl' : 'ltr';
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('tele-iraq-language', lang);
+    
+    // Update document direction and language
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+    
+    // Update body class for styling
+    document.body.className = document.body.className.replace(/\b(ltr|rtl)\b/g, '');
+    document.body.classList.add(lang === 'ar' ? 'rtl' : 'ltr');
+  };
+
+  const t = (key: string): string => {
+    return translations[language][key] || translations.en[key] || key;
+  };
+
+  useEffect(() => {
+    // Set initial direction and language
+    document.documentElement.dir = direction;
+    document.documentElement.lang = language;
+    document.body.classList.add(direction);
+  }, []);
+
+  return (
+    <LanguageContext.Provider value={{ language, direction, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
