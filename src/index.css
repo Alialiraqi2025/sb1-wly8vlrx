@@ -1159,6 +1159,31 @@ div[class*="bg-red-"][class*="rounded-full"] * {
   color: white !important;
 }
 
+/* Camera capture styles */
+.camera-overlay {
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+.camera-controls {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+/* Attachment menu animations */
+.attachment-menu {
+  transform-origin: bottom left;
+}
+
+/* Location sharing styles */
+.location-marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.live-location-pulse {
+  animation: recordingPulse 2s infinite ease-in-out;
+}
+
 /* Auth screen button text styling */
 .auth-screen button[class*="bg-gradient"],
 .auth-screen button[class*="bg-gradient"] *,

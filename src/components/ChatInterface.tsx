@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield, Square, Play, Pause, X } from 'lucide-react';
+import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield, Square, Play, Pause, X, MapPin, Navigation, Camera, VideoIcon, Users, Plus } from 'lucide-react';
 import { Chat, Message } from '../types';
 import MessageBubble from './MessageBubble';
 import EmojiPicker from './EmojiPicker';
@@ -21,6 +21,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const [messageInput, setMessageInput] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [isCapturingMedia, setIsCapturingMedia] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
@@ -30,6 +32,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
 
@@ -178,14 +182,151 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
-  const handleFileUpload = () => {
+  const handleShareLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          onSendMessage(`📍 Location: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`, 'text');
+          setShowAttachmentMenu(false);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          alert('Unable to get your location. Please check your permissions.');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  };
+
+  const handleShareLiveLocation = () => {
+    if (navigator.geolocation) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          onSendMessage(`🔴 Live Location: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`, 'text');
+        },
+        (error) => {
+          console.error('Error getting live location:', error);
+          alert('Unable to get your live location. Please check your permissions.');
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+      
+      // Stop watching after 5 minutes
+      setTimeout(() => {
+        navigator.geolocation.clearWatch(watchId);
+      }, 300000);
+      
+      setShowAttachmentMenu(false);
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  };
+
+  const handleTakePhoto = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'user' }, 
+        audio: false 
+      });
+      
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+        setIsCapturingMedia(true);
+        setShowAttachmentMenu(false);
+      }
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      alert('Unable to access camera. Please check your permissions.');
+    }
+  };
+
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const video = videoRef.current;
+      const context = canvas.getContext('2d');
+      
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      if (context) {
+        context.drawImage(video, 0, 0);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            onSendMessage('📷 Photo captured', 'image');
+          }
+        }, 'image/jpeg', 0.8);
+      }
+      
+      // Stop camera stream
+      const stream = video.srcObject as MediaStream;
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      
+      setIsCapturingMedia(false);
+    }
+  };
+
+  const handleRecordVideo = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: true 
+      });
+      
+      const mediaRecorder = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+      
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        onSendMessage('🎥 Video recorded', 'video');
+        stream.getTracks().forEach(track => track.stop());
+      };
+      
+      mediaRecorder.start();
+      setShowAttachmentMenu(false);
+      
+      // Stop recording after 30 seconds
+      setTimeout(() => {
+        if (mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
+      }, 30000);
+      
+    } catch (error) {
+      console.error('Error accessing camera/microphone:', error);
+      alert('Unable to access camera and microphone. Please check your permissions.');
+    }
+  };
+
+  const handleShareContact = () => {
+    // In a real app, this would open a contact picker
+    const contacts = ['John Doe', 'Jane Smith', 'Ahmed Al-Iraqi', 'Sarah Johnson'];
+    const randomContact = contacts[Math.floor(Math.random() * contacts.length)];
+    onSendMessage(`👤 Contact: ${randomContact}`, 'text');
+    setShowAttachmentMenu(false);
+  };
+
+  const handleFileUpload = (accept?: string) => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'image/*,application/pdf,.doc,.docx,.txt';
+    input.accept = accept || 'image/*,application/pdf,.doc,.docx,.txt';
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         onSendMessage(`📎 ${file.name}`, file.type.startsWith('image/') ? 'image' : 'file');
+        setShowAttachmentMenu(false);
       }
     };
     input.click();
@@ -193,6 +334,62 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden">
+      {/* Camera Capture Overlay */}
+      {isCapturingMedia && (
+        <div className="fixed inset-0 z-50 bg-black flex flex-col">
+          <div className="flex-1 relative">
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              autoPlay
+              playsInline
+              muted
+            />
+            <canvas ref={canvasRef} className="hidden" />
+            
+            {/* Camera Controls */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-6">
+              <button
+                onClick={() => {
+                  const stream = videoRef.current?.srcObject as MediaStream;
+                  if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                  }
+                  setIsCapturingMedia(false);
+                }}
+                className="w-12 h-12 bg-gray-800 bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 transition-all"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <button
+                onClick={capturePhoto}
+                className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+              >
+                <div className="w-12 h-12 bg-white rounded-full border-4 border-gray-300"></div>
+              </button>
+              
+              <button
+                onClick={() => {
+                  // Switch camera (front/back)
+                  // This would require more complex implementation
+                }}
+                className="w-12 h-12 bg-gray-800 bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 transition-all"
+              >
+                <RefreshCw className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-4 bg-black bg-opacity-50">
+            <div className="text-center">
+              <p className="text-white text-lg font-medium">Take a photo</p>
+              <p className="text-gray-300 text-sm">Tap the capture button to take a photo</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Chat Header */}
       <div className="border-b border-gray-200 p-4 flex-shrink-0 bg-white">
         <div className="flex items-center justify-between">
@@ -292,13 +489,86 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       {/* Message Composer */}
       <div className="message-composer flex-shrink-0">
         <div className="flex items-end space-x-3">
-          {/* Attachment Button */}
-          <button
-            onClick={handleFileUpload}
-            className="element-button-secondary p-2 flex-shrink-0"
-          >
-            <Paperclip className="w-4 h-4" />
-          </button>
+          {/* Attachment Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
+              className="element-button-secondary p-2 flex-shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            
+            {/* Attachment Options */}
+            {showAttachmentMenu && (
+              <div className="absolute bottom-full left-0 mb-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-2 min-w-64 animate-scale-in">
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => handleFileUpload('image/*')}
+                    className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                      <Paperclip className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">File</span>
+                  </button>
+                  
+                  <button
+                    onClick={handleTakePhoto}
+                    className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+                      <Camera className="w-6 h-6 text-green-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">Camera</span>
+                  </button>
+                  
+                  <button
+                    onClick={handleRecordVideo}
+                    className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                      <VideoIcon className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">Video</span>
+                  </button>
+                  
+                  <button
+                    onClick={handleShareLocation}
+                    className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
+                      <MapPin className="w-6 h-6 text-red-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">Location</span>
+                  </button>
+                  
+                  <button
+                    onClick={handleShareLiveLocation}
+                    className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-2">
+                      <Navigation className="w-6 h-6 text-orange-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">Live Location</span>
+                  </button>
+                  
+                  <button
+                    onClick={handleShareContact}
+                    className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-2">
+                      <Users className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">Contact</span>
+                  </button>
+                </div>
+                
+                <div className="mt-2 pt-2 border-t border-gray-100">
+                  <p className="text-xs text-gray-500 text-center">Choose what to share</p>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Message Input */}
           <div className="flex-1 relative">

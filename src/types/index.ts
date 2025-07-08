@@ -2,6 +2,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  bio?: string;
+  location?: string;
+  website?: string;
   avatar?: string;
   status: 'online' | 'away' | 'offline';
   lastSeen?: Date;
@@ -44,7 +47,7 @@ export interface Message {
   senderId: string;
   content: string;
   timestamp: Date;
-  type: 'text' | 'image' | 'file' | 'voice' | 'video';
+  type: 'text' | 'image' | 'file' | 'voice' | 'video' | 'location' | 'contact';
   encrypted: boolean;
   attachment?: {
     url: string;

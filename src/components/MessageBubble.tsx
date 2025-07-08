@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Mic } from 'lucide-react';
+import { Play, Mic, MapPin, Navigation, Users, VideoIcon } from 'lucide-react';
 import { Message } from '../types';
 import { formatTime } from '../utils/dateUtils';
 
@@ -38,6 +38,60 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
           </div>
         );
       
+      case 'video':
+        return (
+          <div className="space-y-2">
+            <div className="bg-gray-100 rounded-lg p-3 relative">
+              <div className="w-64 h-36 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center relative overflow-hidden">
+                <VideoIcon className="w-12 h-12 text-white" />
+                <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
+                  0:15
+                </div>
+                <button className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-40 transition-all">
+                  <Play className="w-8 h-8 text-white" />
+                </button>
+              </div>
+            </div>
+            {message.content && <p>{message.content}</p>}
+          </div>
+        );
+      
+      case 'location':
+        return (
+          <div className="bg-gray-50 rounded-lg p-4 max-w-xs">
+            <div className="flex items-start space-x-3">
+              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-gray-900 mb-1">Location</h4>
+                <p className="text-sm text-gray-600 mb-2">{message.content}</p>
+                <button className="text-blue-500 hover:text-blue-600 text-sm font-medium">
+                  View on Map
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'contact':
+        return (
+          <div className="bg-gray-50 rounded-lg p-4 max-w-xs">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                <Users className="w-6 h-6 text-indigo-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-gray-900">{message.content.replace('👤 Contact: ', '')}</h4>
+                <p className="text-sm text-gray-500">Contact</p>
+                <button className="text-blue-500 hover:text-blue-600 text-sm font-medium mt-1">
+                  Add to Contacts
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      
       case 'voice':
         return (
           <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-3 max-w-xs">
@@ -60,6 +114,23 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderNam
         );
       
       default:
+        // Handle special message types based on content
+        if (message.content.includes('📍 Location:')) {
+          const coordinates = message.content.replace('📍 Location: ', '');
+          return (
+            <div className="bg-gray-50 rounded-lg p-3 max-w-xs">
+              <div className="flex items-center space-x-2 mb-2">
+                <MapPin className="w-4 h-4 text-red-600" />
+                <span className="text-sm font-medium text-gray-900">Shared Location</span>
+              </div>
+              <p className="text-xs text-gray-600 mb-2">{coordinates}</p>
+              <button className="text-blue-500 hover:text-blue-600 text-sm font-medium">
+                Open in Maps
+              </button>
+            </div>
+          );
+        }
+        
         return <p className="leading-relaxed">{message.content}</p>;
     }
   };
