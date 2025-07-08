@@ -773,7 +773,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
               </p>
             </div>
           </div>
-          </button>
+          </div>
         </div>
       </div>
 
