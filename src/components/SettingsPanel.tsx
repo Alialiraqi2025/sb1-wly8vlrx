@@ -142,6 +142,26 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     }
   };
 
+  const renderHeader = (title: string, description: string) => (
+    <div className="p-6 border-b border-gray-200">
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-600">{description}</p>
+    </div>
+  );
+
+  const renderSuccessError = () => (
+    <>
+      {successMessage && (
+        <div className="mx-6 mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center">
+            <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+            <span className="text-green-800 font-medium">{successMessage}</span>
+          </div>
+        </div>
+      )}
+    </>
+  );
+
   const renderMainSettings = () => (
     <div className="space-y-1">
       <button
