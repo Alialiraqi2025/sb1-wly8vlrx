@@ -188,7 +188,7 @@ const CallsSection: React.FC<CallsSectionProps> = ({ currentUserId, onStartCall 
   }
 
   return (
-    <div className={`calls-wrapper overflow-hidden universal-scrollbar ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`calls-wrapper ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <div className="calls-header">
         <div className="flex items-center justify-between mb-4">
@@ -258,7 +258,7 @@ const CallsSection: React.FC<CallsSectionProps> = ({ currentUserId, onStartCall 
       </div>
 
       {/* Call History List */}
-      <div className="calls-content calls-scrollbar universal-scrollbar overflow-y-auto">
+      <div className="calls-content calls-page-scrollbar">
         <div className="scrollable-content">
           {filteredCalls.length === 0 ? (
             <div className="text-center py-12">
