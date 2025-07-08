@@ -56,17 +56,17 @@ function App() {
     setCurrentUser(user);
   };
 
-  const handleLoginWithCredentials = (username: string, password: string) => {
+  const handleLogin = (user: UserType) => {
     // Create a complete User object from the login credentials
-    const user: User = {
-      id: username,
-      name: username,
-      email: `${username}@example.com`,
+    const completeUser: User = {
+      id: user.name || user.email,
+      name: user.name,
+      email: user.email,
       status: 'online',
       lastSeen: new Date(),
-      recoveryKey: undefined
+      recoveryKey: user.recoveryKey
     };
-    setCurrentUser(user);
+    setCurrentUser(completeUser);
   };
 
   const handleLogout = () => {

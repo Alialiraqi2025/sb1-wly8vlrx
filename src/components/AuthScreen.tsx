@@ -7,7 +7,7 @@ import { getDeviceInfo } from '../utils/recoveryKey';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface AuthScreenProps {
-  onLogin: (username: string, password: string) => void;
+  onLogin: (user: UserType) => void;
 }
 
 const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
@@ -94,7 +94,14 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     setIsLoading(false);
-    onLogin('Ahmed Al-Iraqi', 'password123');
+    onLogin({
+      id: 'ahmed-al-iraqi',
+      name: 'Ahmed Al-Iraqi',
+      email: 'ahmed@teleiraq.com',
+      status: 'online',
+      lastSeen: new Date(),
+      recoveryKey: 'ABCD1234EFGH5678IJKL9012MNOP3456QRST7890UVWX1234YZAB5678CDEF9012'
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -104,8 +111,15 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const username = isLogin ? formData.email.split('@')[0] : formData.name;
-    onLogin(username, formData.password);
+    const user: UserType = {
+      id: isLogin ? formData.email.split('@')[0] : formData.name,
+      name: isLogin ? formData.email.split('@')[0] : formData.name,
+      email: formData.email,
+      status: 'online',
+      lastSeen: new Date(),
+      recoveryKey: undefined
+    };
+    onLogin(user);
 
     setIsLoading(false);
   };
