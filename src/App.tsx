@@ -4,7 +4,6 @@ import AuthScreen from './components/AuthScreen';
 import AllChatsList from './components/AllChatsList';
 import ChatInterface from './components/ChatInterface';
 import SettingsPanel from './components/SettingsPanel';
-import HomeMenuDropdown from './components/HomeMenuDropdown';
 import LinkDeviceModal from './components/LinkDeviceModal';
 import RecoveryKeyNotice from './components/RecoveryKeyNotice';
 import RecoveryKeySetup from './components/RecoveryKeySetup';
@@ -192,24 +191,6 @@ function App() {
     setShowRecoveryKeyNotice(true);
   };
 
-  // Home menu handlers
-  const handleLinkDevice = () => {
-    setShowLinkDeviceModal(true);
-  };
-
-  const handleNotifications = () => {
-    setCurrentView('settings');
-    // In a real app, you might navigate to a specific settings section
-  };
-
-  const handleSecurityPrivacy = () => {
-    setCurrentView('settings');
-    // In a real app, you might navigate to security section
-  };
-
-  const handleAllSettings = () => {
-    setCurrentView('settings');
-  };
 
   if (isLoading) {
     return (
@@ -305,15 +286,6 @@ function App() {
 
             {/* Navigation */}
             <nav className="flex items-center space-x-1">
-              {/* Home Menu Dropdown */}
-              <HomeMenuDropdown
-                onLinkDevice={handleLinkDevice}
-                onNotifications={handleNotifications}
-                onSecurityPrivacy={handleSecurityPrivacy}
-                onAllSettings={handleAllSettings}
-                onSignOut={handleLogout}
-              />
-              
               <button
                 onClick={() => setCurrentView('all-chats')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
