@@ -85,6 +85,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   // Theme state management
   const [activeTheme, setActiveTheme] = useState<'light' | 'dark' | 'system'>('light');
 
+  // Add missing state for appearance settings
+  const [appearance, setAppearance] = useState({
+    theme: 'light' as 'light' | 'dark' | 'system'
+  });
+  const [successMessage, setSuccessMessage] = useState('');
+
   const handleThemeChange = (theme: 'light' | 'dark' | 'system') => {
     setActiveTheme(theme);
     setAppearance(prev => ({ ...prev, theme }));
@@ -772,7 +778,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                 {activeTheme === 'system' && 'System theme automatically switches between light and dark based on your device\'s settings.'}
               </p>
             </div>
-          </div>
           </div>
         </div>
       </div>
