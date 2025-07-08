@@ -1204,6 +1204,69 @@ div[class*="bg-red-"][class*="rounded-full"] * {
   color: white !important;
 }
 
+/* Profile editing input fields styling */
+.element-input.bg-gray-800 {
+  background-color: #374151 !important;
+  color: white !important;
+  border-color: #6b7280 !important;
+}
+
+.element-input.bg-gray-800:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.element-input.bg-gray-800::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Profile section text colors - comprehensive override */
+.settings-container .element-card h4,
+.settings-container .element-card h5,
+.settings-container .element-card label,
+.settings-container .element-card p,
+.settings-container .element-card .font-semibold,
+.settings-container .element-card .font-medium,
+.settings-container .element-card .text-gray-900,
+.settings-container .element-card .text-gray-700,
+.settings-container .element-card .text-gray-600 {
+  color: white !important;
+}
+
+/* Specific profile section overrides */
+.profile-section h4,
+.profile-section h5,
+.profile-section label,
+.profile-section p,
+.profile-section .font-semibold,
+.profile-section .font-medium {
+  color: white !important;
+}
+
+/* Settings panel white text overrides */
+.settings-scrollbar .element-card h4,
+.settings-scrollbar .element-card h5,
+.settings-scrollbar .element-card label,
+.settings-scrollbar .element-card .font-semibold,
+.settings-scrollbar .element-card .font-medium,
+.settings-scrollbar .element-card .text-gray-900,
+.settings-scrollbar .element-card .text-gray-700 {
+  color: white !important;
+}
+
+/* Main menu user info card text */
+.settings-container .element-card h3,
+.settings-container .element-card .text-xl,
+.settings-container .element-card .text-lg {
+  color: white !important;
+}
+
+/* Profile data display text */
+.settings-container .element-card .text-gray-300,
+.settings-container .element-card p[class*="text-gray"] {
+  color: #d1d5db !important;
+}
+
 /* Element-style badges */
 /* Profile section headings - make Personal Information white */
 .settings-container h4,

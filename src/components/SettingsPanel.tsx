@@ -956,16 +956,16 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
       <div className="flex-1 overflow-y-auto settings-scrollbar">
         <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-gray-900">Profile Information</h3>
+            <h3 className="text-xl font-semibold text-white">Profile Information</h3>
             {!isEditingProfile ? (
               <button
                 onClick={() => setIsEditingProfile(true)}
                 className="element-button-secondary"
               >
                 <Edit3 className="w-4 h-4" />
-                Edit Profile
-              </button>
-            ) : (
+                  <h3 className="text-xl font-semibold text-white">{profileData.name}</h3>
+                  <p className="text-lg text-gray-300">{profileData.email}</p>
+                  <p className="text-green-400 font-medium">Online</p>
               <div className="flex space-x-2">
                 <button
                   onClick={() => setIsEditingProfile(false)}
@@ -992,7 +992,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
           {/* Profile Photo */}
           <div className="element-card p-6">
-            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+            <h4 className="font-semibold text-white mb-4 flex items-center">
               <Camera className="w-5 h-5 mr-2 text-red-600" />
               Profile Photo
             </h4>
@@ -1040,7 +1040,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                       </button>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-300">
                     Recommended: Square image, at least 200x200px, max 5MB
                   </p>
                 </div>
@@ -1058,14 +1058,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
           {/* Profile Details */}
           <div className="element-card p-6">
-            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+            <h4 className="font-semibold text-white mb-4 flex items-center">
               <User className="w-5 h-5 mr-2 text-red-600" />
               Personal Information
             </h4>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Display Name
                 </label>
                 {isEditingProfile ? (
@@ -1073,16 +1073,16 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                     type="text"
                     value={profileData.name}
                     onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
-                    className="element-input"
+                    className="element-input bg-gray-800 text-white border-gray-600 focus:border-red-500"
                     placeholder="Enter your display name"
                   />
                 ) : (
-                  <p className="text-gray-900 font-medium">{profileData.name}</p>
+                  <p className="text-gray-300 font-medium">{profileData.name}</p>
                 )}
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Email Address
                 </label>
                 {isEditingProfile ? (
@@ -1090,27 +1090,27 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
                     type="email"
                     value={profileData.email}
                     onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                    className="element-input"
+                    className="element-input bg-gray-800 text-white border-gray-600 focus:border-red-500"
                     placeholder="Enter your email"
                   />
                 ) : (
-                  <p className="text-gray-900">{profileData.email}</p>
+                  <p className="text-gray-300">{profileData.email}</p>
                 )}
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Bio
                 </label>
                 {isEditingProfile ? (
                   <textarea
                     value={profileData.bio}
                     onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
-                    className="element-input h-20 resize-none"
+                    className="element-input h-20 resize-none bg-gray-800 text-white border-gray-600 focus:border-red-500"
                     placeholder="Tell others about yourself"
                   />
                 ) : (
-                  <p className="text-gray-600">{profileData.bio}</p>
+                  <p className="text-gray-300">{profileData.bio}</p>
                 )}
               </div>
             </div>
@@ -1118,13 +1118,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
           
           {/* Demo content for scrolling */}
           <div className="element-card p-6">
-            <h4 className="font-semibold text-gray-900 mb-4">Additional Profile Options</h4>
+            <h4 className="font-semibold text-white mb-4">Additional Profile Options</h4>
             <div className="space-y-4">
               {Array.from({ length: 6 }, (_, i) => (
                 <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div>
-                    <h5 className="font-medium text-gray-900">Profile Option {i + 1}</h5>
-                    <p className="text-sm text-gray-600">Demo profile setting for scrolling test</p>
+                    <h5 className="font-medium text-white">Profile Option {i + 1}</h5>
+                    <p className="text-sm text-gray-300">Demo profile setting for scrolling test</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" className="sr-only peer" />
