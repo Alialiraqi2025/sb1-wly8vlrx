@@ -777,26 +777,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           onDecline={handleCloseCall}
         />
       )}
-      
-      {/* Demo: Simulate incoming calls */}
-      {!showCallInterface && (
-        <div className="fixed bottom-4 right-4 space-y-2 z-40">
-          <button
-            onClick={() => simulateIncomingCall('voice')}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
-          >
-            <Phone className="w-4 h-4" />
-            <span>Simulate Voice Call</span>
-          </button>
-          <button
-            onClick={() => simulateIncomingCall('video')}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
-          >
-            <Video className="w-4 h-4" />
-            <span>Simulate Video Call</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 };
