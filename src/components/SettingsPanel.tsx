@@ -62,7 +62,7 @@ type SettingsSection =
   | 'help' 
   | 'about';
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
   const [currentSection, setCurrentSection] = useState<SettingsSection>('main');
   const [showPasswordChange, setShowPasswordChange] = useState(false);
   const [showRecoveryKeySetup, setShowRecoveryKeySetup] = useState(false);
