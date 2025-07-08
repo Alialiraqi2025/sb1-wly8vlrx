@@ -73,6 +73,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
+      console.log('Sending message:', messageInput.trim()); // Debug log
       onSendMessage(messageInput.trim());
       setMessageInput('');
       setShowEmojiPicker(false);
@@ -522,6 +523,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       {/* Messages with Custom Scrollbar */}
       <div className="flex-1 overflow-y-auto bg-gray-50 messages-scrollbar universal-scrollbar">
         <div className="messages-content">
+          {console.log('Rendering messages:', messages)} {/* Debug log */}
           <div className="space-y-1">
             {messages.map((message, index) => {
               const prevMessage = messages[index - 1];
@@ -539,25 +541,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 />
               );
             })}
-            
-            {/* Demo messages for scrolling */}
-            {Array.from({ length: 20 }, (_, i) => (
-              <MessageBubble
-                key={`demo-${i}`}
-                message={{
-                  id: `demo-${i}`,
-                  chatId: chat.id,
-                  senderId: i % 3 === 0 ? currentUserId : 'other',
-                  content: `This is demo message ${i + 1}. TELE IRAQ provides a secure and user-friendly messaging experience with end-to-end encryption.`,
-                  timestamp: new Date(Date.now() - (i * 300000)),
-                  type: 'text',
-                  encrypted: true
-                }}
-                isOwn={i % 3 === 0}
-                senderName={i % 3 === 0 ? 'You' : otherParticipant?.name || 'Unknown'}
-                isContinuation={false}
-              />
-            ))}
             
             <div ref={messagesEndRef} />
           </div>

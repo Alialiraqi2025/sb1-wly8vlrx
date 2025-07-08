@@ -133,7 +133,11 @@ function App() {
       encrypted: true
     };
 
-    setMessages(prev => [...prev, newMessage]);
+    setMessages(prev => {
+      const updatedMessages = [...prev, newMessage];
+      console.log('Updated messages:', updatedMessages); // Debug log
+      return updatedMessages;
+    });
 
     // Update chat's last message
     setChats(prev => prev.map(chat => 
@@ -165,7 +169,11 @@ function App() {
         encrypted: true
       };
 
-      setMessages(prev => [...prev, responseMessage]);
+      setMessages(prev => {
+        const updatedMessages = [...prev, responseMessage];
+        console.log('Updated messages with response:', updatedMessages); // Debug log
+        return updatedMessages;
+      });
       setChats(prev => prev.map(chat => 
         chat.id === selectedChat.id 
           ? { ...chat, lastMessage: response, lastMessageTime: new Date() }

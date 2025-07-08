@@ -14,6 +14,8 @@ interface MessageBubbleProps {
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, senderName, isContinuation = false }) => {
   const { t } = useLanguage();
 
+  console.log('Rendering message bubble:', { message, isOwn, senderName }); // Debug log
+
   const renderMessageContent = () => {
     switch (message.type) {
       case 'image':
