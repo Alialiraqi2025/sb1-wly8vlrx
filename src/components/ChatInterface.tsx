@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield } from 'lucide-react';
+import { ArrowLeft, Phone, Video, Send, Paperclip, Smile, Mic, MoreVertical, Shield, Square, Play, Pause, X } from 'lucide-react';
 import { Chat, Message } from '../types';
 import MessageBubble from './MessageBubble';
 import EmojiPicker from './EmojiPicker';
@@ -22,8 +22,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [messageInput, setMessageInput] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [isPlayingPreview, setIsPlayingPreview] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [recordingTimer, setRecordingTimer] = useState<NodeJS.Timeout | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const otherParticipant = chat.participants.find(p => p.id !== currentUserId);
 
@@ -38,6 +44,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 120)}px`;
     }
   }, [messageInput]);
+
+  useEffect(() => {
+    // Cleanup on unmount
+    return () => {
+      if (recordingTimer) {
+        clearInterval(recordingTimer);
+      }
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+      }
+    };
+  }, [recordingTimer, mediaRecorder]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -64,15 +82,99 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     inputRef.current?.focus();
   };
 
-  const handleVoiceRecord = () => {
-    if (isRecording) {
-      setIsRecording(false);
-      onSendMessage('🎤 Voice message', 'voice');
-    } else {
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        setAudioBlob(blob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
       setIsRecording(true);
-      setTimeout(() => {
-        setIsRecording(false);
-      }, 3000);
+      setRecordingTime(0);
+
+      // Start timer
+      const timer = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+      setRecordingTimer(timer);
+
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      alert('Unable to access microphone. Please check your permissions.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+    if (recordingTimer) {
+      clearInterval(recordingTimer);
+      setRecordingTimer(null);
+    }
+    setIsRecording(false);
+  };
+
+  const cancelRecording = () => {
+    stopRecording();
+    setAudioBlob(null);
+    setRecordingTime(0);
+  };
+
+  const sendVoiceMessage = () => {
+    if (audioBlob) {
+      const duration = formatTime(recordingTime);
+      onSendMessage(`🎤 Voice message (${duration})`, 'voice');
+      setAudioBlob(null);
+      setRecordingTime(0);
+    }
+  };
+
+  const playPreview = () => {
+    if (audioBlob && audioRef.current) {
+      const audioUrl = URL.createObjectURL(audioBlob);
+      audioRef.current.src = audioUrl;
+      audioRef.current.play();
+      setIsPlayingPreview(true);
+      
+      audioRef.current.onended = () => {
+        setIsPlayingPreview(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+    }
+  };
+
+  const pausePreview = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlayingPreview(false);
+    }
+  };
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleVoiceRecord = () => {
+    if (!isRecording && !audioBlob) {
+      startRecording();
+    } else {
+      stopRecording();
     }
   };
 
@@ -227,26 +329,84 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
 
           {/* Send/Voice Button */}
-          {messageInput.trim() ? (
+          {messageInput.trim() || audioBlob ? (
             <button
-              onClick={handleSendMessage}
+              onClick={audioBlob ? sendVoiceMessage : handleSendMessage}
               className="element-button p-2 flex-shrink-0"
             >
               <Send className="w-4 h-4" />
             </button>
+          ) : isRecording ? (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={cancelRecording}
+                className="p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200 flex-shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="flex items-center space-x-2 px-3 py-2 bg-red-50 rounded-lg border border-red-200">
+                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-red-700 font-mono text-sm">
+                  {formatTime(recordingTime)}
+                </span>
+              </div>
+              <button
+                onClick={stopRecording}
+                className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all duration-200 flex-shrink-0"
+              >
+                <Square className="w-4 h-4" />
+              </button>
+            </div>
           ) : (
             <button
               onClick={handleVoiceRecord}
-              className={`p-2 rounded-lg transition-all duration-200 flex-shrink-0 ${
-                isRecording
-                  ? 'bg-red-500 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+              className="p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200 flex-shrink-0"
             >
               <Mic className="w-4 h-4" />
             </button>
           )}
         </div>
+        
+        {/* Voice Message Preview */}
+        {audioBlob && !isRecording && (
+          <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={isPlayingPreview ? pausePreview : playPreview}
+                  className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
+                >
+                  {isPlayingPreview ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4" />
+                  )}
+                </button>
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Voice Message</p>
+                  <p className="text-xs text-blue-700">{formatTime(recordingTime)}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={cancelRecording}
+                  className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={sendVoiceMessage}
+                  className="px-4 py-1 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Hidden audio element for preview */}
+        <audio ref={audioRef} style={{ display: 'none' }} />
       </div>
     </div>
   );
