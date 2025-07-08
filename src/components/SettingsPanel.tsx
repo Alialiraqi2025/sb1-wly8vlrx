@@ -112,6 +112,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [accountInfo, setAccountInfo] = useState({
+    homeserver: 'matrix.teleiraq.com',
+    identityServer: 'vector.im',
+    mediaCacheSize: '2.3 GB',
+    totalCacheSize: '3.1 GB'
+  });
+
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -214,6 +221,46 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     setShowRecoveryKeySetup(false);
     setSuccessMessage('Recovery key set up successfully!');
     setTimeout(() => setSuccessMessage(''), 3000);
+  };
+
+  const handleClearMediaCache = async () => {
+    setIsLoading(true);
+    setErrorMessage('');
+    
+    try {
+      // Simulate cache clearing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setAccountInfo(prev => ({ ...prev, mediaCacheSize: '0 MB' }));
+      setSuccessMessage('Media cache cleared successfully!');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      setErrorMessage('Failed to clear media cache');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClearCache = async () => {
+    setIsLoading(true);
+    setErrorMessage('');
+    
+    try {
+      // Simulate cache clearing
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      
+      setAccountInfo(prev => ({ 
+        ...prev, 
+        mediaCacheSize: '0 MB',
+        totalCacheSize: '0.8 GB'
+      }));
+      setSuccessMessage('All cache cleared successfully!');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      setErrorMessage('Failed to clear cache');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const mainMenuItems = [
@@ -1150,6 +1197,211 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     </div>
   );
 
+  const renderAccountSection = () => (
+    <div className="h-full flex flex-col bg-white">
+      {renderHeader('Account', 'Manage your account settings and server information')}
+      {renderSuccessError()}
+      
+      <div className="flex-1 overflow-y-auto settings-scrollbar">
+        <div className="p-6 space-y-6">
+          {/* Account Information */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <User className="w-5 h-5 mr-2 text-red-600" />
+              Account Information
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <h5 className="font-medium text-gray-900">Logged in as</h5>
+                  <p className="text-sm text-gray-600">{user.email}</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-medium text-gray-900">{user.name}</p>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm text-green-600">Online</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Globe className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h5 className="font-medium text-blue-900">Homeserver</h5>
+                      <p className="text-sm text-blue-700">{accountInfo.homeserver}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <h5 className="font-medium text-purple-900">Identity Server</h5>
+                      <p className="text-sm text-purple-700">{accountInfo.identityServer}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cache Management */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Trash2 className="w-5 h-5 mr-2 text-red-600" />
+              Cache Management
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h5 className="font-medium text-gray-900">Media Cache</h5>
+                    <p className="text-sm text-gray-600">Images, videos, and file attachments</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-medium text-gray-900">{accountInfo.mediaCacheSize}</p>
+                    <p className="text-xs text-gray-500">Used storage</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleClearMediaCache}
+                  disabled={isLoading}
+                  className="w-full element-button-secondary text-orange-600 hover:bg-orange-50"
+                >
+                  {isLoading ? (
+                    <div className="element-spinner"></div>
+                  ) : (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      Clear Media Cache
+                    </>
+                  )}
+                </button>
+              </div>
+              
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h5 className="font-medium text-gray-900">Total Cache</h5>
+                    <p className="text-sm text-gray-600">All cached data including messages and media</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-medium text-gray-900">{accountInfo.totalCacheSize}</p>
+                    <p className="text-xs text-gray-500">Total storage</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleClearCache}
+                  disabled={isLoading}
+                  className="w-full element-button-secondary text-red-600 hover:bg-red-50"
+                >
+                  {isLoading ? (
+                    <div className="element-spinner"></div>
+                  ) : (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      Clear All Cache
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+              <div className="flex items-start space-x-3">
+                <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h5 className="font-medium text-amber-900">Cache Information</h5>
+                  <p className="text-sm text-amber-800 mt-1">
+                    Clearing cache will free up storage space but may slow down the app temporarily as data is re-downloaded.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Actions */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Settings className="w-5 h-5 mr-2 text-red-600" />
+              Account Actions
+            </h4>
+            
+            <div className="space-y-3">
+              <button className="w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 text-left">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Download className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h5 className="font-medium text-gray-900">Export Account Data</h5>
+                    <p className="text-sm text-gray-600">Download your messages and account information</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+              </button>
+              
+              <button className="w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 text-left">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <RefreshCw className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h5 className="font-medium text-gray-900">Sync Account</h5>
+                    <p className="text-sm text-gray-600">Synchronize data across all devices</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+              </button>
+              
+              <button className="w-full p-4 border border-red-200 rounded-lg hover:bg-red-50 transition-all duration-200 text-left">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <AlertTriangle className="w-5 h-5 text-red-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h5 className="font-medium text-red-900">Deactivate Account</h5>
+                    <p className="text-sm text-red-700">Temporarily disable your account</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+              </button>
+            </div>
+          </div>
+          
+          {/* Demo content for scrolling */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4">Additional Account Settings</h4>
+            <div className="space-y-4">
+              {Array.from({ length: 8 }, (_, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <h5 className="font-medium text-gray-900">Account Setting {i + 1}</h5>
+                    <p className="text-sm text-gray-600">Demo account setting for scrolling test</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderPlaceholderSection = (title: string, icon: React.ElementType, description: string) => (
     <div className="h-full flex flex-col bg-white">
       {renderHeader(title, description)}
@@ -1201,7 +1453,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     case 'devices':
       return renderDevicesSection();
     case 'account':
-      return renderPlaceholderSection('Account', Mail, 'Manage your account settings and preferences');
+      return renderAccountSection();
     case 'privacy':
       return renderPlaceholderSection('Privacy', Lock, 'Advanced privacy controls and settings');
     case 'language':
