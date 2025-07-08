@@ -22,6 +22,34 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
     password: ''
   });
 
+  const handleTestLogin = async () => {
+    setIsLoading(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const deviceInfo = getDeviceInfo();
+    const testUser: UserType = {
+      id: 'test-user-123',
+      name: 'Ahmed Al-Iraqi',
+      email: 'ahmed@teleiraq.com',
+      status: 'online',
+      deviceId: deviceInfo.id,
+      recoveryKey: 'ABCD1234EFGH5678IJKL9012MNOP3456QRST7890UVWX1234YZAB5678CDEF9012',
+      trustedDevices: [{
+        id: deviceInfo.id,
+        name: deviceInfo.name,
+        type: deviceInfo.type,
+        lastUsed: new Date(),
+        isCurrentDevice: true,
+        verified: true
+      }]
+    };
+    
+    setIsLoading(false);
+    onLogin(testUser);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -350,6 +378,34 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               </p>
             </div>
 
+            {/* Test Account Section */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="text-center">
+                <p className="text-sm text-gray-600 mb-4">For testing purposes:</p>
+                <button
+                  onClick={handleTestLogin}
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <div className="element-spinner"></div>
+                  ) : (
+                    <>
+                      <User className="w-4 h-4" />
+                      <span>Login with Test Account</span>
+                    </>
+                  )}
+                </button>
+                <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="text-xs text-blue-800">
+                    <p className="font-medium mb-1">Test Account Details:</p>
+                    <p>Name: Ahmed Al-Iraqi</p>
+                    <p>Email: ahmed@teleiraq.com</p>
+                    <p>Features: Recovery key enabled, trusted device</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* Security Notice */}
             <div className="mt-8 p-4 bg-red-50 rounded-lg border border-red-200">
               <div className="flex items-start space-x-3">
