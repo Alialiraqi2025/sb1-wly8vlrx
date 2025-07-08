@@ -47,6 +47,7 @@ import RecoveryKeySetup from './RecoveryKeySetup';
 
 interface SettingsPanelProps {
   user: UserType;
+  onSignOut?: () => void;
 }
 
 type SettingsSection = 
@@ -90,6 +91,23 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
     theme: 'light' as 'light' | 'dark' | 'system'
   });
   const [successMessage, setSuccessMessage] = useState('');
+
+  const handleSignOut = () => {
+    // Clear any local state/data
+    setCurrentSection('main');
+    setIsEditingProfile(false);
+    setShowPasswordChange(false);
+    setShowRecoveryKeySetup(false);
+    setSuccessMessage('');
+    
+    // Call the parent logout handler if provided
+    if (onSignOut) {
+      onSignOut();
+    } else {
+      // Fallback: reload the page to clear all state
+      window.location.reload();
+    }
+  };
 
   const handleThemeChange = (theme: 'light' | 'dark' | 'system') => {
     setActiveTheme(theme);
@@ -266,7 +284,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
       </div>
 
       <div className="border-t border-gray-200 mt-4 pt-4">
-        <button className="w-full flex items-center space-x-3 p-4 hover:bg-red-50 transition-colors text-red-600">
+        <button 
+          onClick={handleSignOut}
+          className="w-full flex items-center space-x-3 p-4 hover:bg-red-50 transition-colors text-red-600"
+        >
           <LogOut className="w-5 h-5" />
           <span>Sign Out</span>
         </button>

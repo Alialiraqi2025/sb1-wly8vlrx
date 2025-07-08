@@ -382,7 +382,7 @@ function App() {
           
           {currentView === 'settings' && (
             <div className="h-full bg-white overflow-hidden">
-              <SettingsPanel user={currentUser} />
+              <SettingsPanel user={currentUser} onSignOut={handleLogout} />
             </div>
           )}
         </div>
