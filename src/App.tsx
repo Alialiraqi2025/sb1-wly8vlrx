@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, Users, Settings, Hash, ArrowLeft } from 'lucide-react';
+import { MessageSquare, Users, Settings, Hash, ArrowLeft, Phone } from 'lucide-react';
 import AuthScreen from './components/AuthScreen';
 import AllChatsList from './components/AllChatsList';
 import ChatInterface from './components/ChatInterface';
@@ -7,11 +7,12 @@ import SettingsPanel from './components/SettingsPanel';
 import LinkDeviceModal from './components/LinkDeviceModal';
 import RecoveryKeyNotice from './components/RecoveryKeyNotice';
 import RecoveryKeySetup from './components/RecoveryKeySetup';
+import CallsSection from './components/CallsSection';
 import { User, Chat, Message } from './types';
 import { generateDemoData } from './utils/demoData';
 import { useLanguage } from './contexts/LanguageContext';
 
-type ViewType = 'all-chats' | 'groups' | 'settings' | 'chat-interface';
+type ViewType = 'all-chats' | 'calls' | 'groups' | 'settings' | 'chat-interface';
 
 function App() {
   const { t, direction } = useLanguage();
@@ -309,6 +310,16 @@ function App() {
                 <MessageSquare className="w-5 h-5" />
               </button>
               <button
+                onClick={() => setCurrentView('calls')}
+                className={`p-2 rounded-lg transition-all duration-200 ${
+                  currentView === 'calls'
+                    ? 'bg-red-100 text-red-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+              >
+                <Phone className="w-5 h-5" />
+              </button>
+              <button
                 onClick={() => setCurrentView('groups')}
                 className={`p-2 rounded-lg transition-all duration-200 ${
                   currentView === 'groups'
@@ -356,6 +367,15 @@ function App() {
                 chats={chats}
                 onChatSelect={handleChatSelect}
                 currentUserId={currentUser.id}
+              />
+            </div>
+          )}
+          
+          {currentView === 'calls' && (
+            <div className="h-full bg-white calls-container calls-page-scrollbar overflow-y-auto">
+              <CallsSection
+                currentUserId={currentUser.id}
+                onStartCall={(userId, type) => console.log('Start call:', userId, type)}
               />
             </div>
           )}

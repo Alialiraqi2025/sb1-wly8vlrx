@@ -22,6 +22,7 @@ const translations = {
     
     // Navigation
     'nav.chats': 'All Chats',
+    'nav.calls': 'Calls',
     'nav.groups': 'Rooms',
     'nav.settings': 'Settings',
     'nav.back': 'Back',
@@ -99,6 +100,25 @@ const translations = {
     'chatList.startChat': 'Start chat',
     'chatList.searchConversations': 'Search conversations...',
     'chatList.noMessages': 'No messages yet',
+    
+    // Calls
+    'calls.title': 'Calls',
+    'calls.noCalls': 'No calls yet',
+    'calls.startCall': 'Start a voice or video call to see your call history here',
+    'calls.makeCall': 'Make a Call',
+    'calls.searchHistory': 'Search call history...',
+    'calls.allCalls': 'All Calls',
+    'calls.missedCalls': 'Missed Calls',
+    'calls.incoming': 'Incoming',
+    'calls.outgoing': 'Outgoing',
+    'calls.missed': 'Missed call',
+    'calls.declined': 'Declined',
+    'calls.failed': 'Failed',
+    'calls.noAnswer': 'No answer',
+    'calls.voiceCall': 'Voice call',
+    'calls.videoCall': 'Video call',
+    'calls.filterCalls': 'Filter calls',
+    'calls.moreOptions': 'More options',
     
     // Groups
     'groups.title': 'Rooms',
@@ -344,6 +364,7 @@ const translations = {
     
     // Navigation
     'nav.chats': 'جميع المحادثات',
+    'nav.calls': 'المكالمات',
     'nav.groups': 'الغرف',
     'nav.settings': 'الإعدادات',
     'nav.back': 'رجوع',
@@ -421,6 +442,25 @@ const translations = {
     'chatList.startChat': 'بدء محادثة',
     'chatList.searchConversations': 'البحث في المحادثات...',
     'chatList.noMessages': 'لا توجد رسائل بعد',
+    
+    // Calls
+    'calls.title': 'المكالمات',
+    'calls.noCalls': 'لا توجد مكالمات بعد',
+    'calls.startCall': 'ابدأ مكالمة صوتية أو فيديو لرؤية سجل المكالمات هنا',
+    'calls.makeCall': 'إجراء مكالمة',
+    'calls.searchHistory': 'البحث في سجل المكالمات...',
+    'calls.allCalls': 'جميع المكالمات',
+    'calls.missedCalls': 'المكالمات الفائتة',
+    'calls.incoming': 'الواردة',
+    'calls.outgoing': 'الصادرة',
+    'calls.missed': 'مكالمة فائتة',
+    'calls.declined': 'مرفوضة',
+    'calls.failed': 'فشلت',
+    'calls.noAnswer': 'لا إجابة',
+    'calls.voiceCall': 'مكالمة صوتية',
+    'calls.videoCall': 'مكالمة فيديو',
+    'calls.filterCalls': 'تصفية المكالمات',
+    'calls.moreOptions': 'خيارات أكثر',
     
     // Groups
     'groups.title': 'الغرف',
