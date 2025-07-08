@@ -1155,6 +1155,322 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
     </div>
   );
 
+  const renderPlaceholderSection = (title: string, icon: React.ElementType, description: string) => (
+    <div className="h-full flex flex-col bg-white">
+      {renderHeader(title, description)}
+      
+      <div className="flex-1 flex items-center justify-center overflow-y-auto settings-scrollbar">
+        <div className="text-center p-6">
+          <div className="w-28 h-28 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            {React.createElement(icon, { className: "w-12 h-12 text-gray-400" })}
+          </div>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-3">{title}</h3>
+          <p className="text-lg text-gray-600 mb-8">Coming soon...</p>
+          
+          {/* Demo content for scrolling */}
+          <div className="space-y-4 max-w-md">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div key={i} className="element-card p-4 text-left">
+                <h4 className="font-medium text-gray-900 mb-2">Demo Feature {i + 1}</h4>
+                <p className="text-sm text-gray-600">This is a placeholder for future {title.toLowerCase()} features.</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAccountSection = () => (
+    <div className="h-full flex flex-col bg-white">
+      {renderHeader('Account', 'Manage your account settings and preferences')}
+      {renderSuccessError()}
+      
+      <div className="flex-1 overflow-y-auto settings-scrollbar">
+        <div className="p-6 space-y-6">
+          {/* Account Overview */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <User className="w-5 h-5 mr-2 text-red-600" />
+              Account Overview
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <h5 className="font-medium text-gray-900">Account Status</h5>
+                  <p className="text-sm text-gray-600">Your account is active and verified</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <span className="text-sm font-medium text-green-600">Active</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <h5 className="font-medium text-gray-900">Account Type</h5>
+                  <p className="text-sm text-gray-600">Standard TELE IRAQ account</p>
+                </div>
+                <span className="text-sm font-medium text-blue-600">Standard</span>
+              </div>
+              
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <h5 className="font-medium text-gray-900">Member Since</h5>
+                  <p className="text-sm text-gray-600">Account creation date</p>
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  {new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Email Management */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Mail className="w-5 h-5 mr-2 text-red-600" />
+              Email Management
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <h5 className="font-medium text-gray-900">Primary Email</h5>
+                  <p className="text-sm text-gray-600">{user.email}</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <span className="text-xs text-green-600">Verified</span>
+                </div>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button className="flex-1 element-button-secondary">
+                  <Edit3 className="w-4 h-4" />
+                  Change Email
+                </button>
+                <button className="flex-1 element-button-secondary">
+                  <RefreshCw className="w-4 h-4" />
+                  Resend Verification
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Preferences */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Settings className="w-5 h-5 mr-2 text-red-600" />
+              Account Preferences
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="font-medium text-gray-900">Two-Factor Authentication</h5>
+                  <p className="text-sm text-gray-600">Add an extra layer of security to your account</p>
+                </div>
+                <button className="element-button-secondary">
+                  <Shield className="w-4 h-4" />
+                  Enable 2FA
+                </button>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="font-medium text-gray-900">Login Alerts</h5>
+                  <p className="text-sm text-gray-600">Get notified of new login attempts</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    defaultChecked={true}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                </label>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="font-medium text-gray-900">Session Timeout</h5>
+                  <p className="text-sm text-gray-600">Automatically log out after inactivity</p>
+                </div>
+                <select className="element-input w-32">
+                  <option value="30">30 minutes</option>
+                  <option value="60" selected>1 hour</option>
+                  <option value="120">2 hours</option>
+                  <option value="240">4 hours</option>
+                  <option value="never">Never</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Data & Storage */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <FileText className="w-5 h-5 mr-2 text-red-600" />
+              Data & Storage
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-gray-900">Storage Usage</h5>
+                  <span className="text-sm text-gray-600">2.3 GB of 5 GB used</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-red-600 h-2 rounded-full" style={{ width: '46%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-500 mt-2">
+                  <span>Messages: 1.2 GB</span>
+                  <span>Media: 1.1 GB</span>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <button className="element-button-secondary">
+                  <Download className="w-4 h-4" />
+                  Export Data
+                </button>
+                <button className="element-button-secondary">
+                  <Trash2 className="w-4 h-4" />
+                  Clear Cache
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Actions */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <AlertTriangle className="w-5 h-5 mr-2 text-red-600" />
+              Account Actions
+            </h4>
+            
+            <div className="space-y-4">
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Download className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div className="flex-1">
+                    <h5 className="font-medium text-blue-900">Download Your Data</h5>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Export all your messages, media, and account information
+                    </p>
+                    <button className="mt-3 element-button-secondary text-blue-600 hover:bg-blue-100">
+                      Request Data Export
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Clock className="w-5 h-5 text-amber-600 mt-0.5" />
+                  <div className="flex-1">
+                    <h5 className="font-medium text-amber-900">Deactivate Account</h5>
+                    <p className="text-sm text-amber-700 mt-1">
+                      Temporarily disable your account (can be reactivated)
+                    </p>
+                    <button className="mt-3 element-button-secondary text-amber-600 hover:bg-amber-100">
+                      Deactivate Account
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Trash2 className="w-5 h-5 text-red-600 mt-0.5" />
+                  <div className="flex-1">
+                    <h5 className="font-medium text-red-900">Delete Account</h5>
+                    <p className="text-sm text-red-700 mt-1">
+                      Permanently delete your account and all data (cannot be undone)
+                    </p>
+                    <button className="mt-3 element-button-secondary text-red-600 hover:bg-red-100">
+                      Delete Account
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Statistics */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Info className="w-5 h-5 mr-2 text-red-600" />
+              Account Statistics
+            </h4>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-2xl font-bold text-red-600">1,247</div>
+                <div className="text-sm text-gray-600">Messages Sent</div>
+              </div>
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">23</div>
+                <div className="text-sm text-gray-600">Active Chats</div>
+              </div>
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">156</div>
+                <div className="text-sm text-gray-600">Files Shared</div>
+              </div>
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">89</div>
+                <div className="text-sm text-gray-600">Days Active</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="element-card p-6">
+            <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+              <Clock className="w-5 h-5 mr-2 text-red-600" />
+              Recent Activity
+            </h4>
+            
+            <div className="space-y-3">
+              {[
+                { action: 'Password changed', time: '2 hours ago', icon: Lock },
+                { action: 'New device linked', time: '1 day ago', icon: Smartphone },
+                { action: 'Profile updated', time: '3 days ago', icon: User },
+                { action: 'Recovery key generated', time: '1 week ago', icon: Key },
+                { action: 'Account created', time: '2 weeks ago', icon: CheckCircle }
+              ].map((activity, index) => (
+                <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                    <activity.icon className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                    <p className="text-xs text-gray-500">{activity.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (showRecoveryKeySetup) {
+    return (
+      <RecoveryKeySetup
+        onClose={() => setShowRecoveryKeySetup(false)}
+        onComplete={() => setShowRecoveryKeySetup(false)}
+      />
+    );
+  }
+
   const renderCurrentSection = () => {
     switch (currentSection) {
       case 'profile':
@@ -1167,6 +1483,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
         return renderAppearanceSettings();
       case 'devices':
         return renderDeviceSettings();
+      case 'account':
+        return renderAccountSection();
+      case 'privacy':
+        return renderPlaceholderSection('Privacy', Lock, 'Advanced privacy controls and settings');
       case 'language':
         return renderLanguageSettings();
       case 'help':
