@@ -52,10 +52,6 @@ function App() {
     }
   }, [currentUser]);
 
-  const handleLogin = (user: User) => {
-    setCurrentUser(user);
-  };
-
   const handleLogin = (user: UserType) => {
     // Create a complete User object from the login credentials
     const completeUser: User = {
