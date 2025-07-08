@@ -228,17 +228,23 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
   );
 
   const renderProfileSettings = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 profile-section">
       <div className="flex flex-col items-center space-y-4">
         <div className="relative">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="w-24 h-24 rounded-full object-cover"
-          />
+          {user.avatar ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+            />
+          ) : (
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg profile-photo-container">
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+          )}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors"
+            className="absolute bottom-0 right-0 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition-colors shadow-lg"
           >
             <Camera className="w-4 h-4" />
           </button>
@@ -254,7 +260,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-900 mb-1">
             Display Name
           </label>
           <div className="flex items-center space-x-2">
@@ -263,12 +269,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
               value={profileData.displayName}
               onChange={(e) => setProfileData({ ...profileData, displayName: e.target.value })}
               disabled={!isEditingProfile}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-50 text-gray-900"
             />
             {!isEditingProfile && (
               <button
                 onClick={() => setIsEditingProfile(true)}
-                className="p-2 text-gray-500 hover:text-gray-700"
+                className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <Edit3 className="w-4 h-4" />
               </button>
@@ -277,7 +283,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-900 mb-1">
             Email
           </label>
           <input
@@ -285,12 +291,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
             value={profileData.email}
             onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
             disabled={!isEditingProfile}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-50 text-gray-900"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-900 mb-1">
             Bio
           </label>
           <textarea
@@ -298,13 +304,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
             onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
             disabled={!isEditingProfile}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-50 text-gray-900"
             placeholder="Tell us about yourself..."
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-900 mb-1">
             Location
           </label>
           <input
@@ -312,13 +318,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
             value={profileData.location}
             onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
             disabled={!isEditingProfile}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-50 text-gray-900"
             placeholder="Your location"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-900 mb-1">
             Website
           </label>
           <input
@@ -326,7 +332,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
             value={profileData.website}
             onChange={(e) => setProfileData({ ...profileData, website: e.target.value })}
             disabled={!isEditingProfile}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-50 text-gray-900"
             placeholder="https://your-website.com"
           />
         </div>
@@ -335,14 +341,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user, onSignOut }) => {
           <div className="flex space-x-3">
             <button
               onClick={handleProfileSave}
-              className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
+              className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2 shadow-md"
             >
               <Save className="w-4 h-4" />
               <span>Save Changes</span>
             </button>
             <button
               onClick={() => setIsEditingProfile(false)}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-700"
             >
               Cancel
             </button>
