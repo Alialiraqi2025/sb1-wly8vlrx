@@ -1068,6 +1068,7 @@ body {
   height: 64px;
   font-size: 26px;
   box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
+  color: white !important;
 }
 
 .element-avatar-small {
@@ -1075,6 +1076,7 @@ body {
   height: 40px;
   font-size: 16px;
   box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
+  color: white !important;
 }
 
 /* Element-style badges */
