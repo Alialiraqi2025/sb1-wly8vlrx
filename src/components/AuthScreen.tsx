@@ -132,7 +132,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen bg-gray-50 flex auth-scrollbar overflow-y-auto auth-page-container ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
       {/* Server Connection Modal */}
       {showServerConnection && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
@@ -298,7 +298,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
       </div>
 
       {/* Right Side - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-8 overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center p-8 overflow-y-auto auth-content">
         <div className="w-full max-w-md">
           {/* Server Connection Status */}
           <div className="mb-6">
@@ -356,7 +356,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             <h1 className="text-4xl font-bold text-gray-900">TELE IRAQ</h1>
           </div>
 
-          <div className="element-card p-8">
+          <div className="element-card p-8 auth-form-container">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 {isLogin ? t('auth.signin') : t('auth.signup')}
@@ -366,7 +366,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 auth-form">
               {!isLogin && (
                 <div className="animate-slide-up">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -459,7 +459,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             </div>
 
             {/* Local Server Connection Section */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-6 pt-6 border-t border-gray-200 server-section">
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Local Server Connection</h3>
                 <p className="text-sm text-gray-600 mb-4">
@@ -515,7 +515,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             </div>
 
             {/* Test Account Section */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-6 pt-6 border-t border-gray-200 test-account-section">
               <div className="text-center">
                 <p className="text-sm text-gray-600 mb-4">For testing purposes:</p>
                 <button
@@ -544,7 +544,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
             </div>
 
             {/* Security Notice */}
-            <div className="mt-8 p-4 bg-red-50 rounded-lg border border-red-200">
+            <div className="mt-8 p-4 bg-red-50 rounded-lg border border-red-200 security-notice">
               <div className="flex items-start space-x-3">
                 <Shield className="w-5 h-5 text-red-600 mt-0.5" />
                 <div>
@@ -558,7 +558,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
 
             {/* Recovery Key Info for New Users */}
             {!isLogin && (
-              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 recovery-info">
                 <div className="flex items-start space-x-3">
                   <Key className="w-5 h-5 text-blue-600 mt-0.5" />
                   <div>
@@ -573,7 +573,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
 
             {/* Login Info */}
             {isLogin && (
-              <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+              <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200 login-info">
                 <div className="flex items-start space-x-3">
                   <Shield className="w-5 h-5 text-green-600 mt-0.5" />
                   <div>
