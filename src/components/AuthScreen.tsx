@@ -576,14 +576,14 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed auth-button"
               >
                 {isLoading ? (
                   <div className="element-spinner"></div>
                 ) : (
                   <>
                     {isLogin ? <MessageSquare className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                    <span>{isLogin ? 'Sign in' : 'Create account'}</span>
+                    <span style={{ color: 'white !important' }}>{isLogin ? 'Sign in' : 'Create account'}</span>
                   </>
                 )}
               </button>
@@ -612,10 +612,10 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 {!serverConnected ? (
                   <button
                     onClick={() => setShowServerConnection(true)}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 auth-button"
                   >
                     <Link className="w-4 h-4" />
-                    <span>Connect to Local Server</span>
+                    <span style={{ color: 'white !important' }}>Connect to Local Server</span>
                   </button>
                 ) : (
                   <div className="space-y-3">
@@ -664,14 +664,14 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                 <button
                   onClick={handleTestLogin}
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed auth-button"
                 >
                   {isLoading ? (
                     <div className="element-spinner"></div>
                   ) : (
                     <>
                       <User className="w-4 h-4" />
-                      <span>Login with Test Account</span>
+                      <span style={{ color: 'white !important' }}>Login with Test Account</span>
                     </>
                   )}
                 </button>

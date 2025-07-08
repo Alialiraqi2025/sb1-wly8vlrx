@@ -1859,6 +1859,20 @@ div[class*="bg-red-"][class*="rounded-full"] * {
   color: white !important;
 }
 
+/* Ensure all gradient buttons have white text */
+button[class*="bg-gradient-to-r"],
+button[class*="bg-gradient-to-r"] *,
+button[class*="bg-gradient-to-r"] span {
+  color: white !important;
+}
+
+/* Specific styling for auth buttons */
+.auth-button,
+.auth-button *,
+.auth-button span {
+  color: white !important;
+}
+
 .element-badge {
   background: var(--element-accent);
   color: white;
