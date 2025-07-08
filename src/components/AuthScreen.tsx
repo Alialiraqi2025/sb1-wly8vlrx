@@ -23,10 +23,9 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
   const [showDeviceVerification, setShowDeviceVerification] = useState(false);
   const [pendingUser, setPendingUser] = useState<UserType | null>(null);
   const [serverConfig, setServerConfig] = useState({
-    serverUrl: 'https://localhost:8080',
+    serverUrl: 'https://localhost',
     serverName: 'Local TELE IRAQ Server',
-    useSSL: true,
-    port: '8080'
+    useSSL: true
   });
   const [formData, setFormData] = useState({
     name: '',
@@ -36,6 +35,13 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
 
   const handleServerConnect = async () => {
     setIsConnecting(true);
+    
+    // Validate that URL starts with https://
+    if (!serverConfig.serverUrl.startsWith('https://')) {
+      alert('Server URL must use HTTPS for security. Please enter a URL starting with "https://"');
+      setIsConnecting(false);
+      return;
+    }
     
     try {
       // Simulate server connection
@@ -288,34 +294,19 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                     value={serverConfig.serverUrl}
                     onChange={(e) => setServerConfig(prev => ({ ...prev, serverUrl: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    placeholder="https://your-server.com"
+                    placeholder="https://your-server.com (SSL required)"
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Port
-                    </label>
-                    <input
-                      type="text"
-                      value={serverConfig.port}
-                      onChange={(e) => setServerConfig(prev => ({ ...prev, port: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      placeholder="8080"
-                    />
-                  </div>
-                  
-                  <div className="flex items-end">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={serverConfig.useSSL}
-                        onChange={(e) => setServerConfig(prev => ({ ...prev, useSSL: e.target.checked }))}
-                        className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                      />
-                      <span className="text-sm font-medium text-gray-700">Use SSL</span>
-                    </label>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium text-green-900">SSL Security Enforced</h4>
+                      <p className="text-sm text-green-700 mt-1">
+                        All connections to local servers must use HTTPS for maximum security. Your server URL must start with "https://".
+                      </p>
+                    </div>
                   </div>
                 </div>
                 
@@ -340,7 +331,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                   </button>
                   <button
                     onClick={handleServerConnect}
-                    disabled={isConnecting || !serverConfig.serverUrl}
+                    disabled={isConnecting || !serverConfig.serverUrl || !serverConfig.serverUrl.startsWith('https://')}
                     className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isConnecting ? (
@@ -624,7 +615,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                         <CheckCircle className="w-5 h-5 text-green-600" />
                         <span className="text-green-800 font-medium">Connected to {serverConfig.serverName}</span>
                       </div>
-                      <p className="text-xs text-green-600 mt-1">{serverConfig.serverUrl}</p>
+                      <p className="text-xs text-green-600 mt-1">{serverConfig.serverUrl} (SSL Secured)</p>
                     </div>
                     <div className="flex space-x-2">
                       <button
@@ -648,7 +639,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                     <p className="font-medium mb-1">Local Server Benefits:</p>
                     <ul className="text-left space-y-1">
                       <li>• Complete data control and ownership</li>
-                      <li>• Enhanced privacy and security</li>
+                      <li>• Enhanced privacy and security with SSL</li>
                       <li>• Custom server configurations</li>
                       <li>• Reduced dependency on external servers</li>
                     </ul>
