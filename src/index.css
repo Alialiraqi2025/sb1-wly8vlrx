@@ -1061,6 +1061,7 @@ body {
   font-weight: 600;
   font-size: 18px;
   box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  color: white !important;
 }
 
 .element-avatar-large {
@@ -1079,6 +1080,85 @@ body {
   color: white !important;
 }
 
+/* Profile section specific white text styling */
+.profile-section .element-avatar,
+.profile-section .element-avatar-large,
+.profile-section .element-avatar-small {
+  color: white !important;
+}
+
+/* Profile photo container with white text */
+.profile-photo-container {
+  color: white !important;
+}
+
+.profile-photo-container .element-avatar,
+.profile-photo-container .element-avatar-large,
+.profile-photo-container .element-avatar-small,
+.profile-photo-container div[class*="rounded-full"] {
+  color: white !important;
+}
+
+/* Ensure all profile avatars have white text */
+div[class*="bg-gradient-to-br"][class*="from-red"] {
+  color: white !important;
+}
+
+div[class*="bg-red-"][class*="rounded-full"] {
+  color: white !important;
+}
+
+/* Profile section avatar text override */
+.settings-container .element-avatar,
+.settings-container .element-avatar-large,
+.settings-container .element-avatar-small,
+.settings-container div[class*="rounded-full"][class*="bg-gradient"],
+.settings-container div[class*="rounded-full"][class*="bg-red"] {
+  color: white !important;
+}
+
+/* Main header avatar text */
+.app-header .element-avatar,
+.app-header .element-avatar-large,
+.app-header .element-avatar-small,
+.app-header div[class*="rounded-full"][class*="bg-gradient"],
+.app-header div[class*="rounded-full"][class*="bg-red"] {
+  color: white !important;
+}
+
+/* Chat list avatar text */
+.chat-list-wrapper .element-avatar,
+.chat-list-wrapper .element-avatar-large,
+.chat-list-wrapper .element-avatar-small,
+.chat-list-wrapper div[class*="rounded-full"][class*="bg-gradient"],
+.chat-list-wrapper div[class*="rounded-full"][class*="bg-red"] {
+  color: white !important;
+}
+
+/* All avatar components with red background should have white text */
+[class*="bg-gradient-to-br"][class*="from-red-500"],
+[class*="bg-gradient-to-br"][class*="from-red-600"],
+[class*="bg-red-500"],
+[class*="bg-red-600"] {
+  color: white !important;
+}
+
+/* Specific targeting for profile initials */
+.element-avatar span,
+.element-avatar-large span,
+.element-avatar-small span,
+div[class*="rounded-full"] span {
+  color: white !important;
+}
+
+/* Override any conflicting text colors in avatars */
+.element-avatar *,
+.element-avatar-large *,
+.element-avatar-small *,
+div[class*="bg-gradient-to-br"][class*="from-red"] *,
+div[class*="bg-red-"][class*="rounded-full"] * {
+  color: white !important;
+}
 /* Element-style badges */
 .element-badge {
   background: var(--element-accent);
