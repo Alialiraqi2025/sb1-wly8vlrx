@@ -82,6 +82,31 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Theme state management
+  const [activeTheme, setActiveTheme] = useState<'light' | 'dark' | 'system'>('light');
+
+  const handleThemeChange = (theme: 'light' | 'dark' | 'system') => {
+    setActiveTheme(theme);
+    setAppearance(prev => ({ ...prev, theme }));
+    
+    // Apply theme immediately
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      // System theme - check user's preference
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    
+    // Show success message
+    setSuccessMessage(`Theme changed to ${theme}`);
+    setTimeout(() => setSuccessMessage(''), 2000);
+  };
   const handlePasswordChange = () => {
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match');
@@ -652,23 +677,102 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ user }) => {
 
   const renderAppearanceSettings = () => (
     <div className="space-y-6">
+      {/* Success message */}
+      {successMessage && (
+        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center">
+            <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+            <span className="text-green-800 font-medium">{successMessage}</span>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-900">Theme</h3>
+        <p className="text-sm text-gray-600">Choose your preferred theme appearance</p>
         
         <div className="grid grid-cols-3 gap-3">
-          <button className="p-4 border-2 border-blue-500 rounded-lg bg-blue-50">
-            <div className="w-full h-16 bg-white rounded mb-2 border"></div>
-            <p className="text-sm font-medium text-gray-900">Light</p>
+          <button 
+            onClick={() => handleThemeChange('light')}
+            className={`p-4 border-2 rounded-lg transition-all duration-200 ${
+              activeTheme === 'light' 
+                ? 'border-red-500 bg-red-50 shadow-md' 
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <div className="w-full h-16 bg-white rounded mb-3 border shadow-sm flex items-center justify-center">
+              <div className="w-8 h-8 bg-gray-100 rounded-full"></div>
+            </div>
+            <div className="flex items-center justify-center space-x-2">
+              <p className="text-sm font-medium text-gray-900">Light</p>
+              {activeTheme === 'light' && (
+                <CheckCircle className="w-4 h-4 text-red-500" />
+              )}
+            </div>
+            {activeTheme === 'light' && (
+              <p className="text-xs text-red-600 mt-1">Active</p>
+            )}
           </button>
           
-          <button className="p-4 border-2 border-gray-200 rounded-lg hover:border-gray-300">
-            <div className="w-full h-16 bg-gray-800 rounded mb-2"></div>
-            <p className="text-sm font-medium text-gray-900">Dark</p>
+          <button 
+            onClick={() => handleThemeChange('dark')}
+            className={`p-4 border-2 rounded-lg transition-all duration-200 ${
+              activeTheme === 'dark' 
+                ? 'border-red-500 bg-red-50 shadow-md' 
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <div className="w-full h-16 bg-gray-800 rounded mb-3 shadow-sm flex items-center justify-center">
+              <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
+            </div>
+            <div className="flex items-center justify-center space-x-2">
+              <p className="text-sm font-medium text-gray-900">Dark</p>
+              {activeTheme === 'dark' && (
+                <CheckCircle className="w-4 h-4 text-red-500" />
+              )}
+            </div>
+            {activeTheme === 'dark' && (
+              <p className="text-xs text-red-600 mt-1">Active</p>
+            )}
           </button>
           
-          <button className="p-4 border-2 border-gray-200 rounded-lg hover:border-gray-300">
-            <div className="w-full h-16 bg-gradient-to-r from-white to-gray-800 rounded mb-2"></div>
-            <p className="text-sm font-medium text-gray-900">Auto</p>
+          <button 
+            onClick={() => handleThemeChange('system')}
+            className={`p-4 border-2 rounded-lg transition-all duration-200 ${
+              activeTheme === 'system' 
+                ? 'border-red-500 bg-red-50 shadow-md' 
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <div className="w-full h-16 bg-gradient-to-r from-white to-gray-800 rounded mb-3 shadow-sm flex items-center justify-center">
+              <div className="w-4 h-4 bg-white rounded-full mr-1"></div>
+              <div className="w-4 h-4 bg-gray-800 rounded-full"></div>
+            </div>
+            <div className="flex items-center justify-center space-x-2">
+              <p className="text-sm font-medium text-gray-900">System</p>
+              {activeTheme === 'system' && (
+                <CheckCircle className="w-4 h-4 text-red-500" />
+              )}
+            </div>
+            {activeTheme === 'system' && (
+              <p className="text-xs text-red-600 mt-1">Active</p>
+            )}
+          </button>
+        </div>
+        
+        {/* Theme description */}
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-start space-x-3">
+            <Palette className="w-5 h-5 text-blue-600 mt-0.5" />
+            <div>
+              <h4 className="font-medium text-blue-900 mb-1">Current Theme: {activeTheme.charAt(0).toUpperCase() + activeTheme.slice(1)}</h4>
+              <p className="text-sm text-blue-700">
+                {activeTheme === 'light' && 'Light theme provides a clean, bright interface that\'s easy on the eyes during daytime use.'}
+                {activeTheme === 'dark' && 'Dark theme reduces eye strain in low-light conditions and saves battery on OLED displays.'}
+                {activeTheme === 'system' && 'System theme automatically switches between light and dark based on your device\'s settings.'}
+              </p>
+            </div>
+          </div>
           </button>
         </div>
       </div>
